@@ -42,7 +42,7 @@ form a {
   margin-left: 180px;
 }
 
-.loginbox input[type="text"],
+.loginbox input[type="text"],input[type="email"],
 input[type="password"] {
   border: 30px;
   border: 0px solid #505050;
@@ -139,13 +139,14 @@ input[type="password"] {
 }
 
 #Send-btn {
+  display:block;
+  width:33%;
   padding: 10px 40px;
   background: #add8e6;
   border: 0;
   outline: none;
-  font-size: 10px;
   font-weight: 500;
-  margin-left: 113px;
+  margin: 0 auto;
   text-align: center;
 }
 
