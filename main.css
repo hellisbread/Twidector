@@ -540,7 +540,7 @@ textarea {
 }
 
 a {
-    color: #1abc9c;
+    color: #6ed3e3;
     text-decoration: none;
     -webkit-transition: all .2s ease-in-out;
     -moz-transition: all .2s ease-in-out;
@@ -550,13 +550,13 @@ a {
 }
 
 a:visited {
-    color: #1abc9c
+    color: #6ed3e3
 }
 
 a:hover,
 a:focus,
 a:active {
-    color: #1abc9c;
+    color: #6ed3e3;
     -webkit-transition: all .2s ease-in-out;
     -moz-transition: all .2s ease-in-out;
     -ms-transition: all .2s ease-in-out;
