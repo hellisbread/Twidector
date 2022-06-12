@@ -1,18 +1,14 @@
-body {
-  display: flex;
-  height: 100vh;
-  justify-content: center;
-  align-items: center;
-  padding: 10px;
-  background: #fff;
-}
-
 .box {
   max-width: 700px;
   width: 100%;
   background: #fff;
   padding: 25px 30px;
   border-radius: 5px;
+  display:inline;
+}
+
+.entry-title{
+  text-align:center;
 }
 
 .box .title {
@@ -52,9 +48,81 @@ input[type="password"] {
 
 .button input[type="submit"] {
   width: 20%;
-  height: 25px;
-  margin-left: 230px;
+  margin: 0 auto;
   background-color: #add8e6;
   border-color: #add8e6;
   align-content: center;
+}
+
+#register-button {
+  display:block;
+  width: 25%;
+  margin: 0 auto;
+  margin-top:25px;
+  background-color: #add8e6;
+  border-color: #add8e6;
+}
+
+.float-right{
+  float:right!important;
+}
+
+.main-navigation .login-nav:after {
+  content: "/";
+  display: block;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  margin-top: -9px;
+  margin-right: -3px;
+  font-size: 16px;
+  color: #444;
+  font-weight: 300;
+}
+
+.main-navigation .float-right:before {
+  display:none!important;
+}
+
+.input-box input[type=text]:focus{
+  background: #dbdbdb;
+  color: #444;
+  outline: none;
+  -webkit-transition: all .2s ease-in-out;
+  -moz-transition: all .2s ease-in-out;
+  -ms-transition: all .2s ease-in-out;
+  -o-transition: all .2s ease-in-out;
+  transition: all .2s ease-in-out;
+}
+
+/*PlaceHolder*/
+input::-webkit-input-placeholder {
+  color: white;
+}
+input:focus::-webkit-input-placeholder {
+  color: #444;
+}
+
+/* Firefox < 19 */
+input:-moz-placeholder {
+  color: white;
+}
+input:focus:-moz-placeholder {
+  color: #444;
+}
+
+/* Firefox > 19 */
+input::-moz-placeholder {
+  color: white;
+}
+input:focus::-moz-placeholder {
+  color: #444;
+}
+
+/* Internet Explorer 10 */
+input:-ms-input-placeholder {
+  color: white;
+}
+input:focus:-ms-input-placeholder {
+  color: #444;
 }

@@ -206,12 +206,57 @@ input[type="password"] {
   display:none!important;
 }
 
-/* registration */
-/* 
-input[type="text"],
-input[type="password"],
-input[type="submit"] {
-  width: 100%;
-  padding: 10px 0px;
-  margin: 10px 0px;
-} */
+/*PlaceHolder*/
+input::-webkit-input-placeholder {
+  color: white;
+}
+input:focus::-webkit-input-placeholder {
+  color: #444;
+}
+
+/* Firefox < 19 */
+input:-moz-placeholder {
+  color: white;
+}
+input:focus:-moz-placeholder {
+  color: #444;
+}
+
+/* Firefox > 19 */
+input::-moz-placeholder {
+  color: white;
+}
+input:focus::-moz-placeholder {
+  color: #444;
+}
+
+/* Internet Explorer 10 */
+input:-ms-input-placeholder {
+  color: white;
+}
+input:focus:-ms-input-placeholder {
+  color: #444;
+}
+
+.button{
+  border: 0 none;
+  border-radius: 4px;
+  background: #1d1d1d;
+  color: #fff!important;
+  cursor: pointer;
+  -webkit-appearance: button;
+  font-family: "Lato", sans-serif;
+  line-height: 1;
+  padding: 16px 18px;
+  -webkit-transition: all .2s ease-in-out;
+  -moz-transition: all .2s ease-in-out;
+  -ms-transition: all .2s ease-in-out;
+  -o-transition: all .2s ease-in-out;
+  transition: all .2s ease-in-out;
+  font-size:100%;
+  text-align:center;
+}
+
+.button:hover{
+  color:#fff;
+}
