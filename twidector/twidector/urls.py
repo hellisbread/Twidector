@@ -20,5 +20,8 @@ from website import views
 
 urlpatterns = [
     path('', views.login, name='login'),
+    path('register/', views.register, name='register'),
+    path('retrieve-password/', views.retrievepassword, name='retrievepassword'),
+    path('free-trial/', views.freetrial, name='freetrial'),
     path('admin/', admin.site.urls),
 ]
