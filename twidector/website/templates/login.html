@@ -109,11 +109,22 @@
             </header><!-- .entry-header -->
 
             <div class="loginbox">
-              <form>
+              <form action="/" method="POST">
+
+                <!--Error Messages-->
+                {% if messages %}
+                <ul class="messages">
+                  {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+                </ul>
+                {% endif %}
+
+                {% csrf_token %}
                 <!-- <p id="username">Username</p> -->
-                <input type="text" name="" placeholder="Enter Username" />
+                <input type="text" name="username" placeholder="Enter Username" />
                 <!-- <p id="pass">Password</p> -->
-                <input type="password" name="" placeholder="Enter Password" />
+                <input type="password" name="password" placeholder="Enter Password" />
                 <p class="reset-password"><a href="retrievePassword_fyp.html">Reset Password</a></p>
                 <br />
                 <input type="submit" name="" id="login-button" value="Login" /><br />
