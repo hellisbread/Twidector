@@ -22,7 +22,7 @@ def login(request):
         password = request.POST['password']
 
         with connection.cursor() as cursor:
-            sqlcommand = "SELECT `password` FROM `UserInfo` WHERE `username` = %s"
+            sqlcommand = "SELECT `epassword` FROM `UserInfo` WHERE `username` = %s"
             cursor.execute(sqlcommand, (username))
         
             result = cursor.fetchone()
@@ -32,11 +32,11 @@ def login(request):
             messages.info(request, 'Invalid Username or password')
             return redirect('login')#goes back to login if wrong credentials
 
-        elif (password == result["password"]):
+        elif (password == result["epassword"]):
             return redirect("register")    #goes to home page after successful login
 
         else:
-            messages.info(request, 'Invalid Username or password')
+            messages.info(request, 'Error 2')
             return redirect('login')#goes back to login if wrong credentials
 
     else:
