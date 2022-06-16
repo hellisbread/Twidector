@@ -1,0 +1,44 @@
+/*
+This contains css that we added ourselves
+*/
+.navbar {
+    padding-left:2.5rem;
+}
+
+.navbar-nav .active .nav-link{
+    color:rgba(255, 255, 255, 1)!important;
+} 
+
+.banner{
+    background-image: url("../img/pexels-pixabay-163097.jpg");
+    background-size: cover;
+}
+
+.banner-text-bg{
+    background-color:rgba(220,220,220,0.7);
+}
+
+.btn{
+    background-color:#75eff7;
+    color:black;
+}
+
+.btn:hover{
+    background-color:#17f0ff;
+    color:white;
+}
+
+.no-underline{
+    text-decoration: none!important;
+}
+
+.goto-freetrial{
+    color:white;
+}
+
+.goto-freetrial:hover{
+    color:#eeeeee;
+}
+.login-button{
+    width:33%;
+}
