@@ -50,3 +50,7 @@ This contains css that we added ourselves
 .register-button{
     width:50%;
 }
+
+.btn-outline-secondary:hover{
+    border-color:white!important;
+}
