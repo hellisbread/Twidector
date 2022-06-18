@@ -1,18 +1,9 @@
+from wsgiref import validate
 from django.shortcuts import render
 from django.shortcuts import render, redirect
 from django.contrib import messages
 
-#from validate_email import validate_email
-#from mysql.connector.errors import IntegrityError
-from django.db import IntegrityError
-import pymysql.cursors
-
-connection = pymysql.connect(host='db-mysql-sgp1-59801-do-user-11772463-0.b.db.ondigitalocean.com',
-                             port=25060,
-                             user='doadmin',
-                             password='AVNS_8sOuFo_0JsSYDZDq3bL',
-                             db='defaultdb',
-                             cursorclass=pymysql.cursors.DictCursor)
+from website.functions import *
 
 # Create your views here.
 def index(request):
@@ -25,71 +16,44 @@ def aboutTeam(request):
     return render(request,'about-team.html',{})
 
 def login(request):
-
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
 
-        with connection.cursor() as cursor:
-            sqlcommand = "SELECT `epassword` FROM `UserInfo` WHERE `username` = %s"
-            cursor.execute(sqlcommand, (username))
-        
-            result = cursor.fetchone()
-            print(result)
-        
-        if (result is None):
-            messages.info(request, 'Invalid Username or password')
-            return redirect('login')#goes back to login if wrong credentials
+        result = validateLogin(username, password)
 
-        elif (password == result["epassword"]):
-            return redirect("register")    #goes to home page after successful login
-
+        if result:
+            messages.info(request, 'Successfully Login to Account')
+            return redirect('login')
         else:
-            messages.info(request, 'Error 2')
-            return redirect('login')#goes back to login if wrong credentials
+            messages.info(request, 'Invalid Username or Password')
+            return redirect('login')
 
     else:
         return render(request, 'login.html',{})
 
 def register(request):
-    if request.method == 'POST' and 'username' in request.POST:
+    if request.method == 'POST':
         username = request.POST['username']
         email = request.POST['email']
         password = request.POST['password']
         twitterusername = request.POST['twitterusername']
-        key = 123456
         usertype = 0
-        #key = request.POST['key']
-        #usertype = request.POST['usertype']
-        #resp = "Username already taken"
 
-        with connection.cursor() as cursor:
-            sqlcommand = "INSERT INTO `UserInfo` (`username`, `epassword`, `email`, `twitterusername`, `key`, `usertype`) VALUES (%s,%s,%s,%s,%s,%s)"
-            try:
-                cursor.execute(sqlcommand, (username, password, email, twitterusername, key, usertype))
-                connection.commit()
-            except pymysql.IntegrityError:
-                return("Username already taken")
+        result = registerUser(username, password, usertype, email, twitterusername)
 
-            #print('Details Updated')
-            #return render(request,'login.html', {})
-            result = cursor.fetchone() #to validate details
-
-        if(result is None):
-            #messages.info(request, 'Username already taken')
-            return redirect('login') #goes to home page after successful registration
-        
-        elif(username == result["username"]):
-            #return HttpResponse(resp)
-            #return HttpResponse('Username already taken')
-            messages.info(request, 'Username already taken')
-            return redirect('register')    #goes back to login if wrong credentials
-        
+        if result:
+            messages.info(request, 'Successfully Created Account')
+            return redirect('login')
         else:
-            messages.info(request, 'Error 2')
-            return redirect('register')       #goes back to login if wrong credentials
+            messages.info(request, 'Invalid Username or Password')
+            return redirect('register')
+        
     else:
         return render(request, 'register.html', {})
+
+
+
 
 def forgotPassword(request):
     return render(request, 'forgot-password.html', {})
