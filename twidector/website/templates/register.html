@@ -83,7 +83,15 @@
                                     <h4 class="mt-1 mb-3 pb-1">Join Twidector Now!</h4>                                  
                                 </div>
 
-                                <form>
+                                <form action="/register" method="POST">
+                                    <!--Error Messages-->
+                                    {% if messages %}
+                                    {% for message in messages %}
+                                        <p{% if message.tags %} class="alert alert-danger pb-2 pt-2" {% endif %}>{{ message }}</p>
+                                    {% endfor %}
+                                    {% endif %}
+
+                                    {% csrf_token %}
                                     <div class="d-flex align-items-center justify-content-center pb-3 pt-2">
                                         <h5 class="mb-0 me-2">Register via Twitter: </h4>
                                         <button type="button" class="btn btn-outline-secondary mx-1">
@@ -98,12 +106,12 @@
 
                                     <div class="form-outline mb-4">
                                         <label class="form-label">Username:</label>
-                                        <input type="email" id="username" class="form-control" placeholder="Username" />
+                                        <input type="text" id="username" name="username" class="form-control" placeholder="Username" />
                                     </div>
 
                                     <div class="form-outline mb-4">
                                         <label class="form-label">Password:</label>
-                                        <input type="password" id="password" class="form-control" placeholder="Password" />
+                                        <input type="password" id="password" name="password" class="form-control" placeholder="Password" />
                                     </div>
                                     <div class="form-outline mb-4">
                                         <label class="form-label">Re-enter Password:</label>
@@ -112,18 +120,17 @@
 
                                     <div class="form-outline mb-4">
                                         <label class="form-label">Email:</label>
-                                        <input type="email" id="email" class="form-control" placeholder="Email Address" />
+                                        <input type="email" id="email" name="email" class="form-control" placeholder="Email Address" />
                                     </div>
 
                                     <div class="form-outline mb-4">
                                         <label class="form-label">Twitter Username (Optional):</label>
-                                        <input type="text" id="twitter-user" class="form-control" placeholder="Twitter username" />
+                                        <input type="text" id="twitter-user" name="twitteruserame" class="form-control" placeholder="Twitter username" />
                                     </div>
 
 
                                     <div class="text-center pt-1 mb-5 pb-1">
-                                        <button class="btn btn-info btn-block fa-lg btn-outline-secondary register-button"
-                                            type="button">Register</button>
+                                        <input class="btn btn-info btn-block fa-lg btn-outline-secondary login-button" type="submit" value="Register" />
                                     </div>
                                     <hr>
                                     <div class="d-flex align-items-center justify-content-center pb-4 pt-2">

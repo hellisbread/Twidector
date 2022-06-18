@@ -56,19 +56,22 @@ def register(request):
         username = request.POST['username']
         email = request.POST['email']
         password = request.POST['password']
-        key = request.POST['key']
-        usertype = request.POST['usertype']
+        twitterusername = request.POST['twitterusername']
+        key = 123456
+        usertype = 0
+        #key = request.POST['key']
+        #usertype = request.POST['usertype']
         #resp = "Username already taken"
 
         with connection.cursor() as cursor:
-            sqlcommand = "INSERT INTO `UserInfo` (`username`, `key`, `epassword`, `usertype`, `email`) VALUES (%s,%s,%s,%s,%s)"
+            sqlcommand = "INSERT INTO `UserInfo` (`username`, `epassword`, `email`, `twitterusername`, `key`, `usertype`) VALUES (%s,%s,%s,%s,%s,%s)"
             try:
-                cursor.execute(sqlcommand, (username, key, password, usertype, email))
+                cursor.execute(sqlcommand, (username, password, email, twitterusername, key, usertype))
                 connection.commit()
             except pymysql.IntegrityError:
                 return("Username already taken")
 
-            print('Details Updated')
+            #print('Details Updated')
             #return render(request,'login.html', {})
             result = cursor.fetchone() #to validate details
 

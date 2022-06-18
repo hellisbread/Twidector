@@ -20,12 +20,12 @@ from website import views
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('about-us/',views.aboutUs, name='about-us'),
+    path('about-us',views.aboutUs, name='about-us'),
     path('about-team', views.aboutTeam, name='about-team'),
-    path('login/', views.login, name='login'),
-    path('register/', views.register, name='register'),
-    path('forgot-password/', views.forgotPassword, name='forgot-password'),
-    path('free-trial/', views.freeTrial, name='free-trial'),
-    path('reset-password/', views.resetPassword, name='reset-password'),
-    path('admin/', admin.site.urls),
+    path('login', views.login, name='login'),
+    path('register', views.register, name='register'),
+    path('forgot-password', views.forgotPassword, name='forgot-password'),
+    path('free-trial', views.freeTrial, name='free-trial'),
+    path('reset-password', views.resetPassword, name='reset-password'),
+    path('admin', admin.site.urls),
 ]
