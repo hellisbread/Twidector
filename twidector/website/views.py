@@ -15,6 +15,8 @@ connection = pymysql.connect(host='db-mysql-sgp1-59801-do-user-11772463-0.b.db.o
                              cursorclass=pymysql.cursors.DictCursor)
 
 # Create your views here.
+def index(request):
+    return render(request,'index.html',{})
 
 def login(request):
 

@@ -19,7 +19,8 @@ from django.urls import path
 from website import views
 
 urlpatterns = [
-    path('', views.login, name='login'),
+    path('', views.index, name='index'),
+    path('login/', views.login, name='login'),
     path('register/', views.register, name='register'),
     path('forgot-password/', views.forgotpassword, name='forgot-password'),
     path('free-trial/', views.freetrial, name='freetrial'),
