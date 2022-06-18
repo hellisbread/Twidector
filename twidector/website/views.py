@@ -3,7 +3,8 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 
 #from validate_email import validate_email
-from mysql.connector.errors import IntegrityError
+#from mysql.connector.errors import IntegrityError
+from django.db import IntegrityError
 import pymysql.cursors
 
 connection = pymysql.connect(host='db-mysql-sgp1-59801-do-user-11772463-0.b.db.ondigitalocean.com',
@@ -43,8 +44,41 @@ def login(request):
         return render(request, 'login.html',{})
 
 def register(request):
-    return render(request, 'register.html', {})
+    if request.method == 'POST' and 'username' in request.POST:
+        username = request.POST['username']
+        email = request.POST['email']
+        password = request.POST['password']
+        key = request.POST['key']
+        usertype = request.POST['usertype']
+        #resp = "Username already taken"
 
+        with connection.cursor() as cursor:
+            sqlcommand = "INSERT INTO `UserInfo` (`username`, `key`, `epassword`, `usertype`, `email`) VALUES (%s,%s,%s,%s,%s)"
+            try:
+                cursor.execute(sqlcommand, (username, key, password, usertype, email))
+                connection.commit()
+            except pymysql.IntegrityError:
+                return("Username already taken")
+
+            print('Details Updated')
+            #return render(request,'login.html', {})
+            result = cursor.fetchone() #to validate details
+
+        if(result is None):
+            #messages.info(request, 'Username already taken')
+            return redirect('login') #goes to home page after successful registration
+        
+        elif(username == result["username"]):
+            #return HttpResponse(resp)
+            #return HttpResponse('Username already taken')
+            messages.info(request, 'Username already taken')
+            return redirect('register')    #goes back to login if wrong credentials
+        
+        else:
+            messages.info(request, 'Error 2')
+            return redirect('register')       #goes back to login if wrong credentials
+    else:
+        return render(request, 'register.html', {})
 def retrievepassword(request):
     return render(request, 'retrievepassword.html', {})
 
