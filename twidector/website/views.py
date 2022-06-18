@@ -53,8 +53,6 @@ def register(request):
         return render(request, 'register.html', {})
 
 
-
-
 def forgotPassword(request):
     return render(request, 'forgot-password.html', {})
 
