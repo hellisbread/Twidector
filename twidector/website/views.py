@@ -87,6 +87,6 @@ def resetpassword(request):
     return render(request, 'reset-password.html', {})
 
 def freetrial(request):
-    return render(request, 'freetrial.html', {})
+    return render(request, 'free-trial.html', {})
 
 
