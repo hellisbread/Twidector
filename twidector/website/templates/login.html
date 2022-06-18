@@ -13,6 +13,8 @@
   <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-grid.css' %}" />
   <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-utilities.css' %}" />
 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/brands.min.css" integrity="sha512-OivR4OdSsE1onDm/i3J3Hpsm5GmOVvr9r49K3jJ0dnsxVzZgaOJ5MfxEAxCyGrzWozL9uJGKz6un3A7L+redIQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
   <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}" />
 
  <!--Favicon-->
@@ -26,48 +28,48 @@
   <!--Navigation-->
   <nav class="navbar navbar-expand-md navbar-dark bg-dark">
     <div class="container-fluid">
-      <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
-        <ul class="navbar-nav me-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="#">Home</a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-bs-toggle="dropdown"
-              aria-haspopup="true" aria-expanded="false">
-              About
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <a class="dropdown-item" href="#">About Twidector</a>
-              <a class="dropdown-item" href="#">About the team</a>
-            </div>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="free-trial.html">Free Trial</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="https://fyp22s205.wordpress.com/blog">Blog</a>
-          </li>
-
-        </ul>
-      </div>
-      <div class="mx-auto order-0">
-        <a class="navbar-brand mx-auto" href="#">Twidector</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".dual-collapse2">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-      </div>
-      <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="login.html">Login</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="register.html">Register</a>
-          </li>
-        </ul>
-      </div>
+        <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">Home</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
+                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        About
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="about-us.html">About Twidector</a>
+                        <a class="dropdown-item" href="about-team.html">About the team</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="free-trial.html">Free Trial</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="https://fyp22s205.wordpress.com/blog">Blog</a>
+                </li>
+                
+            </ul>
+        </div>
+        <div class="mx-auto order-0">
+            <a class="navbar-brand mx-auto" href="index.html">Twidector</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".dual-collapse2">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+        <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="login.html">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="register.html">Register</a>
+                </li>
+            </ul>
+        </div>
     </div>
-  </nav>
+</nav>
 
   <!-- Login Content -->
   <div class="container py-5 h-100">
@@ -109,8 +111,15 @@
                     <div class="text-center pt-1 mb-5 pb-1">
                       <input class="btn btn-info btn-block fa-lg btn-outline-secondary login-button" type="submit"
                         value="Login" />
-                      <a class="text-muted" href="#!">Forgot password?</a>
+                      <a class="text-muted forgot-password" href="#!">Forgot password?</a>
                     </div>
+
+                    <div class="d-flex align-items-center justify-content-center pb-4 pt-2">
+                      <h4 class="mb-0 me-2">Sign in via Twitter: </h4>
+                      <button type="button" class="btn btn-outline-secondary mx-1">
+                          <i class="fab fa-twitter"></i>
+                      </button>
+                  </div>
 
                     <div class="d-flex align-items-center justify-content-center pb-4">
                       <p class="mb-0 me-2">Don't have an account?</p>

@@ -42,3 +42,15 @@ This contains css that we added ourselves
 .login-button{
     width:33%;
 }
+
+.forgot-password{
+    margin-left:15px;
+}
+
+.register-button{
+    width:50%;
+}
+
+.btn-outline-secondary:hover{
+    border-color:white!important;
+}
