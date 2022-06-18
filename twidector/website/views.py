@@ -79,8 +79,9 @@ def register(request):
             return redirect('register')       #goes back to login if wrong credentials
     else:
         return render(request, 'register.html', {})
-def retrievepassword(request):
-    return render(request, 'retrievepassword.html', {})
+        
+def forgotpassword(request):
+    return render(request, 'forgot-password.html', {})
 
 def freetrial(request):
     return render(request, 'freetrial.html', {})
