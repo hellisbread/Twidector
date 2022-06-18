@@ -24,4 +24,5 @@ urlpatterns = [
     path('forgot-password/', views.forgotpassword, name='forgot-password'),
     path('free-trial/', views.freetrial, name='freetrial'),
     path('admin/', admin.site.urls),
+    path('reset-password/', views.resetpassword, name='reset-password'),
 ]
