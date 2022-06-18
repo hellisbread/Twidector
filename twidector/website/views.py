@@ -18,6 +18,12 @@ connection = pymysql.connect(host='db-mysql-sgp1-59801-do-user-11772463-0.b.db.o
 def index(request):
     return render(request,'index.html',{})
 
+def aboutUs(request):
+    return render(request,'about-us.html',{})
+
+def aboutTeam(request):
+    return render(request,'about-team.html',{})
+
 def login(request):
 
     if request.method == 'POST':
@@ -82,13 +88,13 @@ def register(request):
     else:
         return render(request, 'register.html', {})
 
-def forgotpassword(request):
+def forgotPassword(request):
     return render(request, 'forgot-password.html', {})
 
-def resetpassword(request):
+def resetPassword(request):
     return render(request, 'reset-password.html', {})
 
-def freetrial(request):
+def freeTrial(request):
     return render(request, 'free-trial.html', {})
 
 
