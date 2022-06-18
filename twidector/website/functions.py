@@ -1,8 +1,9 @@
 from validate_email import validate_email
-#from mysql.connector.errors import IntegrityError
-from django.db import IntegrityError
-from cryptography.fernet import Fernet
+from mysql.connector.errors import IntegrityError
 import pymysql.cursors
+import hashlib
+import os
+import secrets
 
 connection = pymysql.connect(host='db-mysql-sgp1-59801-do-user-11772463-0.b.db.ondigitalocean.com',
                              port=25060,
@@ -17,24 +18,19 @@ def validateLogin(username, password):
         
         try:
         
-            sqlcommand = "SELECT `key`, `salt` FROM `UserInfo` WHERE `username` = %s"
+            sqlcommand = "SELECT `salt`, `key` FROM `UserInfo` WHERE `username` = %s"
             cursor.execute(sqlcommand, (username))
 
             result = cursor.fetchone()
 
-            #bytepassword = password.encode("utf-8")
+            salt = result["salt"]
+            
+            key = result["key"]
+            
+            
+            currentkey = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), salt, 100000)
 
-            cipher_suite = Fernet(result["key"])
-
-            bytepassword = result["salt"].encode("utf-8")
-
-            unciphered = (cipher_suite.decrypt(bytepassword))
-            #print(unciphered)
-
-            plain = bytes(unciphered).decode("utf-8")
-            #print("plain :" + plain)
-
-            if (password == plain):
+            if (secrets.compare_digest(currentkey,key) == True):
                 return True
             else:
                 return False
@@ -51,24 +47,22 @@ def registerUser(username, password, usertype, email, twitterusername):
     
         with connection.cursor() as cursor:
 
-            key = Fernet.generate_key()
-            cipher_suite = Fernet(key)
+            salt = os.urandom(32)
             
-            bytepassword = password.encode("utf-8")
+            key = hashlib.pbkdf2_hmac('sha256', password.encode("utf-8"), salt, 100000)
             
-            ciphered = cipher_suite.encrypt(bytepassword)
-            sqlcommand = "INSERT INTO `UserInfo` (`username`, `key`, `salt`, `usertype`, `email`, `twitterusername`) VALUES (%s, %s, %s, %s, %s, %s)"
+            sqlcommand = "INSERT INTO `UserInfo` (`username`, `salt`, `key`, `usertype`, `email`, `twitterusername`) VALUES (%s, %s, %s, %s, %s, %s)"
             
             try:
-                cursor.execute(sqlcommand, (username, key, ciphered, usertype, email, twitterusername))
+                cursor.execute(sqlcommand, (username, salt, key, usertype, email, twitterusername))
                 connection.commit()
                 return True
 
             except pymysql.IntegrityError:
-                return False
+              return False
         
     else:
-        return ("Invalid email")
+        return True
 
 #companyname
 #salting hashing here
