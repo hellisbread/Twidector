@@ -83,6 +83,13 @@ This contains css that we added ourselves
     margin: 0 auto;
 }
 
+.twitter-icon{
+    font-size:16px!important;
+    padding-top:0px;
+    padding-bottom:0px;
+    padding-right:2px;
+}
+
 /*Free-Trial*/
 .container {
     height: auto;
