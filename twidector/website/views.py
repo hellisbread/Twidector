@@ -23,12 +23,12 @@ def login(request):
         result = validateLogin(username, password)
 
         if result:
-            messages.info(request, 'Successfully Login to Account')
+            messages.success(request, 'Successfully Login to Account')
 
             request.session['loggedin'] = username
             return redirect('login')
         else:
-            messages.info(request, 'Invalid Username or Password')
+            messages.error(request, 'Invalid Username or Password')
             return redirect('login')
 
     else:
@@ -41,6 +41,7 @@ def logout(request):
 
     else:
         del request.session['loggedin']
+        messages.success(request, 'Successfully Logged out.')
         return redirect('index')
         
 def register(request):
@@ -54,10 +55,10 @@ def register(request):
         result = registerUser(username, password, usertype, email)
 
         if result:
-            messages.info(request, 'Successfully Created Account')
+            messages.success(request, 'Successfully Created Account')
             return redirect('login')
         else:
-            messages.info(request, 'Invalid Username or Password')
+            messages.error(request, 'This username may already exist.')
             return redirect('register')
         
     else:

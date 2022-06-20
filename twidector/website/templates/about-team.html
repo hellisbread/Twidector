@@ -55,16 +55,29 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
             </div>
-            <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'login' %}">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'register' %}">Register</a>
-                    </li>
-                </ul>
-            </div>
+            {% if 'loggedin' not in request.session %}
+        <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'register' %}">Register</a>
+                </li>
+            </ul>
+        </div>
+        {% else %}
+        <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="#">Dashboard</a>
+          </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+              </li>
+          </ul>
+      </div>
+      {% endif %}
         </div>
     </nav>
 
@@ -83,7 +96,8 @@
                     <div class="bg-white p-3 text-center card">
                         <img class="center rounded-circle mt-4 mb-2" src="{% static 'img/haroldprofile.png' %}" width="90">
                         <h5 class="mt-3 font-weight-bold">Harold Lim</h5><span class="font-weight-medium">Project Leader</span>
-                        <div class="mt-4 p-3">I'm Harold Lim Wei Hao. I am a full time student studying Bachelor of Business Information Systems in UOW.</div>
+                        <div class="mt-4 p-3">I'm Harold Lim Wei Hao. I am a full time student studying Bachelor of Business 
+                            Information Systems in UOW.</div>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -97,7 +111,8 @@
                     <div class="bg-white p-3 text-center card">
                         <img class="center rounded-circle mt-4 mb-2" src="{% static 'img/gabrielprofile.png' %}" width="90">
                         <h5 class="mt-3 font-weight-bold">Gabriel Ong</h5><span class="font-weight-medium">Backend Lead</span>
-                        <div class="mt-4 p-3">I am Gabriel Ong Jian Kai, currently a full time student pursuing Bachelor of Computer Science (Big Data) in UOW.</div>
+                        <div class="mt-4 p-3">I am Gabriel Ong Jian Kai, currently a full time student pursuing Bachelor of 
+                            Computer Science (Big Data) in UOW.</div>
                     </div>
                 </div>
             </div>
