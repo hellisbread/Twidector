@@ -5,12 +5,15 @@ import hashlib
 import os
 import secrets
 
-connection = pymysql.connect(host='db-mysql-sgp1-59801-do-user-11772463-0.b.db.ondigitalocean.com',
-                             port=25060,
-                             user='doadmin',
-                             password='AVNS_8sOuFo_0JsSYDZDq3bL',
-                             db='defaultdb',
-                             cursorclass=pymysql.cursors.DictCursor)
+import config
+
+connection = pymysql.connect(host = config.serverhost,
+                             port = config.serverport,
+                             user = config.serveruser,
+                             password = config.serverpassword,
+                             db = config.serverdb,
+                             charset = "utf8",
+                             cursorclass = pymysql.cursors.DictCursor)
 
 
 def validateLogin(username, password):
@@ -38,8 +41,37 @@ def validateLogin(username, password):
         except:
             return False
 
+def registerUser(username, password, usertype, email):
+          
+    is_valid = validate_email(email)
+    
+    if (is_valid == True):
+    
+        with connection.cursor() as cursor:
 
-def registerUser(username, password, usertype, email, twitterusername):
+            salt = os.urandom(32)
+            
+            key = hashlib.pbkdf2_hmac('sha256', password.encode("utf-8"), salt, 100000)
+            
+            sqlcommand = "INSERT INTO `UserInfo` (`username`, `salt`, `key`, `usertype`, `email`) VALUES (%s, %s, %s, %s, %s)"
+            
+            try:
+                cursor.execute(sqlcommand, (username, salt, key, usertype, email))
+                connection.commit()
+                return ("Account successfully created")
+
+            except pymysql.IntegrityError:
+              return ("Username already exists")
+        
+    else:
+        return ("Invalid email")
+
+#companyname
+#salting hashing here
+#send email for verification here
+
+
+#def registerTwitterUser(username, password, usertype, email, twitterusername):
           
     is_valid = validate_email(email)
     
@@ -64,6 +96,4 @@ def registerUser(username, password, usertype, email, twitterusername):
     else:
         return True
 
-#companyname
-#salting hashing here
-#send email for verification here
+
