@@ -124,3 +124,127 @@ def register_user(username, password, user_type, email):
         return True
 
 
+def recover_username(email):
+    with connection.cursor() as cursor:
+        
+        sqlcommand = "SELECT `username` FROM `UserInfo` WHERE `email` = %s"
+        
+        try:
+            cursor.execute(sqlcommand, (email))
+            result = cursor.fetchone()
+
+            return ("Your username has been sent to the email submitted")
+        
+        except:
+            return ("Invalid")
+        
+#send to email
+
+def recover_password(username, email):
+    with connection.cursor() as cursor:
+        
+        sqlcommand = "SELECT `username`, `email` FROM `UserInfo` WHERE `username` = %s AND `email` = %s"
+        
+        try:
+            cursor.execute(sqlcommand, (username, email)) 
+            result = cursor.fetchone()
+        
+            if (username == result["username"] and
+                email == result["email"]):
+                return ("A reset link has been sent to the email submitted. Please continue reset instructions from there.")
+            
+            else:
+                return ("Invalid")
+        
+        except:
+            return ("Invalid")
+        
+#change to send by email method eventually
+#dont have to validate email here, dont let attackers know what usernames/emails exist
+
+def whitelist_user(username, targetUser):
+
+    with connection.cursor() as cursor:
+
+        sqlcommand = "INSERT INTO `WhitelistTable` (`username`, `whitelisted`) VALUES (%s, %s)"
+
+        try:
+            cursor.execute(sqlcommand, (username, targetUser))
+            connection.commit()
+
+        except pymysql.IntegrityError:
+          return ("Already whitelisted")
+
+def retrieve_whitelist(username):
+    with connection.cursor() as cursor:
+        sqlcommand = "SELECT `whitelisted` FROM `WhitelistTable` WHERE `username` = %s"
+        cursor.execute(sqlcommand, (username))
+        result = cursor.fetchall()
+        for item in result:
+            print(item["whitelisted"])
+
+def blacklist_user(username, targetUser):
+
+    with connection.cursor() as cursor:
+
+        sqlcommand = "INSERT INTO `BlacklistTable` (`username`, `blacklisted`) VALUES (%s, %s)"
+
+        try:
+            cursor.execute(sqlcommand, (username, targetUser))
+            connection.commit()
+
+        except pymysql.IntegrityError:
+          return ("Already blacklisted")
+
+def retrieve_blacklist(username):
+    with connection.cursor() as cursor:
+        sqlcommand = "SELECT `blacklisted` FROM `BlacklistTable` WHERE `username` = %s"
+        cursor.execute(sqlcommand, (username))
+        result = cursor.fetchall()
+        for item in result:
+            print(item["blacklisted"])
+
+def block_user(username, targetUser):
+
+    with connection.cursor() as cursor:
+
+        sqlcommand = "INSERT INTO `BlockTable` (`username`, `blocked`) VALUES (%s, %s)"
+
+        try:
+            cursor.execute(sqlcommand, (username, targetUser))
+            connection.commit()
+
+        except pymysql.IntegrityError:
+          return ("Already blocked")
+
+def retrieve_blocked(username):
+    with connection.cursor() as cursor:
+        sqlcommand = "SELECT `blocked` FROM `BlockTable` WHERE `username` = %s"
+        cursor.execute(sqlcommand, (username))
+        result = cursor.fetchall()
+        for item in result:
+            print(item["blocked"])
+
+def delete_account(username):
+    with connection.cursor() as cursor:
+        sqlcommand = "DELETE FROM `UserInfo` WHERE `username` = %s"
+        cursor.execute(sqlcommand, (username))
+        
+        connection.commit()
+        print("Deletion success")
+
+# Delete button -> Are you sure you want to delete -> Yes -> delete_account
+
+
+#unfollow twitter user
+#on click unfollow button(should only appear after followed)
+def unfollow_user(username, target_user):
+
+    with connection.cursor() as cursor:
+
+        sqlcommand = "DELETE FROM `FollowedUsers` WHERE `username` = %s AND `followeduser` = %s"
+
+        cursor.execute(sqlcommand, (username, target_user))
+        connection.commit()
+
+        return('you have unfollowed the user:' + target_user)
