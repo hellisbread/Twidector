@@ -83,6 +83,12 @@ This contains css that we added ourselves
     margin: 0 auto;
 }
 
+/*Feature Table*/
+
+.feature-list i{
+    font-size:25px;
+}
+
 /*Free-Trial*/
 .container {
     height: auto;
@@ -108,3 +114,5 @@ This contains css that we added ourselves
   .p {
     text-align: right;
   }
+
+  

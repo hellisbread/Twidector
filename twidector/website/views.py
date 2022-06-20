@@ -20,7 +20,7 @@ def login(request):
         username = request.POST['username']
         password = request.POST['password']
 
-        result = validateLogin(username, password)
+        result = validate_login(username, password)
 
         if result:
             messages.success(request, 'Successfully Login to Account')
@@ -52,7 +52,7 @@ def register(request):
         twitterusername = request.POST['twitterusername']
         usertype = 0
 
-        result = registerUser(username, password, usertype, email)
+        result = register_user(username, password, usertype, email)
 
         if result:
             messages.success(request, 'Successfully Created Account')

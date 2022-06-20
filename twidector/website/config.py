@@ -4,7 +4,7 @@ serveruser='doadmin'
 serverpassword='AVNS_8sOuFo_0JsSYDZDq3bL'
 serverdb='defaultdb'
 
-emailport = 465
-emailsmtp_server = "smtp.gmail.com"
-emailemail = "twidector@gmail.com"
-emailpassword = "hvxxdoxsxrtsinbu"
+email_port = 465
+email_smtp_server = "smtp.gmail.com"
+email_email = "twidector@gmail.com"
+email_password = "hvxxdoxsxrtsinbu"

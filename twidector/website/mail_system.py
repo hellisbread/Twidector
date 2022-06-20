@@ -2,14 +2,14 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-import config
-import functions
+from website.config import *
+from website.functions import *
 
 def send_email(recipient, subject, body):
-    port = config.email_port
-    smtp_server = config.email_smtp_server
-    sender_email = config.email_email
-    password = config.email_password
+    port = email_port
+    smtp_server = email_smtp_server
+    sender_email = email_email
+    password = email_password
     
     msg = MIMEMultipart()
     msg["From"] = sender_email
@@ -31,18 +31,18 @@ def send_registration_email(email, html):
     
     send_email(email, subject, body)
 
-def confirm_email(token):
-    try:
-        email = confirm_token(token)
-    except:
-        flash("Invalid", "danger")
-    user = User.query.filter_by(email=email).first_or_404()
-    if user.confirmed:
-        flash("Account already confirmed.", "success")
-    else:
-        user.confirmed = True
-        user.confirmed_on = datetime.datetime.now()
-        db.session.add(user)
-        db.session.commit()
-        flash("Account has been confirmed", "success")
-    return redirect(url_for('main.home'))
+# def confirm_email(token):
+#     try:
+#         email = function.confirm_token(token)
+#     except:
+#         flash("Invalid", "danger")
+#     user = User.query.filter_by(email=email).first_or_404()
+#     if user.confirmed:
+#         flash("Account already confirmed.", "success")
+#     else:
+#         user.confirmed = True
+#         user.confirmed_on = datetime.datetime.now()
+#         db.session.add(user)
+#         db.session.commit()
+#         flash("Account has been confirmed", "success")
+#     return redirect(url_for('main.home'))

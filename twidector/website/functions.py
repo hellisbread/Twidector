@@ -6,19 +6,11 @@ import os
 import secrets
 import email.utils
 import requests
-from flask import Flask, url_for
 
-import config
-import mail_system
+from flask import Flask, render_template, url_for
+from itsdangerous import URLSafeTimedSerializer
 
-connection = pymysql.connect(host = config.server_host,
-                             port = config.server_port,
-                             user = config.server_user,
-                             password = config.server_password,
-                             db = config.server_db,
-                             charset = "utf8",
-                             cursorclass = pymysql.cursors.DictCursor)
-
+from website.mail_system import *
 
 from website.config import *
 
@@ -36,15 +28,15 @@ def generate_token(email):
     
     return token
 
-def confirm_token(token):
-    try:
-        email = serializer.loads(
-            token,
-            max_age=60
-        )
-    except:
-        return False
-    return email
+# def confirm_token(token):
+#     try:
+#         email = serializer.loads(
+#             token,
+#             max_age=60
+#         )
+#     except:
+#         return False
+#     return email
 
 def validate_login(username, password):
     with connection.cursor() as cursor:
