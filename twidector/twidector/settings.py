@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure--cp+kvfnrpoqe-***y9swd7&!du&x@)x6zo41ry1qc_5u1cwc+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['twidector.pythonanywhere.com','localhost']
 
 
 # Application definition
@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'twidector','website'
+    'website'
 ]
 
 MIDDLEWARE = [

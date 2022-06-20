@@ -5,6 +5,7 @@ import hashlib
 import os
 import secrets
 
+
 from website.config import *
 
 connection = pymysql.connect(host = serverhost,
@@ -29,7 +30,6 @@ def validateLogin(username, password):
             salt = result["salt"]
             
             key = result["key"]
-            
             
             currentkey = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), salt, 100000)
 

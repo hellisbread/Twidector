@@ -24,6 +24,8 @@ def login(request):
 
         if result:
             messages.info(request, 'Successfully Login to Account')
+
+            request.session['loggedin'] = username
             return redirect('login')
         else:
             messages.info(request, 'Invalid Username or Password')
@@ -32,6 +34,15 @@ def login(request):
     else:
         return render(request, 'login.html',{})
 
+def logout(request):
+    if 'loggedin' not in request.session:
+
+        return redirect('login')
+
+    else:
+        del request.session['loggedin']
+        return redirect('index')
+        
 def register(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -40,7 +51,7 @@ def register(request):
         twitterusername = request.POST['twitterusername']
         usertype = 0
 
-        result = registerUser(username, password, usertype, email, twitterusername)
+        result = registerUser(username, password, usertype, email)
 
         if result:
             messages.info(request, 'Successfully Created Account')

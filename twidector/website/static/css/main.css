@@ -36,6 +36,18 @@ This contains css that we added ourselves
     color:white;
 }
 
+.font-weight-normal{
+    font-weight:normal;
+}
+
+.font-weight-medium{
+    font-weight: 500;
+}
+
+.font-weight-bold{
+    font-weight:bold;
+}
+
 .goto-freetrial:hover{
     color:#eeeeee;
 }
@@ -54,3 +66,45 @@ This contains css that we added ourselves
 .btn-outline-secondary:hover{
     border-color:white!important;
 }
+
+.card {
+    margin-left:30px;
+    margin-right:30px;
+    min-height:260px;
+}
+
+.card-body i{
+    font-size:50px;
+    padding-top:30px;
+    padding-bottom:20px;
+}
+
+.card .center{
+    margin: 0 auto;
+}
+
+/*Free-Trial*/
+.container {
+    height: auto;
+  }
+
+  #percentage {
+    background-color: #fff;
+  }
+  
+  .box {
+    width: 70%;
+    background-color: #d3d3d3;
+    margin: 20px;
+    font-size: 15px;
+    margin-bottom: 30px;
+  }
+  
+  .square {
+    width: 8%;
+    height: 8%;
+  }
+  
+  .p {
+    text-align: right;
+  }
