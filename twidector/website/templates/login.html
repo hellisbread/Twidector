@@ -13,14 +13,16 @@
   <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-grid.css' %}" />
   <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-utilities.css' %}" />
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/brands.min.css" integrity="sha512-OivR4OdSsE1onDm/i3J3Hpsm5GmOVvr9r49K3jJ0dnsxVzZgaOJ5MfxEAxCyGrzWozL9uJGKz6un3A7L+redIQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/brands.min.css"
+    integrity="sha512-OivR4OdSsE1onDm/i3J3Hpsm5GmOVvr9r49K3jJ0dnsxVzZgaOJ5MfxEAxCyGrzWozL9uJGKz6un3A7L+redIQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}" />
 
- <!--Favicon-->
+  <!--Favicon-->
   <link rel="icon" href="{% static 'img/cropped-twidector-1-1.png' %}" sizes="32x32" />
   <link rel="icon" href="{% static 'img/cropped-twidector-1-2.png' %}" sizes="192x192" />
-  <link rel="apple-touch-icon" href="{% static 'img/cropped-twidector-1-2.png' %}" /> 
+  <link rel="apple-touch-icon" href="{% static 'img/cropped-twidector-1-2.png' %}" />
 
 </head>
 
@@ -28,63 +30,63 @@
   <!--Navigation-->
   <nav class="navbar navbar-expand-md navbar-dark bg-dark">
     <div class="container-fluid">
-        <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'index' %}">Home</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
-                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        About
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="{% url 'about-us' %}">About Twidector</a>
-                        <a class="dropdown-item" href="{% url 'about-team' %}">About the team</a>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'free-trial' %}">Free Trial</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="https://fyp22s205.wordpress.com/blog">Blog</a>
-                </li>
-                
-            </ul>
-        </div>
-        <div class="mx-auto order-0">
-            <a class="navbar-brand mx-auto" href="{% url 'index' %}">Twidector</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".dual-collapse2">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-        </div>
-
-        {% if 'loggedin' not in request.session %}
-        <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'login' %}">Login</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'register' %}">Register</a>
-                </li>
-            </ul>
-        </div>
-        {% else %}
-        <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'login' %}">Dashboard</a>
+      <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'index' %}">Home</a>
           </li>
-              <li class="nav-item">
-                  <a class="nav-link" href="{% url 'login' %}">Logout</a>
-              </li>
-          </ul>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-bs-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+              About
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <a class="dropdown-item" href="{% url 'about-us' %}">About Twidector</a>
+              <a class="dropdown-item" href="{% url 'about-team' %}">About the team</a>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'free-trial' %}">Free Trial</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="https://fyp22s205.wordpress.com/blog">Blog</a>
+          </li>
+
+        </ul>
+      </div>
+      <div class="mx-auto order-0">
+        <a class="navbar-brand mx-auto" href="{% url 'index' %}">Twidector</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".dual-collapse2">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      </div>
+
+      {% if 'loggedin' not in request.session %}
+      <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'login' %}">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'register' %}">Register</a>
+          </li>
+        </ul>
+      </div>
+      {% else %}
+      <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'login' %}">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'login' %}">Logout</a>
+          </li>
+        </ul>
       </div>
       {% endif %}
 
     </div>
-</nav>
+  </nav>
 
   <!-- Login Content -->
   <div class="container py-5 h-100">
@@ -104,8 +106,8 @@
 
                   <!--Error Messages-->
                   {% if messages %}
-                    {% for message in messages %}
-                        <p{% if message.tags %} class="alert alert-danger pb-2 pt-2" {% endif %}>{{ message }}</p>
+                  {% for message in messages %}
+                  <p{% if message.tags %} class="alert alert-danger pb-2 pt-2" {% endif %}>{{ message }}</p>
                     {% endfor %}
                     {% endif %}
 
@@ -129,16 +131,17 @@
                       <a class="text-muted forgot-password" href="{% url 'forgot-password' %}">Forgot password?</a>
                     </div>
 
-                    <div class="d-flex align-items-center justify-content-center pb-4 pt-2">
+                    <div class="d-flex align-items-center justify-content-center mb-4 pb-4 pt-2">
                       <h4 class="mb-0 me-2">Sign in via Twitter: </h4>
                       <button type="button" class="btn btn-outline-secondary mx-1">
-                          <i class="fab fa-twitter twitter-icon" style="font-size:20px!important;"></i>
+                        <i class="fab fa-twitter twitter-icon" style="font-size:20px!important;"></i>
                       </button>
-                  </div>
+                    </div>
 
-                    <div class="d-flex align-items-center justify-content-center pb-4">
+                    <div class="d-flex align-items-center justify-content-center pb-2">
                       <p class="mb-0 me-2">Don't have an account?</p>
-                      <a type="button" class="btn btn-block btn-outline-secondary" href="{% url 'register' %}">Register</a>
+                      <a type="button" class="btn btn-block btn-outline-secondary"
+                        href="{% url 'register' %}">Register</a>
                     </div>
 
                 </form>
