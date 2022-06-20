@@ -5,13 +5,13 @@ import hashlib
 import os
 import secrets
 
-import config
+from website.config import *
 
-connection = pymysql.connect(host = config.serverhost,
-                             port = config.serverport,
-                             user = config.serveruser,
-                             password = config.serverpassword,
-                             db = config.serverdb,
+connection = pymysql.connect(host = serverhost,
+                             port = serverport,
+                             user = serveruser,
+                             password = serverpassword,
+                             db = serverdb,
                              charset = "utf8",
                              cursorclass = pymysql.cursors.DictCursor)
 
@@ -58,13 +58,13 @@ def registerUser(username, password, usertype, email):
             try:
                 cursor.execute(sqlcommand, (username, salt, key, usertype, email))
                 connection.commit()
-                return ("Account successfully created")
+                return True
 
             except pymysql.IntegrityError:
-              return ("Username already exists")
+              return False
         
     else:
-        return ("Invalid email")
+        return False
 
 #companyname
 #salting hashing here
