@@ -55,76 +55,26 @@ This contains css that we added ourselves
   border-color: white !important;
 }
 
-#sidebar {
-  width: 250px;
-  height: 100vh;
-  position: fixed;
-  background-color: black;
-  transition: 0.4s;
+.container {
+  height: auto;
+}
+#percentage {
+  background-color: #fff;
 }
 
-.nav-link:active,
-.nav-link:focus,
-.nav-link:hover {
-  background-color: #17f0ff;
+.box {
+  width: 70%;
+  background-color: #d3d3d3;
+  margin: 20px;
+  font-size: 15px;
+  margin-bottom: 30px;
 }
 
-.active-nav {
-  margin-left: 0;
+.square {
+  width: 8%;
+  height: 8%;
 }
 
-.active-cont {
-  margin-left: 250px;
-}
-
-#sidebarCollapse {
-  margin-top: 14px;
-  height: 35px;
-}
-
-#navbar-brand {
-  align-items: center;
-  justify-content: center;
-}
-
-@media (max-width: 768px) {
-  #sidebar {
-    margin-left: -17rem;
-  }
-  #sidebar.active {
-    margin-left: 0;
-  }
-  #content {
-    width: 100%;
-    margin: 0;
-  }
-  #content.active {
-    margin-left: 17rem;
-    width: calc(100% - 17rem);
-  }
-}
-
-#sidebar.active {
-  margin-left: -17rem;
-}
-
-#content.active {
-  width: 100%;
-  margin: 0;
-}
-
-.navbar-custom {
-  height: 50px;
-}
-
-.separator {
-  margin: 3rem 0;
-  border-bottom: 1px dashed #fff;
-}
-
-.form-group {
-  width: calc(100% - 17rem);
-  margin-left: 17rem;
-  transition: all 0.4s;
-  margin-left: 30px;
+.p {
+  text-align: right;
 }
