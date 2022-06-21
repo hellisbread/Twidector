@@ -55,21 +55,94 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
             </div>
-            <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'login' %}">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'register' %}">Register</a>
-                    </li>
-                </ul>
-            </div>
+            {% if 'loggedin' not in request.session %}
+        <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'register' %}">Register</a>
+                </li>
+            </ul>
+        </div>
+        {% else %}
+        <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="#">Dashboard</a>
+          </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+              </li>
+          </ul>
+      </div>
+      {% endif %}
         </div>
     </nav>
 
-
-
+        <!--Banner-->
+        <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-light banner">
+            <div class="col-md-5 p-lg-5 mx-auto my-5 banner-text-bg">
+                <h1 class="display-4 font-weight-normal">Meet the Team!</h1>
+                <p class="lead font-weight-normal">These are our team members</p>
+            </div>
+        </div>
+    
+        <div class="container overflow-hidden">
+            <h1 class="text-center mb-5 mt-4">Our Members</h1>
+            <div class="row justify-content-center mt-4 mb-4">
+                <div class="col-md-4">
+                    <div class="bg-white p-3 text-center card">
+                        <img class="center rounded-circle mt-4 mb-2" src="{% static 'img/haroldprofile.png' %}" width="90">
+                        <h5 class="mt-3 font-weight-bold">Harold Lim</h5><span class="font-weight-medium">Project Leader</span>
+                        <div class="mt-4 p-3">I'm Harold Lim Wei Hao. I am a full time student studying Bachelor of Business 
+                            Information Systems in UOW.</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="bg-white p-3 text-center card">
+                        <img class="center rounded-circle mt-4 mb-2" src="{% static 'img/brandonprofile.png' %}" width="90">
+                        <h5 class="mt-3 font-weight-bold">Brandon Chew</h5><span class="font-weight-medium">Frontend Lead</span>
+                        <div class="mt-4 p-3">I'm Brandon Chew. Currently, I am a full time student taking Digital System Security in UOW!</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="bg-white p-3 text-center card">
+                        <img class="center rounded-circle mt-4 mb-2" src="{% static 'img/gabrielprofile.png' %}" width="90">
+                        <h5 class="mt-3 font-weight-bold">Gabriel Ong</h5><span class="font-weight-medium">Backend Lead</span>
+                        <div class="mt-4 p-3">I am Gabriel Ong Jian Kai, currently a full time student pursuing Bachelor of 
+                            Computer Science (Big Data) in UOW.</div>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="row justify-content-center mt-4 mb-4">
+                <div class="col-md-4">
+                    <div class="bg-white p-3 text-center card">
+                        <img class="center rounded-circle mt-4 mb-2" src="{% static 'img/adindaprofile.png' %}" width="90">
+                        <h5 class="mt-3 font-weight-bold">Adinda Pirono</h5><span class="font-weight-medium">UI/UX Designer</span>
+                        <div class="mt-4 p-3">Hi! I am Adinda. A full-time student taking Digital System Security in UOW!<br/></div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="bg-white p-3 text-center card">
+                        <img class="center rounded-circle mt-4 mb-2" src="{% static 'img/hhxprofile.png' %}" width="90">
+                        <h5 class="mt-3 font-weight-bold">Han Hao Xuan</h5><span class="font-weight-medium">Lead Tester</span>
+                        <div class="mt-4 p-3">Hi I'm Hao Xuan. I am a full time student taking Digital System Security!<br/></div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="bg-white p-3 text-center card">
+                        <img class="center rounded-circle mt-4 mb-2" src="{% static 'img/emptyprofile.png' %}" width="90">
+                        <h5 class="mt-3 font-weight-bold">Jonathan Wang</h5><span class="font-weight-medium">Data Analyst</span>
+                        <div class="mt-4 p-3">Hey! Jonathan here! Full time student specializing in big data at UOW. 
+                            I hope to work in the data industry one day.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
     <!--JavaScript(s)-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"

@@ -23,9 +23,11 @@ urlpatterns = [
     path('about-us/',views.aboutUs, name='about-us'),
     path('about-team/', views.aboutTeam, name='about-team'),
     path('login/', views.login, name='login'),
+    path('logout/', views.logout, name='logout'),
     path('register/', views.register, name='register'),
     path('forgot-password/', views.forgotPassword, name='forgot-password'),
     path('free-trial/', views.freeTrial, name='free-trial'),
     path('reset-password/', views.resetPassword, name='reset-password'),
-    path('admin/', admin.site.urls),
+    
+    #path('admin/', admin.site.urls),
 ]

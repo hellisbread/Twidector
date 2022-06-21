@@ -12,6 +12,8 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-grid.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-utilities.css' %}" />
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}" />
 
     <!--Favicon-->
@@ -46,7 +48,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="https://fyp22s205.wordpress.com/blog">Blog</a>
                     </li>
-                    
+
                 </ul>
             </div>
             <div class="mx-auto order-0">
@@ -55,6 +57,7 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
             </div>
+            {% if 'loggedin' not in request.session %}
             <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
@@ -65,10 +68,99 @@
                     </li>
                 </ul>
             </div>
+            {% else %}
+            <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                    </li>
+                </ul>
+            </div>
+            {% endif %}
         </div>
     </nav>
 
+    <!--Banner-->
+    <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-light banner">
+        <div class="col-md-5 p-lg-5 mx-auto my-5 banner-text-bg">
+            <h1 class="display-4 font-weight-normal">About Twidector</h1>
+            <p class="lead font-weight-normal">Learn more about what twidector is about!</p>
+        </div>
+    </div>
 
+    <div class="overflow-hidden">
+        <div class="row p-5">
+            <div class="col-md-6">
+                <img class="img-fluid" src="{% static 'img/pexels-pixabay-163097.jpg' %}">
+            </div>
+            <div class="col-md-6">
+                <h3 class="font-weight-bold" style="padding-bottom:10px;">About Twidector</h3>
+                <hr>
+                <p class="font-weight-normal">With the increasing popularity of social media over the years, there is
+                    also a noticeable increase of
+                    hateful content being exchanged
+                    or shared amongst users. Therefore, we have decided to create and propose an application, Twidector,
+                    that is capable of identifying
+                    these hateful content as negative posts and categorising their context such as fake news, fraud or
+                    hateful words. Hateful words would
+                    then be further categorised as racist, terrorism, etc.
+                    <br /><br />
+                    With Twidector, users will be able to search and scan through any Twitter user with their respective
+                    profile url. With a click, they
+                    are able to identify what sort of user they are and what content they retweet or share among their
+                    peers/friends. This is all thanks
+                    to our database and machine-learning algorithm which will identify and categorise their tweets. We
+                    also
+                    give suggestions on potential
+                    users that you may recognise that are also known to be negative users through our user database.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mb-5 ">
+        <div class="row justify-content-md-center">
+            <h3 class="text-center mb-4 mt-3"> All our plans and features </h3>
+            <div class="col-md-10">
+
+            <table class="table table-bordered table-striped table-responsive text-center feature-table">
+                <thead>
+                  <tr>
+                    <th scope="col" style="width:48%">Feature</th>
+                    <th scope="col" style="width:16%">Free</th>
+                    <th scope="col" style="width:16%">Basic</th>
+                    <th scope="col" style="width:16%">Business</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th class="font-weight-medium" scope="row">Hate Detection</th>
+                    <td><i class="fa fa-check"></td>
+                    <td><i class="fa fa-check"></td>
+                    <td><i class="fa fa-check"></td>
+                  </tr>
+                  <tr>
+                    <th class="font-weight-medium" scope="row">Fraud Detection</th>
+                    <td><i class="fa fa-x"></td>
+                    <td><i class="fa fa-check"></td>
+                    <td><i class="fa fa-check"></td>
+                  </tr>
+                  <tr>
+                    <th class="font-weight-medium" scope="row">Fake news Detection</th>
+                    <td><i class="fa fa-x"></td>
+                    <td><i class="fa fa-check"></td>
+                    <td><i class="fa fa-check"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            
+            <a type="button" class="btn btn-outline-secondary" href="register.html" style="width:33%;margin:20px auto;">Join us right now!</a>
+        </div>
+    </div>
 
     <!--JavaScript(s)-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
