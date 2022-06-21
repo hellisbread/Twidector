@@ -12,10 +12,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import datetime
 
-import config
-from ipynb.fs.full.mail_system import *
-
-from website.mail_system import *
+#import config
 
 from website.config import *
 
@@ -37,10 +34,10 @@ def generate_token(email):
     return token
 
 def send_email(recipient, subject, body):
-    port = config.email_port
-    smtp_server = config.email_smtp_server
-    sender_email = config.email_email
-    password = config.email_password
+    port = email_port
+    smtp_server = email_smtp_server
+    sender_email = email_email
+    password = email_password
     
     msg = MIMEMultipart()
     msg["From"] = sender_email
@@ -66,11 +63,11 @@ def confirm_email(token):
     try:
         email = ts.loads(token, salt="salt", max_age=86400)
     except:
-        abort(404)
+        return "Error404"
 
-    user = User.query.filter_by(email=email).first_or_404()
+    #user = User.query.filter_by(email=email).first_or_404()
 
-    user.email_confirmed = True
+    #user.email_confirmed = True
 
     with connection.cursor() as cursor:     
 
@@ -205,6 +202,7 @@ def recover_password(username, email):
 #change to send by email method eventually
 #dont have to validate email here, dont let attackers know what usernames/emails exist
 
+
 def whitelist_user(username, targetUser):
 
     with connection.cursor() as cursor:
@@ -247,6 +245,8 @@ def retrieve_blacklist(username):
         for item in result:
             print(item["blacklisted"])
 
+
+#Twitter Function not DB
 def block_user(username, targetUser):
 
     with connection.cursor() as cursor:
@@ -260,6 +260,7 @@ def block_user(username, targetUser):
         except pymysql.IntegrityError:
           return ("Already blocked")
 
+#Twitter Function not DB
 def retrieve_blocked(username):
     with connection.cursor() as cursor:
         sqlcommand = "SELECT `blocked` FROM `BlockTable` WHERE `username` = %s"
@@ -279,7 +280,7 @@ def delete_account(username):
 # Delete button -> Are you sure you want to delete -> Yes -> delete_account
 
 
-#unfollow twitter user
+#unfollow twitter user - This is a twitter function!
 #on click unfollow button(should only appear after followed)
 def unfollow_user(username, target_user):
 
