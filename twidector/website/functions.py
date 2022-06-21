@@ -6,9 +6,15 @@ import os
 import secrets
 import email.utils
 import requests
-
-from flask import Flask, render_template, url_for
 from itsdangerous import URLSafeTimedSerializer
+from flask import redirect, render_template, url_for
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+import datetime
+
+import config
+from ipynb.fs.full.mail_system import *
 
 from website.mail_system import *
 
@@ -22,21 +28,58 @@ connection = pymysql.connect(host = serverhost,
                              charset = "utf8",
                              cursorclass = pymysql.cursors.DictCursor)
 
+salt = os.urandom(32)
+ts = URLSafeTimedSerializer(salt)
+
 def generate_token(email):
-    salt = os.urandom(32)
-    token = hashlib.pbkdf2_hmac('sha256', email.encode("utf-8"), salt, 100000)
+    
+    token = ts.dumps(email, salt="salt")
     
     return token
 
-# def confirm_token(token):
-#     try:
-#         email = serializer.loads(
-#             token,
-#             max_age=60
-#         )
-#     except:
-#         return False
-#     return email
+def send_email(recipient, subject, body):
+    port = config.email_port
+    smtp_server = config.email_smtp_server
+    sender_email = config.email_email
+    password = config.email_password
+    
+    msg = MIMEMultipart()
+    msg["From"] = sender_email
+    msg["To"] = recipient
+    msg["Subject"] = subject
+    body = MIMEText(body)
+    msg.attach(body)
+
+    server = smtplib.SMTP_SSL(smtp_server, port)
+    
+    server.login(sender_email, password)
+    server.sendmail(sender_email, recipient, msg.as_string())
+    server.quit()
+
+def send_registration_email(email, html):
+    subject = "Twidector account registration"
+    body = "Welcome to Twidector! You are just one click away from the completion of your registration. Please click the following link to complete your registration:"
+    body += html
+    
+    send_email(email, subject, body)
+
+def confirm_email(token):
+    try:
+        email = ts.loads(token, salt="salt", max_age=86400)
+    except:
+        abort(404)
+
+    user = User.query.filter_by(email=email).first_or_404()
+
+    user.email_confirmed = True
+
+    with connection.cursor() as cursor:     
+
+        sqlcommand = "UPDATE `UserInfo` SET `confirmed` WHERE (%s)"
+        cursor.execute(sqlcommand, (1))
+        connection.commit()
+
+    return redirect(url_for('signin'))
 
 def validate_login(username, password):
     with connection.cursor() as cursor:
@@ -84,10 +127,11 @@ def register_user(username, password, user_type, email):
 
             token = generate_token(email)
             confirm_url = url_for("confirm_email", token=token, _external=True)
+            
             html = render_template("activate.html", confirm_url=confirm_url)
             send_registration_email(email, html)
-            
-            return ("An email has been sent. Follow the instructions to complete registration.")
+        
+            return redirect(url_for("index"))
 
         except pymysql.IntegrityError:
           return ("Username already exists")
