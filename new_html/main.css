@@ -36,9 +36,22 @@ This contains css that we added ourselves
   color: white;
 }
 
+.font-weight-normal {
+  font-weight: normal;
+}
+
+.font-weight-medium {
+  font-weight: 500;
+}
+
+.font-weight-bold {
+  font-weight: bold;
+}
+
 .goto-freetrial:hover {
   color: #eeeeee;
 }
+
 .login-button {
   width: 33%;
 }
@@ -55,9 +68,33 @@ This contains css that we added ourselves
   border-color: white !important;
 }
 
+.card {
+  margin-left: 30px;
+  margin-right: 30px;
+  min-height: 260px;
+}
+
+.card-body i {
+  font-size: 50px;
+  padding-top: 30px;
+  padding-bottom: 20px;
+}
+
+.card .center {
+  margin: 0 auto;
+}
+
+/*Feature Table*/
+
+.feature-list i {
+  font-size: 25px;
+}
+
+/*Free-Trial*/
 .container {
   height: auto;
 }
+
 #percentage {
   background-color: #fff;
 }
@@ -77,4 +114,80 @@ This contains css that we added ourselves
 
 .p {
   text-align: right;
+}
+
+#sidebar {
+  width: 250px;
+  height: 100vh;
+  position: fixed;
+  background-color: black;
+  transition: 0.4s;
+}
+
+.nav-link:active,
+.nav-link:focus,
+.nav-link:hover {
+  background-color: #17f0ff;
+}
+
+.active-nav {
+  margin-left: 0;
+}
+
+.active-cont {
+  margin-left: 250px;
+}
+
+#sidebarCollapse {
+  margin-top: 14px;
+  height: 35px;
+}
+
+#navbar-brand {
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  #sidebar {
+    margin-left: -17rem;
+  }
+
+  #sidebar.active {
+    margin-left: 0;
+  }
+
+  #content {
+    width: 100%;
+    margin: 0;
+  }
+
+  #content.active {
+    margin-left: 17rem;
+    width: calc(100% - 17rem);
+  }
+}
+
+#sidebar.active {
+  margin-left: -17rem;
+}
+
+#content.active {
+  width: 100%;
+  margin: 0;
+}
+
+.navbar-custom {
+  height: 50px;
+}
+
+.separator {
+  margin: 3rem 0;
+  border-bottom: 1px dashed #fff;
+}
+
+.page-content {
+  width: calc(100% - 17rem);
+  margin-left: 17rem;
+  transition: all 0.4s;
 }
