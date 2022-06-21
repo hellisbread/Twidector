@@ -1,4 +1,3 @@
-from validate_email import validate_email
 from mysql.connector.errors import IntegrityError
 import pymysql.cursors
 import hashlib
