@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Twidector - Login</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-grid.css" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-utilities.css" />
+
+    <link rel="stylesheet" type="text/css" href="css/main.css" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+        integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="style.css" />
+
+    <!--Favicon-->
+    <link rel="icon" href="img/cropped-twidector-1-1.png" sizes="32x32" />
+    <link rel="icon" href="img/cropped-twidector-1-2.png" sizes="192x192" />
+    <link rel="apple-touch-icon" href="img/cropped-twidector-1-2.png" />
+</head>
+
+<body>
+    <!--Navigation-->
+    <!-- Vertical navbar -->
+    <div class="vertical-nav bg-white" id="sidebar">
+        </br></br></br>
+        <p class="text-gray font-weight-bold text-uppercase px-3 small pb-4 mb-0">
+            Dashboard
+        </p>
+
+        <ul class="nav flex-column bg-white mb-0">
+            <li class="nav-item">
+                <a href="Dashboard.html" class="nav-link text-dark bg-light">
+                    <i class="fa fa-th-large mr-3 text-primary fa-fw"></i>
+                    Home
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link text-dark bg-light">
+                    <i class="fa fa-check mr-3 text-primary fa-fw"></i>
+                    Whitelist
+                </a>
+            </li>
+            <li class="nav-item side-active">
+                <a href="#" class="nav-link text-dark bg-light">
+                    <i class="fa fa-times mr-3 text-primary fa-fw"></i>
+                    Blacklist
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link text-dark bg-light">
+                    <i class="fa fa-cog mr-3 text-primary fa-fw"></i>
+                    Settings
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!-- End vertical navbar -->
+
+    <!-- the header bar -->
+
+    <nav class="navbar navbar-custom navbar-expand-md navbar-dark
+        bg-dark
+        shadow-sm
+      ">
+        <div class="container-fluid">
+            <div class="
+            navbar-collapse
+            collapse
+            w-100
+            order-1 order-md-0
+            dual-collapse2
+          ">
+                <!-- Toggle button -->
+                <button id="sidebarCollapse" type="button" class="px-1 mb-3">
+                    <i class="fa-solid fa-bars" style="padding: 0 3px;"></i>
+                </button>
+                <button id="sidebarCollapse" type="button"
+                    class="btn btn-light bg-white shadow-sm px-1 mb-3 dashboard-btn">
+                    <small class="text-uppercase font-weight-bold">Twidector</small>
+                </button>
+            </div>
+
+            <!-- twidector title -->
+            <!-- <div class="mx-auto w-100 order-2" id="title_">Twidector</div> -->
+
+            <!-- logout -->
+            <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- CONTENT -->
+    <form class="page-content p-3 mt-5" id="content">
+        <div class="container">
+            <h3>BlackList</h3>
+            <hr>
+            <div class="row">
+                <h4>Add new blacklisted user</h4>
+                <div class="col-md-8">
+                    <label for="exampleInputEmail1">Twitter username</label>
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">@</div>
+                        </div>
+                        <input type="text" class="form-control" id="Blacklist-User" placeholder="Twitter Username">
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-block btn-info">Add to Blacklist</button>
+                </div>
+            </div>
+            <hr>
+            <div class="row mt-4">
+                <div class="col-md-8">
+                    <h4 class="mb-4">All Blacklisted User(s)</h4>
+                    <table class="table table-bordered table-striped table-responsive text-center feature-table">
+                        <thead>
+                          <tr>
+                            <th scope="col" style="width:48%">Feature</th>
+                            <th scope="col" style="width:16%">Free</th>
+                            <th scope="col" style="width:16%">Basic</th>
+                            <th scope="col" style="width:16%">Business</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <th class="font-weight-medium" scope="row">Hate Detection</th>
+                            <td><i class="fa fa-check"></td>
+                            <td><i class="fa fa-check"></td>
+                            <td><i class="fa fa-check"></td>
+                          </tr>
+                          <tr>
+                            <th class="font-weight-medium" scope="row">Fraud Detection</th>
+                            <td><i class="fa fa-x"></td>
+                            <td><i class="fa fa-check"></td>
+                            <td><i class="fa fa-check"></td>
+                          </tr>
+                          <tr>
+                            <th class="font-weight-medium" scope="row">Fake news Detection</th>
+                            <td><i class="fa fa-x"></td>
+                            <td><i class="fa fa-check"></td>
+                            <td><i class="fa fa-check"></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                </div>
+            </div>
+
+        </div>
+        <div class="separator"></div>
+
+    </form>
+
+
+
+    <!-- JavaScript(s) -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+        crossorigin="anonymous"></script>
+
+    <script src="js/sideBar.js"></script>
+</body>
+
+</html>
