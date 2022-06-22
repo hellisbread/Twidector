@@ -2,116 +2,217 @@
 This contains css that we added ourselves
 */
 .navbar {
-    padding-left:2.5rem;
+  padding-left: 2.5rem;
 }
 
-.navbar-nav .active .nav-link{
-    color:rgba(255, 255, 255, 1)!important;
-} 
-
-.banner{
-    background-image: url("../img/pexels-pixabay-163097.jpg");
-    background-size: cover;
+.navbar-nav .active .nav-link {
+  color: rgba(255, 255, 255, 1) !important;
 }
 
-.banner-text-bg{
-    background-color:rgba(220,220,220,0.7);
+.banner {
+  background-image: url("../img/pexels-pixabay-163097.jpg");
+  background-size: cover;
 }
 
-.btn{
-    background-color:#75eff7;
-    color:black;
+.banner-text-bg {
+  background-color: rgba(220, 220, 220, 0.7);
 }
 
-.btn:hover{
-    background-color:#17f0ff;
-    color:white;
+.btn {
+  background-color: #75eff7;
+  color: black;
 }
 
-.no-underline{
-    text-decoration: none!important;
+.btn:hover {
+  background-color: #17f0ff;
+  color: white;
 }
 
-.goto-freetrial{
-    color:white;
+.no-underline {
+  text-decoration: none !important;
 }
 
-.font-weight-normal{
-    font-weight:normal;
+.goto-freetrial {
+  color: white;
 }
 
-.font-weight-medium{
-    font-weight: 500;
+.font-weight-normal {
+  font-weight: normal;
 }
 
-.font-weight-bold{
-    font-weight:bold;
+.font-weight-medium {
+  font-weight: 500;
 }
 
-.goto-freetrial:hover{
-    color:#eeeeee;
-}
-.login-button{
-    width:33%;
+.font-weight-bold {
+  font-weight: bold;
 }
 
-.forgot-password{
-    margin-left:15px;
+.goto-freetrial:hover {
+  color: #eeeeee;
 }
 
-.register-button{
-    width:50%;
+.login-button {
+  width: 33%;
 }
 
-.btn-outline-secondary:hover{
-    border-color:white!important;
+.forgot-password {
+  margin-left: 15px;
+}
+
+.register-button {
+  width: 50%;
+}
+
+.btn-outline-secondary:hover {
+  border-color: white !important;
 }
 
 .card {
-    margin-left:30px;
-    margin-right:30px;
-    min-height:260px;
+  margin-left: 30px;
+  margin-right: 30px;
+  min-height: 260px;
 }
 
-.card-body i{
-    font-size:50px;
-    padding-top:30px;
-    padding-bottom:20px;
+.card-body i {
+  font-size: 50px;
+  padding-top: 30px;
+  padding-bottom: 20px;
 }
 
-.card .center{
-    margin: 0 auto;
+.card .center {
+  margin: 0 auto;
 }
 
-.twitter-icon{
-    font-size:16px!important;
-    padding-top:0px;
-    padding-bottom:0px;
-    padding-right:2px;
+/*Feature Table*/
+
+.feature-list i {
+  font-size: 25px;
 }
 
 /*Free-Trial*/
 .container {
-    height: auto;
+  height: auto;
+}
+
+#percentage {
+  background-color: #fff;
+}
+
+.box {
+  width: 70%;
+  background-color: #d3d3d3;
+  margin: 20px;
+  font-size: 15px;
+  margin-bottom: 30px;
+}
+
+.square {
+  width: 8%;
+  height: 8%;
+}
+
+.p {
+  text-align: right;
+}
+
+#sidebar {
+  width: 250px;
+  height: 100vh;
+  position: fixed;
+  background-color: black;
+  transition: 0.4s;
+}
+
+.nav-link:active,
+.nav-link:focus,
+.nav-link:hover {
+  background-color: #17f0ff;
+}
+
+.active-nav {
+  margin-left: 0;
+}
+
+.active-cont {
+  margin-left: 250px;
+}
+
+#sidebarCollapse {
+  margin-top: 14px;
+  height: 35px;
+}
+
+#navbar-brand {
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  #sidebar {
+    margin-left: -17rem;
   }
 
-  #percentage {
-    background-color: #fff;
+  #sidebar.active {
+    margin-left: 0;
   }
-  
-  .box {
-    width: 70%;
-    background-color: #d3d3d3;
-    margin: 20px;
-    font-size: 15px;
-    margin-bottom: 30px;
+
+  #content {
+    width: 100%;
+    margin: 0;
   }
-  
-  .square {
-    width: 8%;
-    height: 8%;
+
+  #content.active {
+    margin-left: 17rem;
+    width: calc(100% - 17rem);
   }
-  
-  .p {
-    text-align: right;
-  }
+}
+
+#sidebar.active {
+  margin-left: -17rem;
+}
+
+#content.active {
+  width: 100%;
+  margin: 0;
+}
+
+.navbar-custom {
+  padding-left:0.5rem;
+  height: 50px;
+}
+
+.separator {
+  margin: 3rem 0;
+  border-bottom: 1px dashed #fff;
+}
+
+.page-content {
+  width: calc(100% - 17rem);
+  margin-left: 17rem;
+  transition: all 0.4s;
+}
+
+.side-active a{
+  background-color:#dae0e5!important;
+  font-weight:500;
+}
+
+.dashboard-btn{
+  margin-left:20px;
+}
+
+.dashboard-btn:hover{
+  color:black;
+}
+
+.twitter-icon{
+  font-size:20px!important;
+  padding-right:2px;
+}
+
+.alert-error {
+  --bs-alert-color: #842029;
+  --bs-alert-bg: #f8d7da;
+  --bs-alert-border-color: #f5c2c7;
+}

@@ -1,5 +1,4 @@
 from wsgiref import validate
-from django.shortcuts import render
 from django.shortcuts import render, redirect
 from django.contrib import messages
 
@@ -26,13 +25,14 @@ def login(request):
             messages.success(request, 'Successfully Login to Account')
 
             request.session['loggedin'] = username
-            return redirect('login')
+            return redirect('dashboard')
+            
         else:
             messages.error(request, 'Invalid Username or Password')
             return redirect('login')
 
     else:
-        return render(request, 'login.html',{})
+         return render(request, 'login.html', {})
 
 def logout(request):
     if 'loggedin' not in request.session:
@@ -42,7 +42,7 @@ def logout(request):
     else:
         del request.session['loggedin']
         messages.success(request, 'Successfully Logged out.')
-        return redirect('index')
+        return redirect('login')
         
 def register(request):
     if request.method == 'POST':
@@ -73,5 +73,95 @@ def resetPassword(request):
 
 def freeTrial(request):
     return render(request, 'free-trial.html', {})
+
+
+
+
+#Dashboard Views
+
+def dashboard(request):
+    return render(request, 'dashboard.html', {})
+
+def blacklist(request):
+
+    if 'loggedin' not in request.session:
+        messages.error(request, 'please login before enterring the dashboard.')
+        return redirect('login')
+
+    else:
+        context = {}
+
+        loggedUser = request.session.get('loggedin')
+
+        #Retrieve List
+        blacklisted_users = retrieve_blacklist(loggedUser)
+
+        #Convert List to context dict
+        list_of_blacklisted_users = []
+        for user in blacklisted_users:
+            list_of_blacklisted_users.append(user)
+
+        context['list_of_blacklisted_users'] = list_of_blacklisted_users
+
+        #POST
+        if request.method == 'POST':
+            #Add new blacklisted user
+            blacklist_username = request.POST['blacklist-user']
+
+            result = blacklist_user(loggedUser , blacklist_username)
+
+            if result:
+                messages.success(request, "Successfully blacklisted " + blacklist_username)
+            else:
+                messages.error(request, "This username exists in your blacklist.")
+
+            return redirect('blacklist')
+
+        else:
+            
+            return render(request, 'blacklist.html', context)
+
+def whitelist(request):
+
+    if 'loggedin' not in request.session:
+        messages.error(request, 'please login before enterring the dashboard.')
+        return redirect('login')
+    else:
+        context = {}
+
+        loggedUser = request.session.get('loggedin')
+
+        #Retrieve List
+        whitelisted_users = retrieve_whitelist(loggedUser)
+
+        #Convert List to context dict
+        list_of_whitelisted_users = []
+        for user in whitelisted_users:
+            list_of_whitelisted_users.append(user)
+
+        context['list_of_whitelisted_users'] = list_of_whitelisted_users
+
+        print(context)
+
+        #POST
+        if request.method == 'POST':
+            #Add new blacklisted user
+            whitelist_username = request.POST['whitelist-user']
+
+            result = whitelist_user(loggedUser , whitelist_username)
+
+            if result:
+                messages.success(request, "Successfully whitelisted " + whitelist_username)
+            else:
+                messages.error(request, "This username exists in your whitelist.")
+
+            return redirect('whitelist')
+
+        else:
+            
+            return render(request, 'whitelist.html', context)
+
+def settings(request):
+    return render(request, 'settings.html', {})
 
 

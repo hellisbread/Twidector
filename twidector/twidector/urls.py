@@ -28,6 +28,9 @@ urlpatterns = [
     path('forgot-password/', views.forgotPassword, name='forgot-password'),
     path('free-trial/', views.freeTrial, name='free-trial'),
     path('reset-password/', views.resetPassword, name='reset-password'),
-    
+    path('dashboard/',views.dashboard,name='dashboard'),
+    path('blacklist/',views.blacklist,name='blacklist'),
+    path('whitelist/',views.whitelist,name='whitelist'),
+    path('settings/',views.settings,name='settings'),
     #path('admin/', admin.site.urls),
 ]

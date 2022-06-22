@@ -6,7 +6,7 @@ import secrets
 import email.utils
 import requests
 from itsdangerous import URLSafeTimedSerializer
-from flask import redirect, render_template, url_for
+#from flask import redirect, render_template, url_for
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -75,7 +75,7 @@ def confirm_email(token):
         cursor.execute(sqlcommand, (1))
         connection.commit()
 
-    return redirect(url_for('signin'))
+    return True
 
 def validate_login(username, password):
     with connection.cursor() as cursor:
@@ -94,17 +94,17 @@ def validate_login(username, password):
             
             currentkey = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), salt, 100000)
 
-            if ((secrets.compare_digest(currentkey,key) == True) and (result["confirmed"]) == True):
-                return ("Valid")
+            if ((secrets.compare_digest(currentkey,key) == True) and (result["confirmed"]) == 1):
+                return True
             
-            elif ((secrets.compare_digest(currentkey,key) == True) and (result["confirmed"]) == False):
-                return ("Account not confirmed")
+            elif ((secrets.compare_digest(currentkey,key) == True) and (result["confirmed"]) == 0):
+                return False
             
             else:
-                return ("Invalid")
+                return False
             
         except:
-            return ("Invalid")
+            return False
 
 def register_user(username, password, user_type, email):
     
@@ -118,50 +118,20 @@ def register_user(username, password, user_type, email):
 
         try:
 
-            cursor.execute(sqlcommand, (username, salt, key, user_type, email, 0))
+            #Set 1 to 0 back once confirm email is complete
+            cursor.execute(sqlcommand, (username, salt, key, user_type, email, 1))
             connection.commit()
 
-            token = generate_token(email)
-            confirm_url = url_for("confirm_email", token=token, _external=True)
+            #token = generate_token(email)
+            #confirm_url = url_for("confirm_email", token=token, _external=True)
             
-            html = render_template("activate.html", confirm_url=confirm_url)
-            send_registration_email(email, html)
+            #html = render_template("activate.html", confirm_url=confirm_url)
+            #send_registration_email(email, html)
         
-            return redirect(url_for("index"))
+            return True
 
         except pymysql.IntegrityError:
-          return ("Username already exists")
-
-
-#companyname
-#salting hashing here
-#send email for verification here
-
-
-#def register_twitter_user(username, password, usertype, email, twitterusername):
-          
-    is_valid = validate_email(email)
-    
-    if (is_valid == True):
-    
-        with connection.cursor() as cursor:
-
-            salt = os.urandom(32)
-            
-            key = hashlib.pbkdf2_hmac('sha256', password.encode("utf-8"), salt, 100000)
-            
-            sqlcommand = "INSERT INTO `UserInfo` (`username`, `salt`, `key`, `usertype`, `email`, `twitterusername`) VALUES (%s, %s, %s, %s, %s, %s)"
-            
-            try:
-                cursor.execute(sqlcommand, (username, salt, key, usertype, email, twitterusername))
-                connection.commit()
-                return True
-
-            except pymysql.IntegrityError:
-              return False
-        
-    else:
-        return True
+          return False
 
 
 def recover_username(email):
@@ -213,16 +183,18 @@ def whitelist_user(username, targetUser):
             cursor.execute(sqlcommand, (username, targetUser))
             connection.commit()
 
-        except pymysql.IntegrityError:
-          return ("Already whitelisted")
+            return True
+
+        except pymysql.IntegrityError: #User already exists
+          return False
 
 def retrieve_whitelist(username):
     with connection.cursor() as cursor:
         sqlcommand = "SELECT `whitelisted` FROM `WhitelistTable` WHERE `username` = %s"
         cursor.execute(sqlcommand, (username))
         result = cursor.fetchall()
-        for item in result:
-            print(item["whitelisted"])
+
+        return result
 
 def blacklist_user(username, targetUser):
 
@@ -234,16 +206,18 @@ def blacklist_user(username, targetUser):
             cursor.execute(sqlcommand, (username, targetUser))
             connection.commit()
 
+            return True
+
         except pymysql.IntegrityError:
-          return ("Already blacklisted")
+          return False
 
 def retrieve_blacklist(username):
     with connection.cursor() as cursor:
         sqlcommand = "SELECT `blacklisted` FROM `BlacklistTable` WHERE `username` = %s"
         cursor.execute(sqlcommand, (username))
         result = cursor.fetchall()
-        for item in result:
-            print(item["blacklisted"])
+
+        return result
 
 
 #Twitter Function not DB
@@ -266,6 +240,7 @@ def retrieve_blocked(username):
         sqlcommand = "SELECT `blocked` FROM `BlockTable` WHERE `username` = %s"
         cursor.execute(sqlcommand, (username))
         result = cursor.fetchall()
+        
         for item in result:
             print(item["blocked"])
 

@@ -79,7 +79,7 @@
             <a class="nav-link" href="{% url 'login' %}">Dashboard</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'login' %}">Logout</a>
+            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
           </li>
         </ul>
       </div>
@@ -106,10 +106,12 @@
 
                   <!--Error Messages-->
                   {% if messages %}
-                  {% for message in messages %}
-                  <p{% if message.tags %} class="alert alert-danger pb-2 pt-2" {% endif %}>{{ message }}</p>
+                    {% for message in messages %}
+                      <p class="alert alert-{{ message.tags }}">
+                        {{ message }}
+                      </p>
                     {% endfor %}
-                    {% endif %}
+                  {% endif %}
 
                     {% csrf_token %}
                     <div class="form-outline mb-4">
@@ -134,7 +136,7 @@
                     <div class="d-flex align-items-center justify-content-center mb-4 pb-4 pt-2">
                       <h4 class="mb-0 me-2">Sign in via Twitter: </h4>
                       <button type="button" class="btn btn-outline-secondary mx-1">
-                        <i class="fab fa-twitter twitter-icon" style="font-size:20px!important;"></i>
+                        <i class="fab fa-twitter twitter-icon"></i>
                       </button>
                     </div>
 
