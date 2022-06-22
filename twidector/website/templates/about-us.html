@@ -12,7 +12,9 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-grid.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-utilities.css' %}" />
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+        integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}" />
 
@@ -126,39 +128,82 @@
             <h3 class="text-center mb-4 mt-3"> All our plans and features </h3>
             <div class="col-md-10">
 
-            <table class="table table-bordered table-striped table-responsive text-center feature-table">
-                <thead>
-                  <tr>
-                    <th scope="col" style="width:48%">Feature</th>
-                    <th scope="col" style="width:16%">Free</th>
-                    <th scope="col" style="width:16%">Basic</th>
-                    <th scope="col" style="width:16%">Business</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <th class="font-weight-medium" scope="row">Hate Detection</th>
-                    <td><i class="fa fa-check"></td>
-                    <td><i class="fa fa-check"></td>
-                    <td><i class="fa fa-check"></td>
-                  </tr>
-                  <tr>
-                    <th class="font-weight-medium" scope="row">Fraud Detection</th>
-                    <td><i class="fa fa-x"></td>
-                    <td><i class="fa fa-check"></td>
-                    <td><i class="fa fa-check"></td>
-                  </tr>
-                  <tr>
-                    <th class="font-weight-medium" scope="row">Fake news Detection</th>
-                    <td><i class="fa fa-x"></td>
-                    <td><i class="fa fa-check"></td>
-                    <td><i class="fa fa-check"></td>
-                  </tr>
-                </tbody>
-              </table>
+                <table class="table table-bordered table-striped table-responsive text-center feature-table">
+                    <thead>
+                        <tr>
+                            <th scope="col" style="width:48%">Feature</th>
+                            <th scope="col" style="width:16%">Free</th>
+                            <th scope="col" style="width:16%">Basic</th>
+                            <th scope="col" style="width:16%">Business</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th class="font-weight-medium" scope="row">Hate Detection</th>
+                            <td><i class="fa fa-check"></td>
+                            <td><i class="fa fa-check"></td>
+                            <td><i class="fa fa-check"></td>
+                        </tr>
+                        <tr>
+                            <th class="font-weight-medium" scope="row">Fraud Detection</th>
+                            <td><i class="fa fa-x"></td>
+                            <td><i class="fa fa-check"></td>
+                            <td><i class="fa fa-check"></td>
+                        </tr>
+                        <tr>
+                            <th class="font-weight-medium" scope="row">Fake news Detection</th>
+                            <td><i class="fa fa-x"></td>
+                            <td><i class="fa fa-check"></td>
+                            <td><i class="fa fa-check"></td>
+                        </tr>
+                        <tr>
+                            <th class="font-weight-medium" scope="row">Blacklist recommendation </th>
+                            <td><i class="fa fa-x"></td>
+                            <td><i class="fa fa-x"></td>
+                            <td><i class="fa fa-check"></td>
+                        </tr>
+
+                        <tr>
+                            <th class="font-weight-medium" scope="row">Whitelist </th>
+                            <td><i class="fa fa-x"></td>
+                            <td><i class="fa fa-x"></td>
+                            <td><i class="fa fa-check"></td>
+                        </tr>
+
+                        <tr>
+                            <th class="font-weight-medium" scope="row">Blacklist </th>
+                            <td><i class="fa fa-x"></td>
+                            <td><i class="fa fa-x"></td>
+                            <td><i class="fa fa-check"></td>
+                        </tr>
+
+                        <tr>
+                            <th class="font-weight-medium" scope="row">Fact Check </th>
+                            <td><i class="fa fa-x"></td>
+                            <td><i class="fa fa-check"></td>
+                            <td><i class="fa fa-check"></td>
+                        </tr>
+
+                        <tr>
+                            <th class="font-weight-medium" scope="row">Block </th>
+                            <td><i class="fa fa-x"></td>
+                            <td><i class="fa fa-check"></td>
+                            <td><i class="fa fa-x"></td>
+                        </tr>
+
+
+                        <tr>
+                            <th class="font-weight-medium" scope="row">Categorising Hate Content </th>
+                            <td><i class="fa fa-x"></td>
+                            <td><i class="fa fa-check"></td>
+                            <td><i class="fa fa-check"></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-            
-            <a type="button" class="btn btn-outline-secondary" href="{%url 'register'%}" style="width:33%;margin:20px auto;">Join us right now!</a>
+
+            <a type="button" class="btn btn-outline-secondary" href="{%url 'register'%}"
+                style="width:33%;margin:20px auto;">Join us right now!</a>
         </div>
     </div>
 

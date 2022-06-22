@@ -77,6 +77,22 @@ def confirm_email(token):
 
     return True
 
+def salting():
+    salt = os.urandom(32)
+
+    return salt
+
+def encrypt(text):
+    salt = salting()
+    encrypted = hashlib.pbkdf2_hmac('sha256', text.encode("utf-8"), salt, 100000)
+
+    salt_and_encrypted = { "salt" : salt,
+                            "encrypted" : encrypted}
+
+    return salt_and_encrypted
+
+
+
 def validate_login(username, password):
     with connection.cursor() as cursor:
         
@@ -110,16 +126,14 @@ def register_user(username, password, user_type, email):
     
     with connection.cursor() as cursor:
 
-        salt = os.urandom(32)
-
-        key = hashlib.pbkdf2_hmac('sha256', password.encode("utf-8"), salt, 100000)
+        encrypt_dict = encrypt(password)
 
         sqlcommand = "INSERT INTO `UserInfo` (`username`, `salt`, `key`, `user_type`, `email`, `confirmed`) VALUES (%s, %s, %s, %s, %s, %s)"
 
         try:
 
             #Set 1 to 0 back once confirm email is complete
-            cursor.execute(sqlcommand, (username, salt, key, user_type, email, 1))
+            cursor.execute(sqlcommand, (username, encrypt_dict["salt"], encrypt_dict["encrypted"], user_type, email, 1))
             connection.commit()
 
             #token = generate_token(email)
@@ -168,6 +182,29 @@ def recover_password(username, email):
         
         except:
             return ("Invalid")
+
+def change_password(username, password):
+    with connection.cursor() as cursor:
+
+        encrypt_dict = encrypt(password)
+
+        sqlcommand = "UPDATE `UserInfo` SET `salt` = %s ,`key` = %s WHERE `username` = %s"
+        cursor.execute(sqlcommand, (encrypt_dict["salt"],encrypt_dict["encrypt"],username))
+        
+        connection.commit()
+        print("Password change success")
+
+#requires password to change email
+def change_email(username, email, password):
+    with connection.cursor() as cursor:
+
+        encrypt_dict = encrypt(password)
+
+        sqlcommand = "UPDATE `UserInfo` SET `email` = %s WHERE `username` = %s"
+        cursor.execute(sqlcommand, (email,username))
+        
+        connection.commit()
+        print("Email changed success")
         
 #change to send by email method eventually
 #dont have to validate email here, dont let attackers know what usernames/emails exist
