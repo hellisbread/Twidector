@@ -72,7 +72,7 @@
             <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Dashboard</a>
+                        <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'logout' %}">Logout</a>
@@ -158,7 +158,7 @@
               </table>
             </div>
             
-            <a type="button" class="btn btn-outline-secondary" href="register.html" style="width:33%;margin:20px auto;">Join us right now!</a>
+            <a type="button" class="btn btn-outline-secondary" href="{%url 'register'%}" style="width:33%;margin:20px auto;">Join us right now!</a>
         </div>
     </div>
 

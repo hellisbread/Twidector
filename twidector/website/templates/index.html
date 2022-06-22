@@ -72,7 +72,7 @@
         <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-              <a class="nav-link" href="#">Dashboard</a>
+              <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
           </li>
               <li class="nav-item">
                   <a class="nav-link" href="{% url 'logout' %}">Logout</a>
@@ -99,7 +99,7 @@
                 <p class="text-white text-center" style="font-size:20px;margin-top:0.5rem;margin-bottom:0.5rem;">Give our product a try! It's free! </p>
             </div>
             <div class="col-lg-2 col-md-2 bg-info">
-                <p class="text-white text-center" style="font-size:20px;margin-top:0.5rem;margin-bottom:0.5rem;"><a class="no-underline goto-freetrial" href="% url 'free-trial' %">Go to Free Trial</a></p>
+                <p class="text-white text-center" style="font-size:20px;margin-top:0.5rem;margin-bottom:0.5rem;"><a class="no-underline goto-freetrial" href="{% url 'free-trial' %}">Go to Free Trial</a></p>
             </div>
         </div>
     </div>

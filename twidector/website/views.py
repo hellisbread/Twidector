@@ -15,24 +15,27 @@ def aboutTeam(request):
     return render(request,'about-team.html',{})
 
 def login(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
+    if 'loggedin' not in request.session:
+        if request.method == 'POST':
+            username = request.POST['username']
+            password = request.POST['password']
 
-        result = validate_login(username, password)
+            result = validate_login(username, password)
 
-        if result:
-            messages.success(request, 'Successfully Login to Account')
+            if result:
+                messages.success(request, 'Successfully Login to Account')
 
-            request.session['loggedin'] = username
-            return redirect('dashboard')
-            
+                request.session['loggedin'] = username
+                return redirect('dashboard')
+                
+            else:
+                messages.error(request, 'Invalid Username or Password')
+                return redirect('login')
+
         else:
-            messages.error(request, 'Invalid Username or Password')
-            return redirect('login')
-
+            return render(request, 'login.html', {})
     else:
-         return render(request, 'login.html', {})
+        return redirect('index')
 
 def logout(request):
     if 'loggedin' not in request.session:
@@ -45,24 +48,27 @@ def logout(request):
         return redirect('login')
         
 def register(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        email = request.POST['email']
-        password = request.POST['password']
-        twitterusername = request.POST['twitterusername']
-        usertype = 0
 
-        result = register_user(username, password, usertype, email)
+    if 'loggedin' not in request.session:
+        if request.method == 'POST':
+            username = request.POST['username']
+            email = request.POST['email']
+            password = request.POST['password']
+            usertype = 0
 
-        if result:
-            messages.success(request, 'Successfully Created Account')
-            return redirect('login')
+            result = register_user(username, password, usertype, email)
+
+            if result:
+                messages.success(request, 'Successfully Created Account')
+                return redirect('login')
+            else:
+                messages.error(request, 'This username may already exist.')
+                return redirect('register')
+            
         else:
-            messages.error(request, 'This username may already exist.')
-            return redirect('register')
-        
+            return render(request, 'register.html', {})
     else:
-        return render(request, 'register.html', {})
+        return redirect('index')
 
 
 def forgotPassword(request):
