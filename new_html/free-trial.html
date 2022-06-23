@@ -11,6 +11,10 @@
     <link rel="stylesheet" type="text/css" href="css/bootstrap-grid.css" />
     <link rel="stylesheet" type="text/css" href="css/bootstrap-utilities.css" />
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+        integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     <link rel="stylesheet" type="text/css" href="css/main.css" />
 
     <!--Favicon-->
@@ -77,16 +81,20 @@
 
     <div class="container">
         <div class="row">
+            <h4 class="text-center mt-4">Key in a Twitter's user URL Below</h4>
             <div class="col-md-12">
-                <div class="form-outline mb-4 mt-4">
-                    <h4 class="text-center mb-4">Key in a Twitter's user URL Below</h5>
+                <div class="form-outline mb-4 mt-2">
+                    
                     <input type="text" id="email" class="form-control" placeholder="Twitter User's URL" />
                     <small class="text-muted text-form">Enter a Twitter's user URL. E.g: https://www.twitter.com/UserIGN . We will text-scrape the profile and begin our hate detection algorithm. <br/> Note: Ensure that the user profile is public.</small>
                 </div>
                 <!-- search Button -->
-                <a typ="button" href ="free_trialpg2.html" class="btn btn-black-outline-secondary">Search</a>
-            </br>
+                
             </div>
+        </div>
+
+        <div class="d-grid gap-2 col-3 mx-auto">
+            <a type="button" href ="free_trialpg2.html" class="btn btn-block btn-black-outline-secondary text-center"><i class="fa fa-search"></i> Search</a>
         </div>
     </div>
     <!--JavaScript(s)-->
