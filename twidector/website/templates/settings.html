@@ -97,24 +97,33 @@
 
 
     <!-- CONTENT -->
-    <form class="page-content p-3" id="content">
+    <form class="page-content p-3" id="content" method="POST" action="/settings/">
+        {% csrf_token %}
         <div class="container">
             <h3>Settings</h3>
             <hr>
             <div class="row mt-4">
+                <!--Error Messages-->
+                {% if messages %}
+                {% for message in messages %}
+                  <p class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                  </p>
+                {% endfor %}
+              {% endif %}
                 <h4 class="mb-4">Change password</h4>
                 <div class="col-md-8">
 
                     <div class="form-outline mb-4">
                         <label class="form-label">Current Password:</label>
-                        <input type="password" id="old-password" class="form-control" placeholder="Old Password" />
+                        <input type="password" id="old-password" name="old-password" class="form-control" placeholder="Old Password" />
                     </div>
 
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-outline mb-4">
                                 <label class="form-label">New Password:</label>
-                                <input type="password" id="new-password" class="form-control"
+                                <input type="password" id="new-password" name="new-password" class="form-control"
                                     placeholder="New Password" />
                             </div>
                         </div>
@@ -122,14 +131,14 @@
 
                             <div class="form-outline mb-4">
                                 <label class="form-label">Confirm New Password:</label>
-                                <input type="password" id="confirm-new-password" class="form-control"
+                                <input type="password" id="confirm-new-password" name="confirm-new-password" class="form-control"
                                     placeholder="New Password" />
                             </div>
                         </div>
                     </div>
 
                     <div class="pt-1 mb-5 pb-1">
-                        <input type="submit" class="btn btn-block btn-outline-secondary" href="login.html"
+                        <input type="submit" class="btn btn-block btn-outline-secondary" name="change-password" href="login.html"
                             value="Change Your Password" />
                     </div>
                 </div>

@@ -168,6 +168,49 @@ def whitelist(request):
             return render(request, 'whitelist.html', context)
 
 def settings(request):
-    return render(request, 'settings.html', {})
+    if 'loggedin' not in request.session:
+        messages.error(request, 'please login before enterring the dashboard.')
+        return redirect('login')
+    else:
+
+        if 'change-password' in request.POST:
+
+            loggedUser = request.session.get('loggedin')
+            old_password = request.POST['old-password']
+            new_password = request.POST['new-password']
+            confirm_new_password = request.POST['confirm-new-password']
+
+            checkPassword = validate_login(loggedUser, old_password)
+
+            if checkPassword:
+
+                #check password
+                if (new_password == confirm_new_password):
+                    result = change_password(loggedUser, new_password)
+
+                    if result:
+                        messages.success(request,"You have successfully changed your password!")
+
+                    else:
+                        messages.error(request, "There was an error changing your password.")
+
+                    return redirect('settings')
+
+                else:
+                    messages.error(request, "The password confirmation does not match.")
+                    return redirect('settings')
+
+            else:
+                messages.error(request, "Invalid Password.")
+                return redirect('settings')
+        
+        else:
+
+            return render(request, 'settings.html', {})
+
+            
+
+
+        
 
 

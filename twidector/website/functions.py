@@ -183,17 +183,19 @@ def recover_password(username, email):
         except:
             return ("Invalid")
 
+#will send an email to user
 def change_password(username, password):
     with connection.cursor() as cursor:
 
         encrypt_dict = encrypt(password)
 
         sqlcommand = "UPDATE `UserInfo` SET `salt` = %s ,`key` = %s WHERE `username` = %s"
-        cursor.execute(sqlcommand, (encrypt_dict["salt"],encrypt_dict["encrypt"],username))
+        cursor.execute(sqlcommand, (encrypt_dict["salt"],encrypt_dict["encrypted"],username))
         
         connection.commit()
-        print("Password change success")
+        return True
 
+#willsend an email to user
 #requires password to change email
 def change_email(username, email, password):
     with connection.cursor() as cursor:
