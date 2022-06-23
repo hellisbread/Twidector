@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+{%load static%}
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Twidector - Login</title>
+
+  <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-grid.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-utilities.css' %}" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+        integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}" />
+
+    <!--Favicon-->
+    <link rel="icon" href="{% static 'img/cropped-twidector-1-1.png' %}" sizes="32x32" />
+    <link rel="icon" href="{% static 'img/cropped-twidector-1-2.png' %}" sizes="192x192" />
+    <link rel="apple-touch-icon" href="{% static 'img/cropped-twidector-1-2.png' %}" />
+</head>
+
+<body>
+    <!--Navigation-->
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+      <div class="container-fluid">
+          <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+              <ul class="navbar-nav me-auto">
+                  <li class="nav-item">
+                      <a class="nav-link" href="{% url 'index' %}">Home</a>
+                  </li>
+                  <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
+                          data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          About
+                      </a>
+                      <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                          <a class="dropdown-item" href="{% url 'about-us' %}">About Twidector</a>
+                          <a class="dropdown-item" href="{% url 'about-team' %}">About the team</a>
+                      </div>
+                  </li>
+                  <li class="nav-item active">
+                      <a class="nav-link" href="{% url 'free-trial' %}">Free Trial</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="https://fyp22s205.wordpress.com/blog">Blog</a>
+                  </li>
+                  
+              </ul>
+          </div>
+          <div class="mx-auto order-0">
+              <a class="navbar-brand mx-auto" href="{% url 'index' %}">Twidector</a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".dual-collapse2">
+                  <span class="navbar-toggler-icon"></span>
+              </button>
+          </div>
+          {% if 'loggedin' not in request.session %}
+      <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+          <ul class="navbar-nav ms-auto">
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'login' %}">Login</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'register' %}">Register</a>
+              </li>
+          </ul>
+      </div>
+      {% else %}
+      <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
+        </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+            </li>
+        </ul>
+    </div>
+    {% endif %}
+      </div>
+  </nav>
+
+  <!--Banner-->
+  <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-light banner">
+    <div class="col-md-5 p-lg-5 mx-auto my-5 banner-text-bg">
+      <h1 class="display-4 font-weight-normal">Free Trial</h1>
+      <p class="lead font-weight-normal">Give Twidector a try right now!</p>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <h3 class="text-center mt-4"> Analysed <strong>200</strong> Tweets from user - TestUser123</h3>
+    <p class="text-center"><small >You have reached the limit of max analysed tweets for free users. Join us to analyse more!</small></p>
+
+  </div>
+
+  <div class="container mb-5">
+    <div class="row justify-content-md-center">
+      <div class="card" style="box-shadow:5px 3px red;">
+        <div class="card-header pt-4">
+          <div class="row">
+            <div class="col-md-3">
+              <img src="{% static 'img/emptyprofile.png'%}" style="height:max-content"/>
+            </div>
+            <div class="col-md-4">
+              <h5 class="card-title">Twitter user: TestUser123</h5>
+              <h6 class="card-subtitle mb-5"><a href="#">http://www.twitter.com/TestUser123</a></h6>
+              <p class="card-text"> Summary: <br/> This user is a <strong>negative</strong> twitter user.</p>
+            </div>
+            <div class="col-md-5">
+              <h5 class="card-title">Scan Result:</h5>
+              <p class="card-text"> Found <strong>150</strong> Negative Tweets. <br/> 75/150 are racist. <br/> 50/150 are vulgar <br/> 25/150 are others.</p>
+            </div>
+          </div>
+          
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-7">
+                    <h6>Tweet #1 <small>Posted on 22/06/2022</small></h6>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                </div>
+                <div class="col-md-1"></div>
+                <div class="col-md-4">
+                  <h6>Tweet Classification</h6>
+                  <p>This is a <strong>Negative</strong> Tweet. <br/> Tweet contains vulgar words.</p>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-md-7">
+                  <h6>Tweet #2 <small>Posted on 22/06/2022</small></h6>
+                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+              </div>
+              <div class="col-md-1"></div>
+              <div class="col-md-4">
+                <h6>Tweet Classification</h6>
+                <p>This is a <strong>Negative</strong> Tweet. <br/> Tweet contains vulgar words.</p>
+              </div>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="col-md-7">
+                <h6>Tweet #3 <small>Posted on 22/06/2022</small></h6>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-4">
+              <h6>Tweet Classification</h6>
+              <p>This is a <strong>Negative</strong> Tweet. <br/> Tweet contains vulgar words.</p>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-md-7">
+              <h6>Tweet #4 <small>Posted on 22/06/2022</small></h6>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+          </div>
+          <div class="col-md-1"></div>
+          <div class="col-md-4">
+            <h6>Tweet Classification</h6>
+            <p>This is a <strong>Negative</strong> Tweet. <br/> Tweet contains vulgar words.</p>
+          </div>
+      </div>
+        </div>
+        <div class="card-footer mt-3">
+          <h5 class="text-center mt-4">Want to learn more about TestUser123?</h5>
+          <div class="d-grid gap-2 col-3 mx-auto mb-3">
+            <a type="button" href ="{% url 'register' %}" class="btn btn-block btn-black-outline-secondary text-center">Join us right now!</a>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!--JavaScript(s)-->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>

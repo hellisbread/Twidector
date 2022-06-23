@@ -80,6 +80,9 @@ def resetPassword(request):
 def freeTrial(request):
     return render(request, 'free-trial.html', {})
 
+def freeTrialTwo(request):
+    return render(request, 'free-trial-2.html', {})
+
 
 
 
