@@ -32,6 +32,7 @@ urlpatterns = [
     path('dashboard/', views.dashboard, name='dashboard'),
     path('analyse/', views.analyse, name='analyse'),
     path('analyse-2/', views.analyseTwo, name='analyse-2'),
+    path('view-tweet/', views.viewTweet, name='view-tweet'),
     path('blacklist/', views.blacklist, name='blacklist'),
     path('whitelist/', views.whitelist, name='whitelist'),
     path('settings/',views.settings,name='settings'),

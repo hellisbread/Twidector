@@ -97,6 +97,9 @@ def analyse(request):
 def analyseTwo(request):
     return render(request, 'analyse-2.html', {})
 
+def viewTweet(request):
+    return render(request, 'view-tweet.html', {})
+
 def blacklist(request):
 
     if 'loggedin' not in request.session:
