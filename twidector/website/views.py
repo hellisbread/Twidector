@@ -91,6 +91,12 @@ def freeTrialTwo(request):
 def dashboard(request):
     return render(request, 'dashboard.html', {})
 
+def analyse(request):
+    return render(request, 'analyse.html', {})
+
+def analyseTwo(request):
+    return render(request, 'analyse-2.html', {})
+
 def blacklist(request):
 
     if 'loggedin' not in request.session:
