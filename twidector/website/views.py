@@ -1,8 +1,26 @@
+import git
 from wsgiref import validate
 from django.shortcuts import render, redirect
 from django.contrib import messages
 
+from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+
 from website.functions import *
+
+@csrf_exempt
+
+def update(request):
+    if request.method == "POST":
+        
+        repo = git.Repo("twidector.pythonanywhere.com/") 
+        origin = repo.remotes.origin
+
+        origin.pull()
+
+        return HttpResponse("Updated code on PythonAnywhere")
+    else:
+        return HttpResponse("Couldn't update the code on PythonAnywhere")
 
 # Create your views here.
 def index(request):

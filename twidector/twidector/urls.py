@@ -36,5 +36,6 @@ urlpatterns = [
     path('blacklist/', views.blacklist, name='blacklist'),
     path('whitelist/', views.whitelist, name='whitelist'),
     path('settings/',views.settings,name='settings'),
+    path("update_server/", views.update, name="update"),
     #path('admin/', admin.site.urls),
 ]
