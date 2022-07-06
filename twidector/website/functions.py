@@ -16,7 +16,7 @@ import datetime
 import sshtunnel
 import logging
 from sshtunnel import SSHTunnelForwarder
-import config
+#import config
 
 from website.config import *
 
@@ -31,9 +31,9 @@ def open_ssh_tunnel():
     global tunnel
     
     tunnel = SSHTunnelForwarder(
-        (config.server_ssh_host),
-        ssh_username = config.server_user,
-        ssh_password = config.server_ssh_password,
+        (server_ssh_host),
+        ssh_username = server_user,
+        ssh_password = server_ssh_password,
         remote_bind_address = ('twidector.mysql.pythonanywhere-services.com', 3306)
     )
     
@@ -47,11 +47,11 @@ def open_server():
     global connection
 
     connection = pymysql.connect(
-        user = config.server_user,
-        password = config.server_password,
+        user = server_user,
+        password = server_password,
         host ='127.0.0.1', #sus
         port =tunnel.local_bind_port,
-        db = config.server_db,
+        db = server_db,
         charset = "utf8",
         cursorclass = pymysql.cursors.DictCursor
     )
