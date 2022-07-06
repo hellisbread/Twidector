@@ -1,3 +1,4 @@
+from fileinput import close
 from mysql.connector.errors import IntegrityError
 import pymysql.cursors
 import hashlib
@@ -12,20 +13,59 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import datetime
 
-#import config
+import sshtunnel
+import logging
+from sshtunnel import SSHTunnelForwarder
+import config
 
 from website.config import *
 
-connection = pymysql.connect(host = serverhost,
-                             port = serverport,
-                             user = serveruser,
-                             password = serverpassword,
-                             db = serverdb,
-                             charset = "utf8",
-                             cursorclass = pymysql.cursors.DictCursor)
-
 salt = os.urandom(32)
 ts = URLSafeTimedSerializer(salt)
+
+sshtunnel.SSH_TIMEOUT = 120.0
+sshtunnel.TUNNEL_TIMEOUT = 120.0
+
+def open_ssh_tunnel():
+    
+    global tunnel
+    
+    tunnel = SSHTunnelForwarder(
+        (config.server_ssh_host),
+        ssh_username = config.server_user,
+        ssh_password = config.server_ssh_password,
+        remote_bind_address = ('twidector.mysql.pythonanywhere-services.com', 3306)
+    )
+    
+    tunnel.start()
+
+def close_ssh_tunnel():
+    tunnel.close
+
+def open_server():
+
+    global connection
+
+    connection = pymysql.connect(
+        user = config.server_user,
+        password = config.server_password,
+        host ='127.0.0.1', #sus
+        port =tunnel.local_bind_port,
+        db = config.server_db,
+        charset = "utf8",
+        cursorclass = pymysql.cursors.DictCursor
+    )
+    
+def close_server():
+    connection.close()
+
+def open_connect():
+    open_ssh_tunnel()
+    open_server()
+    
+def close_connect():
+    close_server()
+    close_ssh_tunnel()
 
 def generate_token(email):
     
@@ -124,6 +164,8 @@ def validate_login(username, password):
 
 def register_user(username, password, user_type, email):
     
+    open_connect()
+
     with connection.cursor() as cursor:
 
         encrypt_dict = encrypt(password)
@@ -147,8 +189,13 @@ def register_user(username, password, user_type, email):
         except pymysql.IntegrityError:
           return False
 
+    close_connect()
+
 
 def recover_username(email):
+
+    open_connect
+
     with connection.cursor() as cursor:
         
         sqlcommand = "SELECT `username` FROM `UserInfo` WHERE `email` = %s"
@@ -161,10 +208,15 @@ def recover_username(email):
         
         except:
             return ("Invalid")
+
+    close_connect()
         
 #send to email
 
 def recover_password(username, email):
+
+    open_connect()
+
     with connection.cursor() as cursor:
         
         sqlcommand = "SELECT `username`, `email` FROM `UserInfo` WHERE `username` = %s AND `email` = %s"
@@ -183,8 +235,13 @@ def recover_password(username, email):
         except:
             return ("Invalid")
 
+    close_connect()
+
 #will send an email to user
 def change_password(username, password):
+
+    open_connect()
+
     with connection.cursor() as cursor:
 
         encrypt_dict = encrypt(password)
@@ -194,10 +251,15 @@ def change_password(username, password):
         
         connection.commit()
         return True
+    
+    close_connect()
 
 #willsend an email to user
 #requires password to change email
 def change_email(username, email, password):
+
+    open_connect()
+
     with connection.cursor() as cursor:
 
         encrypt_dict = encrypt(password)
@@ -207,12 +269,16 @@ def change_email(username, email, password):
         
         connection.commit()
         print("Email changed success")
+
+    close_connect()
         
 #change to send by email method eventually
 #dont have to validate email here, dont let attackers know what usernames/emails exist
 
 
 def whitelist_user(username, targetUser):
+
+    open_connect()
 
     with connection.cursor() as cursor:
 
@@ -227,7 +293,12 @@ def whitelist_user(username, targetUser):
         except pymysql.IntegrityError: #User already exists
           return False
 
+    close_connect()
+
 def retrieve_whitelist(username):
+
+    open_connect()
+
     with connection.cursor() as cursor:
         sqlcommand = "SELECT `whitelisted` FROM `WhitelistTable` WHERE `username` = %s"
         cursor.execute(sqlcommand, (username))
@@ -235,7 +306,11 @@ def retrieve_whitelist(username):
 
         return result
 
+    close_connect()
+
 def blacklist_user(username, targetUser):
+
+    open_connect()
 
     with connection.cursor() as cursor:
 
@@ -250,7 +325,12 @@ def blacklist_user(username, targetUser):
         except pymysql.IntegrityError:
           return False
 
+    close_connect()
+
 def retrieve_blacklist(username):
+
+    open_connect()
+
     with connection.cursor() as cursor:
         sqlcommand = "SELECT `blacklisted` FROM `BlacklistTable` WHERE `username` = %s"
         cursor.execute(sqlcommand, (username))
@@ -258,9 +338,12 @@ def retrieve_blacklist(username):
 
         return result
 
+    close_connect()
 
 #Twitter Function not DB
 def block_user(username, targetUser):
+
+    open_connect()
 
     with connection.cursor() as cursor:
 
@@ -273,8 +356,13 @@ def block_user(username, targetUser):
         except pymysql.IntegrityError:
           return ("Already blocked")
 
+    close_connect()
+
 #Twitter Function not DB
 def retrieve_blocked(username):
+
+    open_connect()
+
     with connection.cursor() as cursor:
         sqlcommand = "SELECT `blocked` FROM `BlockTable` WHERE `username` = %s"
         cursor.execute(sqlcommand, (username))
@@ -283,13 +371,20 @@ def retrieve_blocked(username):
         for item in result:
             print(item["blocked"])
 
+    close_connect()
+
 def delete_account(username):
+
+    open_connect()
+
     with connection.cursor() as cursor:
         sqlcommand = "DELETE FROM `UserInfo` WHERE `username` = %s"
         cursor.execute(sqlcommand, (username))
         
         connection.commit()
         print("Deletion success")
+
+    close_connect()
 
 # Delete button -> Are you sure you want to delete -> Yes -> delete_account
 
