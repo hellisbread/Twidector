@@ -134,6 +134,8 @@ def encrypt(text):
 
 
 def validate_login(username, password):
+    open_connect()
+
     with connection.cursor() as cursor:
         
         try:
@@ -161,6 +163,8 @@ def validate_login(username, password):
             
         except:
             return False
+
+    close_connect()
 
 def register_user(username, password, user_type, email):
     
