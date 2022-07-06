@@ -153,18 +153,22 @@ def validate_login(username, password):
             currentkey = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), salt, 100000)
 
             if ((secrets.compare_digest(currentkey,key) == True) and (result["confirmed"]) == 1):
+                close_connect()
                 return True
             
             elif ((secrets.compare_digest(currentkey,key) == True) and (result["confirmed"]) == 0):
+                close_connect()
                 return False
             
             else:
+                close_connect()
                 return False
             
         except:
+            close_connect()
             return False
 
-    close_connect()
+    
 
 def register_user(username, password, user_type, email):
     
@@ -187,13 +191,14 @@ def register_user(username, password, user_type, email):
             
             #html = render_template("activate.html", confirm_url=confirm_url)
             #send_registration_email(email, html)
-        
+
+
+            close_connect()
             return True
 
         except pymysql.IntegrityError:
-          return False
-
-    close_connect()
+            close_connect()
+            return False
 
 
 def recover_username(email):
