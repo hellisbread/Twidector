@@ -1,4 +1,4 @@
-import git
+#import git
 from wsgiref import validate
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -13,10 +13,10 @@ from website.functions import *
 def update(request):
     if request.method == "POST":
         
-        repo = git.Repo("twidector.pythonanywhere.com/") 
-        origin = repo.remotes.origin
+        #repo = git.Repo("twidector.pythonanywhere.com/") 
+        #origin = repo.remotes.origin
 
-        origin.pull()
+        #origin.pull()
 
         return HttpResponse("Updated code on PythonAnywhere")
     else:
@@ -31,6 +31,18 @@ def aboutUs(request):
 
 def aboutTeam(request):
     return render(request,'about-team.html',{})
+
+def accuracyScore(request):
+    return render(request, 'accuracy-score.html', {})
+
+def adminPage(request):
+    return render(request, 'admin-page.html', {})
+
+def searchAccount(request):
+    return render(request, 'search-account.html', {})
+
+def updateUser(request):
+    return render(request, 'update-user.html', {})
 
 def login(request):
     if 'loggedin' not in request.session:

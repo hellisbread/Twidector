@@ -37,5 +37,9 @@ urlpatterns = [
     path('whitelist/', views.whitelist, name='whitelist'),
     path('settings/',views.settings,name='settings'),
     path("update_server/", views.update, name="update"),
+    path('accuracy-score/', views.accuracyScore, name='accuracy-score'),
+    path('admin-page/', views.adminPage, name='admin-page'),
+    path('search-account/', views.searchAccount, name='search-account'),
+    path('update-user/', views.updateUser, name='update-user'),
     #path('admin/', admin.site.urls),
 ]
