@@ -239,3 +239,17 @@ This contains css that we added ourselves
   margin-left: 330px;
   margin-top: 20px;
 }
+
+#b-testing {
+  width: 100px;
+  height: 100px;
+  margin-top: 70px;
+  box-shadow: 3px 2px 3px black;
+}
+
+#b-testing1 {
+  width: 80px;
+  height: 100px;
+  margin-top: 70px;
+  box-shadow: 3px 2px 3px black;
+}
