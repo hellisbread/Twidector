@@ -32,17 +32,13 @@ def aboutUs(request):
 def aboutTeam(request):
     return render(request,'about-team.html',{})
 
-def accuracyScore(request):
-    return render(request, 'accuracy-score.html', {})
+def freeTrial(request):
+    return render(request, 'free-trial.html', {})
 
-def adminPage(request):
-    return render(request, 'admin-page.html', {})
+def freeTrialTwo(request):
+    return render(request, 'free-trial-2.html', {})
 
-def searchAccount(request):
-    return render(request, 'search-account.html', {})
-
-def updateUser(request):
-    return render(request, 'update-user.html', {})
+#Login/Register Views
 
 def login(request):
     if 'loggedin' not in request.session:
@@ -100,21 +96,48 @@ def register(request):
     else:
         return redirect('index')
 
-
 def forgotPassword(request):
     return render(request, 'forgot-password.html', {})
 
 def resetPassword(request):
     return render(request, 'reset-password.html', {})
 
-def freeTrial(request):
-    return render(request, 'free-trial.html', {})
+#Admin Views
 
-def freeTrialTwo(request):
-    return render(request, 'free-trial-2.html', {})
+def adminLogin(request):
+    if 'adminlog' not in request.session:
+        if request.method == 'POST':
+            username = request.POST['username']
+            password = request.POST['password']
 
+            result = validate_login(username, password)
 
+            if result:
+                messages.success(request, 'Successfully Login to Admin Panel')
 
+                request.session['adminlog'] = username
+                return redirect('admin/home')
+                
+            else:
+                messages.error(request, 'Invalid Username or Password')
+                return redirect('admin')
+
+        else:
+            return render(request, 'login.html', {})
+    else:
+        return redirect('index')
+
+def accuracyScore(request):
+    return render(request, 'accuracy-score.html', {})
+
+def adminPage(request):
+    return render(request, 'admin-page.html', {})
+
+def searchAccount(request):
+    return render(request, 'search-account.html', {})
+
+def updateUser(request):
+    return render(request, 'update-user.html', {})
 
 #Dashboard Views
 
