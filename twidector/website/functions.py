@@ -168,6 +168,37 @@ def validate_login(username, password):
             close_connect()
             return False
 
+def validate_admin(username, password):
+    open_connect()
+
+    with connection.cursor() as cursor:
+        
+        try:
+        
+            sqlcommand = "SELECT `salt`, `key`, `confirmed` FROM `UserInfo` WHERE `username` = %s"
+            cursor.execute(sqlcommand, (username))
+
+            result = cursor.fetchone()
+
+            salt = result["salt"]
+            
+            key = result["key"]
+            
+            
+            currentkey = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), salt, 100000)
+
+            if ((secrets.compare_digest(currentkey,key) == True) and (result["confirmed"]) == 2):
+                close_connect()
+                return True
+
+            else:
+                close_connect()
+                return False
+            
+        except:
+            close_connect()
+            return False
+
     
 
 def register_user(username, password, user_type, email):

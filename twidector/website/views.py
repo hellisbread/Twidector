@@ -142,16 +142,36 @@ def updateUser(request):
 #Dashboard Views
 
 def dashboard(request):
-    return render(request, 'dashboard.html', {})
+    if 'loggedin' not in request.session:
+        messages.error(request, 'please login before enterring the dashboard.')
+        return redirect('login')
+
+    else:
+        return render(request, 'dashboard.html', {})
 
 def analyse(request):
-    return render(request, 'analyse.html', {})
+    if 'loggedin' not in request.session:
+        messages.error(request, 'please login before enterring the dashboard.')
+        return redirect('login')
+
+    else:
+        return render(request, 'analyse.html', {})
 
 def analyseTwo(request):
-    return render(request, 'analyse-2.html', {})
+    if 'loggedin' not in request.session:
+        messages.error(request, 'please login before enterring the dashboard.')
+        return redirect('login')
+
+    else:
+        return render(request, 'analyse-2.html', {})
 
 def viewTweet(request):
-    return render(request, 'view-tweet.html', {})
+    if 'loggedin' not in request.session:
+        messages.error(request, 'please login before enterring the dashboard.')
+        return redirect('login')
+
+    else:
+        return render(request, 'view-tweet.html', {})
 
 def blacklist(request):
 
