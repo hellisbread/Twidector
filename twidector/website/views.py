@@ -80,7 +80,12 @@ def register(request):
             username = request.POST['username']
             email = request.POST['email']
             password = request.POST['password']
+            passwordcheck = request.POST['reenter-password']
             usertype = 0
+
+            if(password != passwordcheck):
+                messages.error(request, 'Error. Password does not match.')
+                return redirect('register')
 
             result = register_user(username, password, usertype, email)
 
