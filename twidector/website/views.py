@@ -128,7 +128,7 @@ def adminLogin(request):
                 return redirect('admin')
 
         else:
-            return render(request, 'login.html', {})
+            return render(request, 'admin-login.html', {})
     else:
         return redirect('index')
 
