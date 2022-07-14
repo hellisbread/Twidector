@@ -214,7 +214,7 @@ def register_user(username, password, user_type, email):
         try:
 
             #Set 1 to 0 back once confirm email is complete
-            cursor.execute(sqlcommand, (username, encrypt_dict["salt"], encrypt_dict["encrypted"], user_type, email, 0))
+            cursor.execute(sqlcommand, (username, encrypt_dict["salt"], encrypt_dict["encrypted"], user_type, email, 1))
             connection.commit()
 
             #token = generate_token(email)
@@ -230,27 +230,6 @@ def register_user(username, password, user_type, email):
         except pymysql.IntegrityError:
             close_connect()
             return False
-
-def activate_user(username):
-    
-    open_connect()
-
-    with connection.cursor() as cursor:
-
-        sqlcommand = "UPDATE `UserInfo` SET `confirmed` = %s WHERE `username` = %s"
-
-        try:
-
-            cursor.execute(sqlcommand, (1, username))
-            connection.commit()
-
-            close_connect()
-            return True
-
-        except pymysql.IntegrityError:
-            close_connect()
-            return False
-
 
 
 def recover_username(email):
