@@ -22,6 +22,8 @@ from website.functions import *
 
 from flask import redirect, render_template, url_for, abort
 
+from . import app
+
 app = Flask(__name__)
 @csrf_exempt
 
@@ -39,6 +41,7 @@ def update(request):
 
 # Create your views here.
 @app.route('/')
+@app.route('/index')
 def index(request):
     return render(request,'index.html',{})
 
@@ -55,7 +58,7 @@ def freeTrialTwo(request):
     return render(request, 'free-trial-2.html', {})
 
 #Login/Register Views
-
+@app.route('/login')
 def login(request):
     if 'loggedin' not in request.session:
         if request.method == 'POST':
@@ -105,12 +108,14 @@ def register(request):
                 return redirect('register')
 
             token = ts.dumps(email, salt="constant")
-            result = register_user(username, password, usertype, email)
+            
 
             confirm_url = url_for("activate_email", token=token, _external=True)
             
             html = render_template("activate_email.html", confirm_url=confirm_url)
             send_registration_email(email, html)
+
+            result = register_user(username, password, usertype, email)
 
             if result:
                 messages.success(request, 'An activation link has been sent to the email. Follow the instructions there to finish activating.')
@@ -132,9 +137,9 @@ def activate_email(token):
     except:
         abort(404)
 
-    search_email(email)
+    #search_email(email)
 
-    result = register_user(email,)
+    result = register_user(email)
 
     if result:
         messages.success('Successfully activated account. You can now login.')
