@@ -1,4 +1,5 @@
 #import git
+from . import app
 from wsgiref import validate
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -19,6 +20,8 @@ from django.template.loader import render_to_string
 from django.utils import six
 
 from website.functions import *
+
+from flask import redirect, render_template, url_for, abort
 
 @csrf_exempt
 
@@ -85,7 +88,7 @@ def logout(request):
         messages.success(request, 'Successfully Logged out.')
         return redirect('login')
         
-def register(request):
+#def register(request):
 
     if 'loggedin' not in request.session:
         if request.method == 'POST':
@@ -105,23 +108,7 @@ def register(request):
                 result = register_user(username, password, usertype, email)
 
                 if result:
-                    user = form.save(commit=False)
-                    user.is_active = False
-                    user.save()
-                    current_site = get_current_site(request)
-                    mail_subject = 'Activate your blog account.'
-                    message = render_to_string('acc_active_email.html', {
-                    'user': user,
-                    'domain': current_site.domain,
-                    'uid':urlsafe_base64_encode(force_bytes(user.pk)),
-                    'token':account_activation_token.make_token(user),
-                })
-                    to_email = form.cleaned_data.get('email')
-                    email = EmailMessage(
-                            mail_subject, message, to=[to_email]
-                )
-                    email.send()
-                    messages.success(request, 'Successfully Created Account')
+                    messages.success(request, 'An activation link has been sent to the email. Follow the instructions there to finish activating.')
                     return redirect('login')
                 else:
                     messages.error(request, 'This username may already exist.')
@@ -134,21 +121,68 @@ def register(request):
     else:
         return redirect('index')
 
-def activate(request, uidb64, token):
+@app.route('/confirm/<token>')
+def confirm_email(token, request):
     try:
-        uid = force_str(urlsafe_base64_decode(uidb64))
-        user = User.objects.get(pk=uid)
-    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
-        user = None
-    if user is not None and account_activation_token.check_token(user, token):
-        user.is_active = True
-        user.save()
-        login(request, user)
-        activate_user(request.user.username)
-        # return redirect('home')
-        return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
+        email = ts.loads(token, salt="constant", max_age=86400)
+    except:
+        abort(404)
+
+    search_email(email)
+
+    result = register_user(email,)
+
+    if result:
+        messages.success(request, 'Successfully activated account. You can now login.')
+        return redirect('login')
     else:
-        return HttpResponse('Activation link is invalid!')
+        messages.error(request, 'Token expired.')
+        return redirect('register')
+    
+
+def register(request):
+
+    if 'loggedin' not in request.session:
+        if request.method == 'POST':
+
+            username = request.POST['username']
+            email = request.POST['email']
+            password = request.POST['password']
+            passwordcheck = request.POST['reenter-password']
+            usertype = 0
+
+            if(password != passwordcheck):
+                messages.error(request, 'Error. Password does not match.')
+                return redirect('register')
+
+            result = register_user(username, password, usertype, email)
+
+            token = ts.dumps(email, salt="constant")
+
+            confirm_url = url_for(
+            'confirm_email',
+            token=token,
+            _external=True)
+
+            html = render_template(
+                'email_activate.html',
+                confirm_url=confirm_url)
+
+            send_registration_email(email, html)
+
+            if result:
+                messages.success(request, 'Successfully created account.')
+                return redirect('login')
+            else:
+                messages.error(request, 'Token expired.')
+                return redirect('register')
+            
+        else:
+            return render(request, 'register.html', {})
+    else:
+        return redirect('index')
+
+
 
 def forgotPassword(request):
     return render(request, 'forgot-password.html', {})
