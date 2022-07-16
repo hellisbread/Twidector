@@ -24,9 +24,6 @@ from sshtunnel import SSHTunnelForwarder
 
 from website.config import *
 
-
-app = Flask(__name__)
-
 salt = os.urandom(32)
 ts = URLSafeTimedSerializer(salt)
 
@@ -214,7 +211,7 @@ def register_user(username, password, user_type, email):
 
         try:     
             encrypt_dict = encrypt(password)
-            
+            token = ts.dumps(email, salt="constant")
             now = datetime.now()
             formatted_date = now.strftime('%Y-%m-%d %H:%M:%S')
             
@@ -223,6 +220,11 @@ def register_user(username, password, user_type, email):
             #Set 1 to 0 back once confirm email is complete
             cursor.execute(sqlcommand, (username, encrypt_dict["salt"], encrypt_dict["encrypted"], user_type, email, 0))
             connection.commit()
+
+            confirm_url = url_for("activate_email", token=token, _external=True)
+            
+            html = render_template("activate_email.html", confirm_url=confirm_url)
+            send_registration_email(email, html)
 
             close_connect()
             return True
