@@ -221,7 +221,7 @@ def register_user(username, password, user_type, email):
             sqlcommand = "INSERT INTO `UserInfo` (`username`, `salt`, `key`, `user_type`, `email`, `activated`) VALUES (%s, %s, %s, %s, %s, %s)"
 
             #Set 1 to 0 back once confirm email is complete
-            cursor.execute(sqlcommand, (username, encrypt_dict["salt"], encrypt_dict["encrypted"], user_type, email, 1))
+            cursor.execute(sqlcommand, (username, encrypt_dict["salt"], encrypt_dict["encrypted"], user_type, email, 0))
             connection.commit()
 
             close_connect()
