@@ -1,4 +1,5 @@
 #import git
+from . import app
 from wsgiref import validate
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -22,7 +23,6 @@ from website.functions import *
 
 from flask import redirect, render_template, url_for, abort
 
-app = Flask(__name__)
 @csrf_exempt
 
 def update(request):
@@ -38,7 +38,6 @@ def update(request):
         return HttpResponse("Couldn't update the code on PythonAnywhere")
 
 # Create your views here.
-@app.route('/')
 def index(request):
     return render(request,'index.html',{})
 
@@ -89,11 +88,11 @@ def logout(request):
         messages.success(request, 'Successfully Logged out.')
         return redirect('login')
         
-@app.route('/register', methods=["POST"])
-def register(request):
+#def register(request):
 
     if 'loggedin' not in request.session:
         if request.method == 'POST':
+            form = SignupForm(request.POST)
             username = request.POST['username']
             email = request.POST['email']
             password = request.POST['password']
@@ -104,29 +103,26 @@ def register(request):
                 messages.error(request, 'Error. Password does not match.')
                 return redirect('register')
 
-            token = ts.dumps(email, salt="constant")
-            result = register_user(username, password, usertype, email)
+            if form.is_valid():
 
-            confirm_url = url_for("activate_email", token=token, _external=True)
-            
-            html = render_template("activate_email.html", confirm_url=confirm_url)
-            send_registration_email(email, html)
+                result = register_user(username, password, usertype, email)
 
-            if result:
-                messages.success(request, 'An activation link has been sent to the email. Follow the instructions there to finish activating.')
-                return redirect('login')
-            else:
-                messages.error(request, 'This username may already exist.')
-                return redirect('register')
+                if result:
+                    messages.success(request, 'An activation link has been sent to the email. Follow the instructions there to finish activating.')
+                    return redirect('login')
+                else:
+                    messages.error(request, 'This username may already exist.')
+                    return redirect('register')
 
         else:
+            form = SignupForm()
             return render(request, 'register.html', {})
             
     else:
         return redirect('index')
 
-@app.route('/activate/<token>')
-def activate_email(token):
+@app.route('/confirm/<token>')
+def confirm_email(token, request):
     try:
         email = ts.loads(token, salt="constant", max_age=86400)
     except:
@@ -137,10 +133,10 @@ def activate_email(token):
     result = register_user(email,)
 
     if result:
-        messages.success('Successfully activated account. You can now login.')
+        messages.success(request, 'Successfully activated account. You can now login.')
         return redirect('login')
     else:
-        messages.error('Token expired.')
+        messages.error(request, 'Token expired.')
         return redirect('register')
     
 

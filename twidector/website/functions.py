@@ -221,9 +221,9 @@ def register_user(username, password, user_type, email):
             cursor.execute(sqlcommand, (username, encrypt_dict["salt"], encrypt_dict["encrypted"], user_type, email, 0))
             connection.commit()
 
-            confirm_url = url_for("activate_email", token=token, _external=True)
+            confirm_url = url_for("confirm_email", token=token, _external=True)
             
-            html = render_template("activate_email.html", confirm_url=confirm_url)
+            html = render_template("email_activate.html", confirm_url=confirm_url)
             send_registration_email(email, html)
 
             close_connect()
