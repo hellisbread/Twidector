@@ -149,7 +149,6 @@ def validate_login(username, password):
             
             key = result["key"]
             
-            
             currentkey = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), salt, 100000)
 
             if ((secrets.compare_digest(currentkey,key) == True) and (result["confirmed"]) == 1):
@@ -209,7 +208,7 @@ def register_user(username, password, user_type, email):
 
         encrypt_dict = encrypt(password)
 
-        sqlcommand = "INSERT INTO `UserInfo` (`username`, `salt`, `key`, `user_type`, `email`, `confirmed`) VALUES (%s, %s, %s, %s, %s, %s)"
+        sqlcommand = "INSERT INTO `UserInfo` (`username`, `salt`, `key`, `user_type`, `email`, `activated`) VALUES (%s, %s, %s, %s, %s, %s)"
 
         try:
 
@@ -231,13 +230,32 @@ def register_user(username, password, user_type, email):
             close_connect()
             return False
 
+def retrieve_user(username):
+    
+    open_connect()
+
+    with connection.cursor() as cursor:
+
+        sqlcommand = "SELECT `username`, `activated` FROM `UserInfo` WHERE `username` = %s"
+
+        try:
+
+            cursor.execute(sqlcommand, (username))
+
+            close_connect()
+            return True
+
+        except pymysql.IntegrityError:
+            close_connect()
+            return False
+
 def activate_user(username):
     
     open_connect()
 
     with connection.cursor() as cursor:
 
-        sqlcommand = "UPDATE `UserInfo` SET `confirmed` = %s WHERE `username` = %s"
+        sqlcommand = "UPDATE `UserInfo` SET `activated` = %s WHERE `username` = %s"
 
         try:
 

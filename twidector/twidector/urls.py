@@ -42,5 +42,6 @@ urlpatterns = [
     path('admin/search-account/', views.searchAccount, name='search-account'),
     path('admin/update-user/', views.updateUser, name='update-user'),
     path('admin/', views.adminLogin, name='admin'),
+    path('activate/<uidb64>/<token>/', views.activate, name='activate'),
     #path('admin/', admin.site.urls),
 ]

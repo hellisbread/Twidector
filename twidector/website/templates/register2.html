@@ -108,18 +108,28 @@
                                         <h5 class="mb-4 me-2">Create a new twidector account</h5>
                                     </div>
 
-                                    {% for field in form %}  
                                     <div class="form-outline mb-4">
-                                        {{ field.label_tag }}<br>  
-                                        {{ field }}  
-                                        {% if field.help_text %}  
-                                        <small style="display: none ">{{ field.help_text }}</small>  
-                                        {% endif %}  
-                                        {% for error in field.errors %}  
-                                        <p style="color: red">{{ error }}</p>  
-                                        {% endfor %}  
+                                        <label class="form-label">Username:</label>
+                                        <input type="text" id="username" name="username" class="form-control"
+                                            placeholder="Username" />
                                     </div>
-                                    {% endfor %} 
+
+                                    <div class="form-outline mb-4">
+                                        <label class="form-label">Password:</label>
+                                        <input type="password" id="password" name="password" class="form-control"
+                                            placeholder="Password" />
+                                    </div>
+                                    <div class="form-outline mb-4">
+                                        <label class="form-label">Re-enter Password:</label>
+                                        <input type="password" id="reenter-password" name="reenter-password" class="form-control"
+                                            placeholder="Re-enter Password" />
+                                    </div>
+
+                                    <div class="form-outline mb-4">
+                                        <label class="form-label">Email:</label>
+                                        <input type="email" id="email" name="email" class="form-control"
+                                            placeholder="Email Address" />
+                                    </div>
 
                                     <!-- <div class="form-outline mb-4">
                                         <label class="form-label">Twitter Username (Optional):</label>

@@ -7,7 +7,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from .forms import SignupForm
+from .forms import UserRegistrationForm
 
 from .tokens import account_activation_token
 from django.contrib.auth.models import User
@@ -17,6 +17,11 @@ from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
 from django.utils import six
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.models import User
+from django.core.mail import EmailMessage
+
+from django.contrib.auth import get_user_model
 
 from website.functions import *
 
@@ -89,11 +94,11 @@ def register(request):
 
     if 'loggedin' not in request.session:
         if request.method == 'POST':
-            form = SignupForm(request.POST)
-            username = request.POST['username']
-            email = request.POST['email']
-            password = request.POST['password']
-            passwordcheck = request.POST['reenter-password']
+            form = UserRegistrationForm(request.POST)
+            username = request.POST.get('username')
+            email = request.POST.get('email')
+            password = request.POST.get('password1')
+            passwordcheck = request.POST.get('password2')
             usertype = 0
 
             if(password != passwordcheck):
@@ -105,22 +110,16 @@ def register(request):
                 result = register_user(username, password, usertype, email)
 
                 if result:
-                    user = form.save(commit=False)
-                    user.is_active = False
-                    user.save()
+                    user = form.save(commit=False)  
+                    user.save()  
                     current_site = get_current_site(request)
-                    mail_subject = 'Activate your blog account.'
-                    message = render_to_string('acc_active_email.html', {
+                    message = render_to_string('acc_activate_email.html', {
                     'user': user,
                     'domain': current_site.domain,
-                    'uid':urlsafe_base64_encode(force_bytes(user.pk)),
-                    'token':account_activation_token.make_token(user),
+                    'uid':urlsafe_base64_encode(force_bytes(user.pk)),  
+                    'token':account_activation_token.make_token(user),  
                 })
-                    to_email = form.cleaned_data.get('email')
-                    email = EmailMessage(
-                            mail_subject, message, to=[to_email]
-                )
-                    email.send()
+                    send_registration_email(email, message)
                     messages.success(request, 'Successfully Created Account')
                     return redirect('login')
                 else:
@@ -128,25 +127,27 @@ def register(request):
                     return redirect('register')
 
         else:
-            form = SignupForm()
-            return render(request, 'register.html', {})
+            form = UserRegistrationForm()
+
+        return render(request, 'register.html', {'form':form})
             
     else:
         return redirect('index')
 
 def activate(request, uidb64, token):
+    User = get_user_model()  
     try:
-        uid = force_str(urlsafe_base64_decode(uidb64))
-        user = User.objects.get(pk=uid)
+        uid = force_str(urlsafe_base64_decode(uidb64))  
+        user = User.objects.get(pk=uid)  
+        
     except(TypeError, ValueError, OverflowError, User.DoesNotExist):
         user = None
+
     if user is not None and account_activation_token.check_token(user, token):
-        user.is_active = True
         user.save()
-        login(request, user)
-        activate_user(request.user.username)
+        activate_user(user.username)
         # return redirect('home')
-        return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
+        return HttpResponse('Thank you for your email confirmation. You can now login your account.')
     else:
         return HttpResponse('Activation link is invalid!')
 
