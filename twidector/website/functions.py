@@ -1,5 +1,4 @@
 from fileinput import close
-from pydoc import tempfilepager
 from mysql.connector.errors import IntegrityError
 import pymysql.cursors
 import hashlib
@@ -8,14 +7,11 @@ import secrets
 import email.utils
 import requests
 from itsdangerous import URLSafeTimedSerializer
-
-
+#from flask import redirect, render_template, url_for
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from datetime import datetime
-
-from flask import Flask, render_template, url_for
+import datetime
 
 import sshtunnel
 import logging
@@ -71,9 +67,9 @@ def close_connect():
     close_server()
     close_ssh_tunnel()
 
-def generate_token(input):
+def generate_token(email):
     
-    token = ts.dumps(input, salt="salt")
+    token = ts.dumps(email, salt="salt")
     
     return token
 
@@ -97,7 +93,7 @@ def send_email(recipient, subject, body):
     server.quit()
 
 def send_registration_email(email, html):
-    subject = "Twidector account activation"
+    subject = "Twidector account registration"
     body = "Welcome to Twidector! You are just one click away from the completion of your registration. Please click the following link to complete your registration:"
     body += html
     
@@ -134,6 +130,8 @@ def encrypt(text):
                             "encrypted" : encrypted}
 
     return salt_and_encrypted
+
+
 
 def validate_login(username, password):
     open_connect()
@@ -209,22 +207,22 @@ def register_user(username, password, user_type, email):
 
     with connection.cursor() as cursor:
 
-        try:     
-            encrypt_dict = encrypt(password)
-            token = ts.dumps(email, salt="constant")
-            now = datetime.now()
-            formatted_date = now.strftime('%Y-%m-%d %H:%M:%S')
-            
-            sqlcommand = "INSERT INTO `UserInfo` (`username`, `salt`, `key`, `user_type`, `email`, `activated`) VALUES (%s, %s, %s, %s, %s, %s)"
+        encrypt_dict = encrypt(password)
+
+        sqlcommand = "INSERT INTO `UserInfo` (`username`, `salt`, `key`, `user_type`, `email`, `confirmed`) VALUES (%s, %s, %s, %s, %s, %s)"
+
+        try:
 
             #Set 1 to 0 back once confirm email is complete
             cursor.execute(sqlcommand, (username, encrypt_dict["salt"], encrypt_dict["encrypted"], user_type, email, 0))
             connection.commit()
 
-            confirm_url = url_for("confirm_email", token=token, _external=True)
+            #token = generate_token(email)
+            #confirm_url = url_for("confirm_email", token=token, _external=True)
             
-            html = render_template("email_activate.html", confirm_url=confirm_url)
-            send_registration_email(email, html)
+            #html = render_template("activate.html", confirm_url=confirm_url)
+            #send_registration_email(email, html)
+
 
             close_connect()
             return True
@@ -233,38 +231,17 @@ def register_user(username, password, user_type, email):
             close_connect()
             return False
 
-def search_email(email):
+def activate_user(username):
     
     open_connect()
 
     with connection.cursor() as cursor:
 
-
-        sqlcommand = "SELECT `email` from `UserInfo` WHERE `email` = %s"
-
-        try:
-
-            cursor.execute(sqlcommand, (email))
-            connection.commit()
-
-            close_connect()
-            return True
-
-        except pymysql.IntegrityError:
-            close_connect()
-            return False
-
-def activate_user(email):
-    
-    open_connect()
-
-    with connection.cursor() as cursor:
-
-        sqlcommand = "UPDATE `UserInfo` SET `activated` = 1, WHERE `email` = %s"
+        sqlcommand = "UPDATE `UserInfo` SET `confirmed` = %s WHERE `username` = %s"
 
         try:
 
-            cursor.execute(sqlcommand, (email))
+            cursor.execute(sqlcommand, (1, username))
             connection.commit()
 
             close_connect()
