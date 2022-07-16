@@ -10,16 +10,16 @@ from django.views.decorators.csrf import csrf_exempt
 from .forms import UserRegistrationForm
 
 from .tokens import account_activation_token
-from django.contrib.auth.models import User
-from django.core.mail import EmailMessage
+#from django.contrib.auth.models import User
+#from django.core.mail import EmailMessage
 
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
-from django.utils import six
-from django.contrib.auth import login, authenticate
-from django.contrib.auth.models import User
-from django.core.mail import EmailMessage
+#from django.utils import six
+#from django.contrib.auth import login, authenticate
+#from django.contrib.auth.models import User
+#from django.core.mail import EmailMessage
 
 from django.contrib.auth import get_user_model
 
@@ -61,7 +61,7 @@ def login(request):
     if 'loggedin' not in request.session:
         if request.method == 'POST':
             username = request.POST['username']
-            password = request.POST['password']
+            password = request.POST['password1']
 
             result = validate_login(username, password)
 
