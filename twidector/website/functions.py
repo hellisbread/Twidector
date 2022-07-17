@@ -271,6 +271,8 @@ def activate_user(username):
 
 
 
+
+
 def recover_username(email):
 
     open_connect

