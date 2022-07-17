@@ -61,7 +61,7 @@ def login(request):
     if 'loggedin' not in request.session:
         if request.method == 'POST':
             username = request.POST['username']
-            password = request.POST['password1']
+            password = request.POST['password']
 
             result = validate_login(username, password)
 
@@ -144,7 +144,6 @@ def activate(request, uidb64, token):
         user = None
 
     if user is not None and account_activation_token.check_token(user, token):
-        user.save()
         activate_user(user.username)
         # return redirect('home')
         return HttpResponse('Thank you for your email confirmation. You can now login your account.')

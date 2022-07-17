@@ -140,7 +140,7 @@ def validate_login(username, password):
         
         try:
         
-            sqlcommand = "SELECT `salt`, `key`, `confirmed` FROM `UserInfo` WHERE `username` = %s"
+            sqlcommand = "SELECT `salt`, `key`, `activated` FROM `UserInfo` WHERE `username` = %s"
             cursor.execute(sqlcommand, (username))
 
             result = cursor.fetchone()
@@ -151,11 +151,11 @@ def validate_login(username, password):
             
             currentkey = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), salt, 100000)
 
-            if ((secrets.compare_digest(currentkey,key) == True) and (result["confirmed"]) == 1):
+            if ((secrets.compare_digest(currentkey,key) == True) and (result["activated"]) == 1):
                 close_connect()
                 return True
             
-            elif ((secrets.compare_digest(currentkey,key) == True) and (result["confirmed"]) == 0):
+            elif ((secrets.compare_digest(currentkey,key) == True) and (result["activated"]) == 0):
                 close_connect()
                 return False
             
@@ -186,7 +186,7 @@ def validate_admin(username, password):
             
             currentkey = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), salt, 100000)
 
-            if ((secrets.compare_digest(currentkey,key) == True) and (result["confirmed"]) == 2):
+            if ((secrets.compare_digest(currentkey,key) == True) and (result["activated"]) == 2):
                 close_connect()
                 return True
 
