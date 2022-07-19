@@ -196,6 +196,9 @@ def searchAccount(request):
 def updateUser(request):
     return render(request, 'update-user.html', {})
 
+def modelTesting(request):
+    return render(request, 'model-testing.html', {})
+
 #Dashboard Views
 
 def dashboard(request):
