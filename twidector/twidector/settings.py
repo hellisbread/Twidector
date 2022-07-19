@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'twidector',
     'website',
-    'django_extensions' #delete this eventually
+    'django_extensions', #delete this eventually
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -154,3 +155,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = 'login'
 LOGOUT_REDIRECT_URL = 'login'
 LOGIN_REDIRECT_URL = 'dashboard'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+DEFAULT_FROM_EMAIL = 'twidector@gmail.com'
+SERVER_EMAIL = 'twidector@gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'twidector@gmail.com'
+EMAIL_HOST_PASSWORD = 'hvxxdoxsxrtsinbu'

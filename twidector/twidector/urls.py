@@ -27,7 +27,7 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('register/', views.register, name='register'),
     path('forgot-password/', views.forgotPassword, name='forgot-password'),
-    path('forgot-username/', views.forgotUsername, name='forgot-username'),
+    #path('forgot-username/', views.forgotUsername, name='forgot-username'),
     path('free-trial/', views.freeTrial, name='free-trial'),
     path('free-trial-2/', views.freeTrialTwo, name='free-trial-2'),
     path('reset-password/', views.resetPassword, name='reset-password'),
@@ -47,6 +47,11 @@ urlpatterns = [
     path('admin/', views.adminLogin, name='admin'),
     path('admin/model-testing', views.modelTesting, name='model-testing'),
     path('activate/<uidb64>/<token>/', views.activate, name='activate'),
-    path('reset_forgot_password/<uidb64>/<token>/', views.resetForgotPassword, name='resetForgotPassword'),
+
+    
+    path('password-reset-request/', auth_views.PasswordResetView.as_view(template_name='password-reset-request.html'), name='password_reset_request'),
+    path('password_reset_done/', auth_views.PasswordResetDoneView.as_view(template_name='password_reset_done.html'), name = 'password_reset_done'),
+    path('password_reset_confirm/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name='password_reset_confirm.html'), name='password_reset_confirm'),
+    path('password-reset-request-confirm-done/', auth_views.PasswordResetCompleteView.as_view(template_name='password-reset-request-confirm-done.html'), name='password_reset_request_confirm_done'),
     #path('admin/', admin.site.urls),
 ]

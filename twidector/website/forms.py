@@ -8,6 +8,7 @@ from django.contrib.auth.validators import UnicodeUsernameValidator
 from .models import CustomTwidectorUser
 #from django.contrib.auth import get_user_model
 #User = get_user_model()
+from django.contrib.auth import views as auth_views
 
 class UserRegistrationForm(UserCreationForm):
     username = forms.CharField(label=_('Username'),
@@ -27,17 +28,17 @@ class UserRegistrationForm(UserCreationForm):
         fields = ('username', 'password1', 'password2', 'email')
         #abstract = True
 
-
-class UserResetPasswordForm(forms.ModelForm):
+'''
+class UserResetPasswordForm(auth_views.PasswordResetView):
 
     email = forms.EmailField(max_length=50, help_text='Required. Inform a valid email address.',
                             widget=(forms.TextInput(attrs={'class': 'form-control'})))
 
     class Meta:
-        model = CustomTwidectorUser
+        #model = CustomTwidectorUser
         fields = ('username', 'email')
         
-'''
+
 #class tempForm(UserCreationForm):
     password = None
     

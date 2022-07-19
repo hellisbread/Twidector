@@ -5,11 +5,15 @@ from django.contrib import messages
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
+from django.urls import reverse_lazy
+from django.contrib.auth.views import PasswordResetView
+from django.contrib.messages.views import SuccessMessageMixin
 
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from .forms import UserRegistrationForm, UserResetPasswordForm
+from .forms import UserRegistrationForm
+from django.contrib.auth import views as auth_views
 
 from .tokens import account_activation_token
 #from django.contrib.auth.models import User
@@ -106,28 +110,19 @@ def register(request):
                 return redirect('register')
 
             if form.is_valid():
-
-                #result = register_user(username, password, usertype, email)
-
-                #if result:
-            
                 user = get_user_model()
                 user = form.save(commit=False)
                 user.is_active = False
                 user.save()  
                 current_site = get_current_site(request)
-                message = render_to_string('activate_account.html', {
+                message = render_to_string('link_to_activate_account.html', {
                 'user': user,
                 'domain': current_site.domain,
                 'uid':urlsafe_base64_encode(force_bytes(user.pk)),  
-                    'uid':urlsafe_base64_encode(force_bytes(user.pk)),  
-                'uid':urlsafe_base64_encode(force_bytes(user.pk)),  
-                'token':account_activation_token.make_token(user),  
-                    'token':account_activation_token.make_token(user),  
-                'token':account_activation_token.make_token(user),  
+                'token':account_activation_token.make_token(user)
             })
                 send_registration_email(email, message)
-                messages.success(request, 'Successfully Created Account')
+                messages.success(request, 'Successfully created account. Please activate your account through the link sent to the email.')
                 return redirect('login')
             else:
                 messages.error(request, 'This username may already exist.')
@@ -165,10 +160,11 @@ def forgotPassword(request):
 
     return render(request, 'forgot-password.html', {})
 
-#def forgotPassword(request):
+
+def password_reset_request(request):
 
     if request.method == 'POST':
-        form = UserResetPasswordForm(request.POST)
+        form = auth_views.PasswordResetView(request.POST)
         email = request.POST.get('email')
         
         if form.is_valid():
@@ -176,7 +172,7 @@ def forgotPassword(request):
             user.set_unusable_password()
             user.save()  
             current_site = get_current_site(request)
-            message = render_to_string('reset_forgotten_password.html', {
+            message = render_to_string('link_to_reset_password.html', {
             'user': user,
             'domain': current_site.domain,
             'uid':urlsafe_base64_encode(force_bytes(user.pk)),  
@@ -190,28 +186,29 @@ def forgotPassword(request):
             return redirect('login')
 
     else:
-        form = UserResetPasswordForm()
+        form = auth_views.PasswordResetView()
 
-    return render(request, 'forgot-password.html', {'form':form})
+    return render(request, 'password_reset_request.html', {'form':form})
+
 
 def resetForgotPassword(request):
 
     return render(request, 'resetForgotPassword ', {})
 
 
-#def resetForgotPassword(request, uidb64, token):
+def confirm_password_reset_request(request, uidb64, token):
     user = get_user_model()  
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))  
-        user = User.objects.get(pk=uid)  
+        user = user.objects.get(pk=uid)  
         
     except(TypeError, ValueError, OverflowError, user.DoesNotExist):
         user = None
 
     if user is not None and account_activation_token.check_token(user, token):
         if request.method == 'POST':
-            password = request.POST.get('new-password')
-            passwordcheck = request.POST.get('confirm-new-password')
+            password = request.POST.get('password1')
+            passwordcheck = request.POST.get('password2')
 
             if(password != passwordcheck):
                 messages.error(request, 'Error. Password does not match.')

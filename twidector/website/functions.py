@@ -101,7 +101,7 @@ def send_registration_email(email, html):
 
 def send_reset_password_email(email, html):
     subject = "Twidector account password reset"
-    body = "You have requested for a password! If you did not request for a password change, you may ignore this email. Otherwise, click on the following link to continue password reset:"
+    body = "You have requested for a password change. If you did not request for a password change, you may ignore this email. Otherwise, click on the following link to continue password reset:"
     body += html
     
     send_email(email, subject, body)
