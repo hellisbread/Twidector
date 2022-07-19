@@ -5,6 +5,10 @@ from django.contrib.auth import password_validation
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.validators import UnicodeUsernameValidator
 
+from .models import CustomTwidectorUser
+#from django.contrib.auth import get_user_model
+#User = get_user_model()
+
 class UserRegistrationForm(UserCreationForm):
     username = forms.CharField(label=_('Username'),
                                 widget=(forms.TextInput(attrs={'class': 'form-control'})),
@@ -19,5 +23,29 @@ class UserRegistrationForm(UserCreationForm):
                             widget=(forms.TextInput(attrs={'class': 'form-control'})))
 
     class Meta:
-        model = User
+        model = CustomTwidectorUser
         fields = ('username', 'password1', 'password2', 'email')
+        #abstract = True
+
+
+class UserResetPasswordForm(forms.ModelForm):
+
+    email = forms.EmailField(max_length=50, help_text='Required. Inform a valid email address.',
+                            widget=(forms.TextInput(attrs={'class': 'form-control'})))
+
+    class Meta:
+        model = CustomTwidectorUser
+        fields = ('username', 'email')
+        
+'''
+#class tempForm(UserCreationForm):
+    password = None
+    
+    def __init__(self, *args, **kargs):
+        super(UserResetPasswordForm, self).__init__(*args, **kargs)
+        self.fields['password1'].required = False
+        self.fields['password2'].required = False
+        del self.fields['password1']
+        del self.fields['password2']
+
+        '''

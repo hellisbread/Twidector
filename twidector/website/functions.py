@@ -99,6 +99,13 @@ def send_registration_email(email, html):
     
     send_email(email, subject, body)
 
+def send_reset_password_email(email, html):
+    subject = "Twidector account password reset"
+    body = "You have requested for a password! If you did not request for a password change, you may ignore this email. Otherwise, click on the following link to continue password reset:"
+    body += html
+    
+    send_email(email, subject, body)
+
 def confirm_email(token):
     try:
         email = ts.loads(token, salt="salt", max_age=86400)
@@ -174,7 +181,7 @@ def validate_admin(username, password):
         
         try:
         
-            sqlcommand = "SELECT `salt`, `key`, `confirmed` FROM `UserInfo` WHERE `username` = %s"
+            sqlcommand = "SELECT `salt`, `key`, `activated` FROM `UserInfo` WHERE `username` = %s"
             cursor.execute(sqlcommand, (username))
 
             result = cursor.fetchone()
@@ -230,7 +237,7 @@ def register_user(username, password, user_type, email):
             close_connect()
             return False
 
-def retrieve_user(username):
+def retrieve_user_by_username(username):
     
     open_connect()
 
@@ -249,13 +256,15 @@ def retrieve_user(username):
             close_connect()
             return False
 
+
+
 def activate_user(username):
     
     open_connect()
 
     with connection.cursor() as cursor:
 
-        sqlcommand = "UPDATE `UserInfo` SET `activated` = %s WHERE `username` = %s"
+        sqlcommand = "UPDATE `website_user` SET `is_active` = %s WHERE `username` = %s"
 
         try:
 
@@ -269,7 +278,50 @@ def activate_user(username):
             close_connect()
             return False
 
+#def retrieve_salt_by_email(email):
+    
+    open_connect()
 
+    with connection.cursor() as cursor:
+
+        sqlcommand = "SELECT `salt` FROM `UserInfo` WHERE `email` = %s"
+
+        try:
+
+            cursor.execute(sqlcommand, (email))
+
+            close_connect()
+            return True
+
+        except pymysql.IntegrityError:
+            close_connect()
+            return False
+
+def reset_user_password(email, password):
+    
+    open_connect()
+
+    with connection.cursor() as cursor:
+        try:
+            sqlcommand = "SELECT `salt` FROM `UserInfo` WHERE `email` = %s"
+            cursor.execute(sqlcommand, (email))
+
+            result = cursor.fetchone()
+
+            salt = result["salt"]
+
+            newkey = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), salt, 100000)
+
+            sqlcommand = "UPDATE `UserInfo` SET `key` = %s WHERE `email` = %s"
+            cursor.execute(sqlcommand, (newkey, email))
+            connection.commit()
+
+            close_connect()
+            return True
+
+        except pymysql.IntegrityError:
+            close_connect()
+            return False
 
 
 

@@ -39,8 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles','twidector',
+    'django.contrib.staticfiles',
+    'twidector',
     'website',
+    'django_extensions' #delete this eventually
 ]
 
 MIDDLEWARE = [
@@ -77,10 +79,31 @@ WSGI_APPLICATION = 'twidector.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+from sshtunnel import SSHTunnelForwarder
+
+ssh_tunnel = SSHTunnelForwarder(
+    "ssh.pythonanywhere.com",
+    ssh_username = "twidector",
+    ssh_password = "SIMfypTopic18",
+    remote_bind_address = ('twidector.mysql.pythonanywhere-services.com', 3306)
+)
+ssh_tunnel.start()
+
 DATABASES = {
+
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'twidector$default',
+        'USER': 'twidector',
+        'PASSWORD': 'FYP22S205',
+        'HOST': '127.0.0.1',
+        'PORT': ssh_tunnel.local_bind_port,
+        'TEST': {
+          'NAME': "twidector$default",
+        },
+        'OPTIONS': {
+            'sql_mode': 'traditional',
+        }
     }
 }
 
@@ -103,6 +126,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = 'website.CustomTwidectorUser'
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
@@ -126,3 +150,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGIN_URL = 'login'
+LOGOUT_REDIRECT_URL = 'login'
+LOGIN_REDIRECT_URL = 'dashboard'

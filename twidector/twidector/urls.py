@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.contrib.auth import views as auth_views
 
 from website import views
 
@@ -22,13 +23,15 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('about-us/',views.aboutUs, name='about-us'),
     path('about-team/', views.aboutTeam, name='about-team'),
-    path('login/', views.login, name='login'),
-    path('logout/', views.logout, name='logout'),
+    path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('register/', views.register, name='register'),
     path('forgot-password/', views.forgotPassword, name='forgot-password'),
+    path('forgot-username/', views.forgotUsername, name='forgot-username'),
     path('free-trial/', views.freeTrial, name='free-trial'),
     path('free-trial-2/', views.freeTrialTwo, name='free-trial-2'),
     path('reset-password/', views.resetPassword, name='reset-password'),
+
     path('dashboard/', views.dashboard, name='dashboard'),
     path('analyse/', views.analyse, name='analyse'),
     path('analyse-2/', views.analyseTwo, name='analyse-2'),
@@ -44,5 +47,6 @@ urlpatterns = [
     path('admin/', views.adminLogin, name='admin'),
     path('admin/model-testing', views.modelTesting, name='model-testing'),
     path('activate/<uidb64>/<token>/', views.activate, name='activate'),
+    path('reset_forgot_password/<uidb64>/<token>/', views.resetForgotPassword, name='resetForgotPassword'),
     #path('admin/', admin.site.urls),
 ]

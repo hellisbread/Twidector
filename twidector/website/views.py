@@ -3,11 +3,13 @@ from wsgiref import validate
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.sites.shortcuts import get_current_site
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login
 
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from .forms import UserRegistrationForm
+from .forms import UserRegistrationForm, UserResetPasswordForm
 
 from .tokens import account_activation_token
 #from django.contrib.auth.models import User
@@ -22,6 +24,8 @@ from django.template.loader import render_to_string
 #from django.core.mail import EmailMessage
 
 from django.contrib.auth import get_user_model
+
+user = get_user_model()
 
 from website.functions import *
 
@@ -56,27 +60,20 @@ def freeTrialTwo(request):
     return render(request, 'free-trial-2.html', {})
 
 #Login/Register Views
-
 def login(request):
     if 'loggedin' not in request.session:
-        if request.method == 'POST':
-            username = request.POST['username']
-            password = request.POST['password']
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
 
-            result = validate_login(username, password)
-
-            if result:
-                messages.success(request, 'Successfully Login to Account')
-
-                request.session['loggedin'] = username
-                return redirect('dashboard')
-                
-            else:
-                messages.error(request, 'Invalid Username or Password')
-                return redirect('login')
-
+        if user is not None:
+            request.session['loggedin'] = username
+            login(request, user)
+            return redirect('dashboard')
+            
         else:
-            return render(request, 'login.html', {})
+            messages.error(request, 'Invalid Username or Password')
+            return redirect('login')
     else:
         return redirect('index')
 
@@ -89,17 +86,20 @@ def logout(request):
         del request.session['loggedin']
         messages.success(request, 'Successfully Logged out.')
         return redirect('login')
-        
+
+#def register(request):
+    return render(request, 'register.html', {})
+
 def register(request):
 
-    if 'loggedin' not in request.session:
+    #if 'loggedin' not in request.session:
         if request.method == 'POST':
             form = UserRegistrationForm(request.POST)
-            username = request.POST.get('username')
+            #username = request.POST.get('username')
             email = request.POST.get('email')
             password = request.POST.get('password1')
             passwordcheck = request.POST.get('password2')
-            usertype = 0
+            #usertype = 0
 
             if(password != passwordcheck):
                 messages.error(request, 'Error. Password does not match.')
@@ -107,46 +107,54 @@ def register(request):
 
             if form.is_valid():
 
-                result = register_user(username, password, usertype, email)
+                #result = register_user(username, password, usertype, email)
 
-                if result:
-                    user = form.save(commit=False)  
-                    user.save()  
-                    current_site = get_current_site(request)
-                    message = render_to_string('acc_activate_email.html', {
-                    'user': user,
-                    'domain': current_site.domain,
+                #if result:
+            
+                user = get_user_model()
+                user = form.save(commit=False)
+                user.is_active = False
+                user.save()  
+                current_site = get_current_site(request)
+                message = render_to_string('activate_account.html', {
+                'user': user,
+                'domain': current_site.domain,
+                'uid':urlsafe_base64_encode(force_bytes(user.pk)),  
                     'uid':urlsafe_base64_encode(force_bytes(user.pk)),  
+                'uid':urlsafe_base64_encode(force_bytes(user.pk)),  
+                'token':account_activation_token.make_token(user),  
                     'token':account_activation_token.make_token(user),  
-                })
-                    send_registration_email(email, message)
-                    messages.success(request, 'Successfully Created Account')
-                    return redirect('login')
-                else:
-                    messages.error(request, 'This username may already exist.')
-                    return redirect('register')
+                'token':account_activation_token.make_token(user),  
+            })
+                send_registration_email(email, message)
+                messages.success(request, 'Successfully Created Account')
+                return redirect('login')
+            else:
+                messages.error(request, 'This username may already exist.')
+                return redirect('register')
 
         else:
             form = UserRegistrationForm()
 
         return render(request, 'register.html', {'form':form})
             
-    else:
+    #else:
         return redirect('index')
 
+#def activate(request):
+    #return render(request, 'Activate.html')
+
 def activate(request, uidb64, token):
-    User = get_user_model()  
+    user = get_user_model()  
     try:
-        uid = force_str(urlsafe_base64_decode(uidb64))  
-        user = User.objects.get(pk=uid)  
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = user.objects.get(pk=uid)  
         
-    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+    except(TypeError, ValueError, OverflowError, user.DoesNotExist):
         user = None
 
     if user is not None and account_activation_token.check_token(user, token):
         activate_user(user.username)
-        records = User.objects.all()
-        records.delete()
 
         # return redirect('home')
         return HttpResponse('Thank you for your email confirmation. You can now login your account.')
@@ -154,10 +162,75 @@ def activate(request, uidb64, token):
         return HttpResponse('Activation link is invalid!')
 
 def forgotPassword(request):
+
     return render(request, 'forgot-password.html', {})
+
+#def forgotPassword(request):
+
+    if request.method == 'POST':
+        form = UserResetPasswordForm(request.POST)
+        email = request.POST.get('email')
+        
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.set_unusable_password()
+            user.save()  
+            current_site = get_current_site(request)
+            message = render_to_string('reset_forgotten_password.html', {
+            'user': user,
+            'domain': current_site.domain,
+            'uid':urlsafe_base64_encode(force_bytes(user.pk)),  
+            'token':account_activation_token.make_token(user),  
+        })
+            send_reset_password_email(email, message)
+            messages.success(request, 'Successfully sent to email on how to reset password')
+            return redirect('login')
+        else:
+            messages.error(request, 'An error has occured.')
+            return redirect('login')
+
+    else:
+        form = UserResetPasswordForm()
+
+    return render(request, 'forgot-password.html', {'form':form})
+
+def resetForgotPassword(request):
+
+    return render(request, 'resetForgotPassword ', {})
+
+
+#def resetForgotPassword(request, uidb64, token):
+    user = get_user_model()  
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))  
+        user = User.objects.get(pk=uid)  
+        
+    except(TypeError, ValueError, OverflowError, user.DoesNotExist):
+        user = None
+
+    if user is not None and account_activation_token.check_token(user, token):
+        if request.method == 'POST':
+            password = request.POST.get('new-password')
+            passwordcheck = request.POST.get('confirm-new-password')
+
+            if(password != passwordcheck):
+                messages.error(request, 'Error. Password does not match.')
+
+            reset_user_password(user.email, password)
+
+        # return redirect('home')
+
+
+        return render(request, 'resetForgotPassword ', {})
+
+    else:
+        return HttpResponse('Reset link is invalid!')
 
 def resetPassword(request):
     return render(request, 'reset-password.html', {})
+
+def forgotUsername(request):
+    return render(request, 'forgot-password.html', {})
 
 #Admin Views
 
@@ -200,14 +273,15 @@ def modelTesting(request):
     return render(request, 'model-testing.html', {})
 
 #Dashboard Views
-
+@login_required
 def dashboard(request):
-    if 'loggedin' not in request.session:
-        messages.error(request, 'please login before enterring the dashboard.')
-        return redirect('login')
+    return render(request, 'dashboard.html', {})
+    #if 'loggedin' not in request.session:
+        #messages.error(request, 'please login before entering the dashboard.')
+        #return redirect('login')
 
-    else:
-        return render(request, 'dashboard.html', {})
+    #else:
+        #return render(request, 'dashboard.html', {})
 
 def analyse(request):
     if 'loggedin' not in request.session:
