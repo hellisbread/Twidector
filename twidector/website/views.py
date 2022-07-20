@@ -161,13 +161,14 @@ def forgotPassword(request):
     return render(request, 'forgot-password.html', {})
 
 
-def password_reset_request(request):
+def password_reset_form(request):
 
     if request.method == 'POST':
         form = auth_views.PasswordResetView(request.POST)
         email = request.POST.get('email')
         
         if form.is_valid():
+            user = get_user_model()
             user = form.save(commit=False)
             user.set_unusable_password()
             user.save()  
@@ -196,7 +197,7 @@ def resetForgotPassword(request):
     return render(request, 'resetForgotPassword ', {})
 
 
-def confirm_password_reset_request(request, uidb64, token):
+def password_reset_confirm(request, uidb64, token):
     user = get_user_model()  
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))  
