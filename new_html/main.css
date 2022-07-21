@@ -253,3 +253,13 @@ This contains css that we added ourselves
   margin-top: 70px;
   box-shadow: 3px 2px 3px black;
 }
+
+.modal-header {
+  background: #1e34f7;
+  color: #fff;
+}
+
+.required:after {
+  content: "*";
+  color: red;
+}

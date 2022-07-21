@@ -14,7 +14,9 @@
   <link rel="stylesheet" type="text/css" href="css/main.css" />
 
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+    integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <link rel="stylesheet" href="style.css" />
 
@@ -34,8 +36,8 @@
     </p>
 
     <ul class="nav flex-column bg-white mb-0">
-    
-        <li class="nav-item">
+
+      <li class="nav-item">
         <a href="searchAcc.html" class="nav-link text-dark bg-light">
           <i class="fa fa-user" aria-hidden="true"></i>
           Manage Accounts
@@ -49,38 +51,38 @@
         </a>
       </li>
 
-       <li>
-              <a
-                class="nav-link px-3 sidebar-link text-dark bg-light"
-                data-bs-toggle="collapse"
-                href="#layouts"
-              >
-              <i class="fa fa-file-text" aria-hidden="true"></i>
-                <span>Testing</span>
-         
+      <li>
+        <a class="nav-link px-3 sidebar-link text-dark bg-light" data-bs-toggle="collapse" href="#layouts">
+          <i class="fa fa-file-text" aria-hidden="true"></i>
+          <span>Testing</span>
+
+        </a>
+        <div class="collapse" id="layouts">
+          <ul class="navbar-nav ps-3">
+            <li>
+              <a href="model_testing.html" class="nav-link px-3">
+                <span class="me-2"><i class="bi bi-speedometer2"></i> <i class="fa fa-align-left"
+                    aria-hidden="true"></i></span>
+                <span>Model Testing</span>
               </a>
-                   <div class="collapse" id="layouts">
-                <ul class="navbar-nav ps-3">
-                  <li>
-                    <a href="model_testing.html" class="nav-link px-3">
-                      <span class="me-2"
-                        ><i class="bi bi-speedometer2"></i
-                      > <i class="fa fa-align-left" aria-hidden="true"></i></span>
-                      <span>Model Testing</span>
-                    </a>
-                  </li>
-                        <li>
-                    <a href="#" class="nav-link px-3">
-                      <span class="me-2"
-                        ><i class="bi bi-speedometer2"></i
-                      >  <i class="fa fa-pie-chart" aria-hidden="true"></i></span>
-                    
-                      <span>Future Testing</span>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-                  </li>
+            </li>
+            <li>
+              <a href="#" class="nav-link px-3">
+                <span class="me-2"><i class="bi bi-speedometer2"></i> <i class="fa fa-pie-chart"
+                    aria-hidden="true"></i></span>
+
+                <span>Future Testing</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a href="report_tweets_admin.html" class="nav-link text-dark bg-light">
+          <i class="fa fa-file" aria-hidden="true"></i>
+          Reported Tweets
+        </a>
+      </li>
     </ul>
   </div>
   <!-- End vertical navbar -->
@@ -122,63 +124,63 @@
     </div>
   </nav>
 
-    <!-- CONTENT -->
+  <!-- CONTENT -->
   <!-- <div class="page-content p-3" id="content"> -->
   <form class="page-content p-3" id="content">
-  </br>
+    </br>
     <h2 style="margin-left: 30px;">User Profile</h2>
-                  <div class="card" id="searchbox" >
-                      <div class="card-body" >
-                          <div class="row">
-                                        <div class="tweet-header">
-                                          <img src="img/emptyprofile.png"  alt="" width="80"height="80"
-                                            class="mr-3 rounded-circle img-thumbnail shadow-sm"> 
-                                        
-                                            <div class="col-md-4" style="margin-left: 20px;">
-                                              </br>
-                                                <div class="form-group row">
-                                                <label><strong>Username</strong></label>
-                                                <div class="col-sm-10">
-                                                  <input class="form-control" placeholder="Username" value="clare123">
-                                                </div>
-                                              </div>
+    <div class="card" id="searchbox">
+      <div class="card-body">
+        <div class="row">
+          <div class="tweet-header">
+            <img src="img/emptyprofile.png" alt="" width="80" height="80"
+              class="mr-3 rounded-circle img-thumbnail shadow-sm">
 
-                                                <div class="form-group row">
-                                                <label ><strong>Email</strong></label>
-                                                <div class="col-sm-10">
-                                                  <input type="email" class="form-control"  placeholder="Email" value="clar123@gmail.com">
-                                                </div>
-                                              </div>
+            <div class="col-md-4" style="margin-left: 20px;">
+              </br>
+              <div class="form-group row">
+                <label><strong>Username</strong></label>
+                <div class="col-sm-10">
+                  <input class="form-control" placeholder="Username" value="clare123">
+                </div>
+              </div>
 
-                                                <div class="form-group row">
-                                                <label ><strong>Twitter Username</strong></label>
-                                                <div class="col-sm-10">
-                                                  <input class="form-control" placeholder="twitter-username" value="@clar123"> 
-                                              
-                                                </div>
-                                              </div>
-                                            </div>
-                                                      
-                                            
-                                            
-                                            <!-- update button -->
-                                            <div class="dropdown" >
-                                              
-                                                     <button type="submit" class="btn btn-primary mb-2" style="margin-top: 20px;">Update </button>
+              <div class="form-group row">
+                <label><strong>Email</strong></label>
+                <div class="col-sm-10">
+                  <input type="email" class="form-control" placeholder="Email" value="clar123@gmail.com">
+                </div>
+              </div>
 
-                                                      <button type="submit" class="btn btn-primary mb-2" style="margin-top: 20px;">Update </button>
-                                                          
-                                                      </div>
-                                            </div>
-                                      </div>
-                                                  
-                                      
-                        </div>
-                    </div>
+              <div class="form-group row">
+                <label><strong>Twitter Username</strong></label>
+                <div class="col-sm-10">
+                  <input class="form-control" placeholder="twitter-username" value="@clar123">
 
-         
-     </div>
-    
+                </div>
+              </div>
+            </div>
+
+
+
+            <!-- update button -->
+            <div class="dropdown">
+
+              <button type="submit" class="btn btn-primary mb-2" style="margin-top: 20px;">Update </button>
+
+              <button type="submit" class="btn btn-primary mb-2" style="margin-top: 20px;">Update </button>
+
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+
+
+    </div>
+
   </form>
   <!-- </div> -->
 
@@ -196,31 +198,37 @@
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
-          const data = {
-            labels: [
-              'Red',
-              'Green',
-              'Yellow',
-              'Grey',
-              'Blue'
-            ],
-            datasets: [{
-              label: 'My First Dataset',
-              data: [11, 16, 7, 3, 14],
-              backgroundColor: [
-                'rgb(255, 99, 132)',
-                'rgb(75, 192, 192)',
-                'rgb(255, 205, 86)',
-                'rgb(201, 203, 207)',
-                'rgb(54, 162, 235)'
-              ]
-            }]
-          };
+    const data = {
+      labels: [
+        'Red',
+        'Green',
+        'Yellow',
+        'Grey',
+        'Blue'
+      ],
+      datasets: [{
+        label: 'My First Dataset',
+        data: [11, 16, 7, 3, 14],
+        backgroundColor: [
+          'rgb(255, 99, 132)',
+          'rgb(75, 192, 192)',
+          'rgb(255, 205, 86)',
+          'rgb(201, 203, 207)',
+          'rgb(54, 162, 235)'
+        ]
+      }]
+    };
   </script>
 
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
 
 </body>
 

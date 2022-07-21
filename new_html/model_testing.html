@@ -14,16 +14,18 @@
   <link rel="stylesheet" type="text/css" href="css/main.css" />
 
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+    integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <link rel="stylesheet" href="style.css" />
-  
+
 
   <!--Favicon-->
   <link rel="icon" href="img/cropped-twidector-1-1.png" sizes="32x32" />
   <link rel="icon" href="img/cropped-twidector-1-2.png" sizes="192x192" />
   <link rel="apple-touch-icon" href="img/cropped-twidector-1-2.png" />
- 
+
 </head>
 
 <body>
@@ -36,7 +38,7 @@
     </p>
 
     <ul class="nav flex-column bg-white mb-0">
-        <li class="nav-item">
+      <li class="nav-item">
         <a href="searchAcc.html" class="nav-link text-dark bg-light">
           <i class="fa fa-user" aria-hidden="true"></i>
           Manage Accounts
@@ -48,38 +50,38 @@
           Accuracy Score
         </a>
       </li>
- <li>
-              <a
-                class="nav-link px-3 sidebar-link text-dark bg-light"
-                data-bs-toggle="collapse"
-                href="#layouts"
-              >
-              <i class="fa fa-file-text" aria-hidden="true"></i>
-                <span>Testing</span>
-         
+      <li>
+        <a class="nav-link px-3 sidebar-link text-dark bg-light" data-bs-toggle="collapse" href="#layouts">
+          <i class="fa fa-file-text" aria-hidden="true"></i>
+          <span>Testing</span>
+
+        </a>
+        <div class="collapse" id="layouts">
+          <ul class="navbar-nav ps-3">
+            <li>
+              <a href="model_testing.html" class="nav-link px-3">
+                <span class="me-2"><i class="bi bi-speedometer2"></i> <i class="fa fa-align-left"
+                    aria-hidden="true"></i></span>
+                <span>Model Testing</span>
               </a>
-                   <div class="collapse" id="layouts">
-                <ul class="navbar-nav ps-3">
-                  <li>
-                    <a href="model_testing.html" class="nav-link px-3">
-                      <span class="me-2"
-                        ><i class="bi bi-speedometer2"></i
-                      > <i class="fa fa-align-left" aria-hidden="true"></i></span>
-                      <span>Model Testing</span>
-                    </a>
-                  </li>
-                        <li>
-                    <a href="#" class="nav-link px-3">
-                      <span class="me-2"
-                        ><i class="bi bi-speedometer2"></i
-                      >  <i class="fa fa-pie-chart" aria-hidden="true"></i></span>
-                    
-                      <span>Future Testing</span>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-                  </li>
+            </li>
+            <li>
+              <a href="#" class="nav-link px-3">
+                <span class="me-2"><i class="bi bi-speedometer2"></i> <i class="fa fa-pie-chart"
+                    aria-hidden="true"></i></span>
+
+                <span>Future Testing</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      <li class="nav-item">
+        <a href="report_tweets_admin.html" class="nav-link text-dark bg-light">
+          <i class="fa fa-file" aria-hidden="true"></i>
+          Reported Tweets
+        </a>
+      </li>
+      </li>
     </ul>
 
   </div>
@@ -122,58 +124,66 @@
     </div>
   </nav>
 
- <!-- buttons + the result for the first button -->
+  <!-- buttons + the result for the first button -->
   <form class="page-content p-3" id="content">
 
 
-  <div class="container mb-8">
-    <div class="row justify-content-md-center">
-      <div class="card" style="box-shadow:5px 3px black;">
-        <div class="card-header pt-4">
-          <div class="row">
-          <h1>Model Testing</h1>          
-        </div>
-        <div class="card-body">
+    <div class="container mb-8">
+      <div class="row justify-content-md-center">
+        <div class="card" style="box-shadow:5px 3px black;">
+          <div class="card-header pt-4">
             <div class="row">
+              <h1>Model Testing</h1>
+            </div>
+            <div class="card-body">
+              <div class="row">
                 <div class="col-md-8">
-                    <h6> Result #1 </h6>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                  <h6> Result #1 </h6>
+                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+                    et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                    aliquip ex ea commodo consequat.</p>
                 </div>
-        
-            </div>
-            <hr>
-            <div class="row">
-              <div class="col-md-8">
-                  <h6> Result #2 </h6>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+
               </div>
-             
-          </div>
-          <hr>
-          <div class="row">
-            <div class="col-md-8">
-                <h6>Result #3 </h6>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+              <hr>
+              <div class="row">
+                <div class="col-md-8">
+                  <h6> Result #2 </h6>
+                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+                    et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                    aliquip ex ea commodo consequat.</p>
+                </div>
+
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-md-8">
+                  <h6>Result #3 </h6>
+                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+                    et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                    aliquip ex ea commodo consequat.</p>
+                </div>
+
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-md-8">
+                  <h6> Result #4</h6>
+                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+                    et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                    aliquip ex ea commodo consequat.</p>
+                </div>
+
+              </div>
             </div>
-        
-        </div>
-        <hr>
-        <div class="row">
-          <div class="col-md-8">
-              <h6> Result #4</h6>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+
           </div>
- 
-      </div>
-        </div>
-        
         </div>
       </div>
     </div>
-  </div>
-                  
-          
-</form> 
+
+
+  </form>
   <!-- JavaScript(s) -->
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
     integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
@@ -188,20 +198,20 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
     const ctx = document.getElementById('myChart').getContext('2d');
-const myChart = new Chart(ctx, {
-    type: 'pie',
-    data: {
-        labels: ['Violent','Non-toxic','Negative','Discrimination'],
+    const myChart = new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: ['Violent', 'Non-toxic', 'Negative', 'Discrimination'],
         datasets: [{
-            label: '# of Votes',
-            data: [10,9,7,15],
-            backgroundColor: [
-              '#f2672e','#30aadd','#f2bf26',	'#008000'
-            ],
-            borderWidth: 0,
+          label: '# of Votes',
+          data: [10, 9, 7, 15],
+          backgroundColor: [
+            '#f2672e', '#30aadd', '#f2bf26', '#008000'
+          ],
+          borderWidth: 0,
         }]
-    },
-});
+      },
+    });
   </script>
 
 
