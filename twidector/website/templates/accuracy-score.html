@@ -28,14 +28,14 @@
 <body>
   <!--Navigation-->
   <!-- Vertical navbar -->
-  <div class="vertical-nav bg-white" id="sidebar">
+<div class="vertical-nav bg-white" id="sidebar">
     </br></br></br>
     <p class="text-gray font-weight-bold text-uppercase px-3 small pb-4 mb-0">
       Admin Dashboard
     </p>
 
     <ul class="nav flex-column bg-white mb-0">
-             <li class="nav-item">
+      <li class="nav-item">
         <a href="{%url 'search-account'%}" class="nav-link text-dark bg-light">
           <i class="fa fa-user" aria-hidden="true"></i>
           Manage Accounts
@@ -48,39 +48,43 @@
         </a>
       </li>
       <li>
-        <a
-          class="nav-link px-3 sidebar-link text-dark bg-light"
-          data-bs-toggle="collapse"
-          href="#layouts"
-        >
-        <i class="fa fa-file-text" aria-hidden="true"></i>
+        <a class="nav-link px-3 sidebar-link text-dark bg-light" data-bs-toggle="collapse" href="#layouts">
+          <i class="fa fa-file-text" aria-hidden="true"></i>
           <span>Testing</span>
-   
+
         </a>
-             <div class="collapse" id="layouts">
+        <div class="collapse" id="layouts">
           <ul class="navbar-nav ps-3">
             <li>
               <a href="{%url 'model-testing'%}" class="nav-link px-3">
-                <span class="me-2"
-                  ><i class="bi bi-speedometer2"></i
-                > <i class="fa fa-align-left" aria-hidden="true"></i></span>
+                <span class="me-2"><i class="bi bi-speedometer2"></i> <i class="fa fa-align-left"
+                    aria-hidden="true"></i></span>
                 <span>Model Testing</span>
               </a>
             </li>
-                  <li>
+            <li>
               <a href="#" class="nav-link px-3">
-                <span class="me-2"
-                  ><i class="bi bi-speedometer2"></i
-                >  <i class="fa fa-pie-chart" aria-hidden="true"></i></span>
-              
+                <span class="me-2"><i class="bi bi-speedometer2"></i> <i class="fa fa-pie-chart"
+                    aria-hidden="true"></i></span>
+
                 <span>Future Testing</span>
               </a>
             </li>
+
           </ul>
         </div>
-            </li>
+
+      <li class="nav-item">
+        <a href="{%url 'reported-tweets'%}" class="nav-link text-dark bg-light">
+          <i class="fa fa-file" aria-hidden="true"></i>
+          Reported Tweets
+        </a>
+      </li>
+      </li>
     </ul>
+
   </div>
+
   <!-- End vertical navbar -->
 
   <!-- the header bar -->

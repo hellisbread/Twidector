@@ -15,7 +15,9 @@
   <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}" />
 
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+    integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
 
@@ -28,21 +30,19 @@
 <body>
   <!--Navigation-->
   <!-- Vertical navbar -->
-  <div class="vertical-nav bg-white" id="sidebar">
+ <div class="vertical-nav bg-white" id="sidebar">
     </br></br></br>
     <p class="text-gray font-weight-bold text-uppercase px-3 small pb-4 mb-0">
       Admin Dashboard
     </p>
 
     <ul class="nav flex-column bg-white mb-0">
-    
-        <li class="nav-item">
+      <li class="nav-item">
         <a href="{%url 'search-account'%}" class="nav-link text-dark bg-light">
           <i class="fa fa-user" aria-hidden="true"></i>
           Manage Accounts
         </a>
       </li>
-
       <li class="nav-item">
         <a href="{%url 'accuracy-score'%}" class="nav-link text-dark bg-light">
           <i class="fa fa-area-chart" aria-hidden="true"></i>
@@ -50,39 +50,44 @@
         </a>
       </li>
       <li>
-        <a
-          class="nav-link px-3 sidebar-link text-dark bg-light"
-          data-bs-toggle="collapse"
-          href="#layouts"
-        >
-        <i class="fa fa-file-text" aria-hidden="true"></i>
+        <a class="nav-link px-3 sidebar-link text-dark bg-light" data-bs-toggle="collapse" href="#layouts">
+          <i class="fa fa-file-text" aria-hidden="true"></i>
           <span>Testing</span>
-   
+
         </a>
-             <div class="collapse" id="layouts">
+        <div class="collapse" id="layouts">
           <ul class="navbar-nav ps-3">
             <li>
               <a href="{%url 'model-testing'%}" class="nav-link px-3">
-                <span class="me-2"
-                  ><i class="bi bi-speedometer2"></i
-                > <i class="fa fa-align-left" aria-hidden="true"></i></span>
+                <span class="me-2"><i class="bi bi-speedometer2"></i> <i class="fa fa-align-left"
+                    aria-hidden="true"></i></span>
                 <span>Model Testing</span>
               </a>
             </li>
-                  <li>
+            <li>
               <a href="#" class="nav-link px-3">
-                <span class="me-2"
-                  ><i class="bi bi-speedometer2"></i
-                >  <i class="fa fa-pie-chart" aria-hidden="true"></i></span>
-              
+                <span class="me-2"><i class="bi bi-speedometer2"></i> <i class="fa fa-pie-chart"
+                    aria-hidden="true"></i></span>
+
                 <span>Future Testing</span>
               </a>
             </li>
+
           </ul>
         </div>
-            </li>
+
+      <li class="nav-item">
+        <a href="{%url 'reported-tweets'%}" class="nav-link text-dark bg-light">
+          <i class="fa fa-file" aria-hidden="true"></i>
+          Reported Tweets
+        </a>
+      </li>
+      </li>
     </ul>
+
   </div>
+  
+  
   <!-- End vertical navbar -->
 
   <!-- the header bar -->
@@ -122,169 +127,145 @@
     </div>
   </nav>
 
-    <!-- CONTENT -->
+  <!-- CONTENT -->
   <!-- <div class="page-content p-3" id="content"> -->
   <form class="page-content p-3" id="content">
     <!-- <div class="separator"></div> -->
     <div class="container">
-          <!-- <h3>Twidector</h3> -->
-            <!-- <hr> -->
-            <!-- <div class="row"> -->
-                <div class="col-md-8">
-                    <h4 for="exampleInputEmail1">Search Account</h4>
-                    <div class="input-group mb-2">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">@</div>
-                        </div>
-                        <input type="text" class="form-control" id="datasetCheck" placeholder="Search the account">
-                    </div>
-                </div>
-            <!-- </div> -->
+      <!-- <h3>Twidector</h3> -->
+      <!-- <hr> -->
+      <!-- <div class="row"> -->
+      <div class="col-md-8">
+        <h4 for="exampleInputEmail1">Search Account</h4>
+        <div class="input-group mb-2">
+          <div class="input-group-prepend">
+            <div class="input-group-text">@</div>
+          </div>
+          <input type="text" class="form-control" id="datasetCheck" placeholder="Search the account">
+        </div>
+      </div>
+      <!-- </div> -->
 
 
-            <!--  Search button -->
-                 <div class="row mb-4">
-                    <div class="col-md-4">
-                        <button type="submit" class="btn btn-block btn-info">Search</button>
-                    </div>
-                  </div>
-                </br> </br>
+      <!--  Search button -->
+      <div class="row mb-4">
+        <div class="col-md-4">
+          <button type="submit" class="btn btn-block btn-info">Search</button>
+        </div>
+      </div>
+      </br> </br>
 
-                
-                <!-- list of accounts -->
+
+      <!-- list of accounts -->
+
       
-                <!-- <div class="container mb-3" >
-                  <div class="row justify-content-md-center" > -->
-                    <h2 style="margin-left: 30px;">List of Accounts</h2>
-                    <div class="card" id="searchbox" >
-                      <div class="card-body" >
-                          <div class="row">
-                                        <div class="tweet-header">
-                                          <img class="center rounded-circle mt-4 mb-2" src="{% static 'img/emptyprofile.png' %}" width="80">
-                                        
-                                            <div class="col-md-4" style="margin-left: 20px;">
-                                              </br>
-                                              <p class="card-title font-weight-bold"> Clara Pranomo</p>
-                                              <p class="card-subtitle mb-5"> Pranomo123@gmail.com</p>
-                                            </div>
-                                                       <div class="dropdown" >
-                                                        <button class="btn btn-secondary dropdown-toggle " type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                          Settings
-                                                        </button>
-                                                          <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                                                            <li>
-                                                              <a href="{%url 'update-user'%}" class="dropdown-item"> Update Account</a>
-                                                            </li>
-                                                              <li>
-                                                              <a href="#" class="dropdown-item"> Delete Account</a>
-                                                            </li>
-                                                          </ul>
-                                                      </div>
-                                            </div>
-                                      </div>
-                                                  
-                                      
-                        </div>
-                    </div>
+      <h2 style="margin-left: 30px;">List of Accounts</h2>
+      <div class="card" id="searchbox">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-2">
+              <img src="img/emptyprofile.png" alt="" width="100" height="100"
+                class="mr-3 rounded-circle img-thumbnail shadow-sm">
+            </div>
+            <div class="col-md-8">
+              <h6>Clara Pranomo</h6>
+              <p>Pranomo123@gmail.com</p>
+            </div>
+            <!-- //button -->
 
-                    <div class="card" id="searchbox" >
-                                      <div class="card-body" >
-                                          <div class="row">
-                                                        <div class="tweet-header">
-                                                          <img class="center rounded-circle mt-4 mb-2" src="{% static 'img/emptyprofile.png' %}" width="80">
-                                                        
-                                                            <div class="col-md-4" style="margin-left: 20px;">
-                                                              </br>
-                                                              <p class="card-title font-weight-bold"> Clara Pranomo</p>
-                                                              <p class="card-subtitle mb-5"> Pranomo123@gmail.com</p>
-                                                            </div>
-                                                                      <div class="dropdown" >
-                                                                        <button class="btn btn-secondary dropdown-toggle " type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                          Settings
-                                                                        </button>
-                                                                          <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                                                                            <li>
-                                                                              <a href="updateUser.html" class="dropdown-item"> Update Account</a>
-                                                                            </li>
-                                                                              <li>
-                                                                              <a href="#" class="dropdown-item"> Delete Account</a>
-                                                                            </li>
-                                                                          </ul>
-                                                                      </div>
-                                                            </div>
-                                                      </div>
-                                                                  
-                                                      
-                                        </div>
-                                    </div>
+            <div class="dropdown col-md-1">
+              <button class="btn btn-secondary dropdown-toggle " type="button" id="dropdownMenu2" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                Settings
+              </button>
+
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                <li>
+                  <a href="updateUser.html" class="dropdown-item"> Update Account</a>
+                </li>
+                <li>
+                  <a href="#" class="dropdown-item"> Delete Account</a>
+                </li>
+              </ul>
+              <!-- //end of button -->
+            </div>
+          </div>
+        </div>
 
 
-                       <div class="card" id="searchbox" >
-                      <div class="card-body" >
-                          <div class="row">
-                                        <div class="tweet-header">
-                                          <img class="center rounded-circle mt-4 mb-2" src="{% static 'img/emptyprofile.png' %}" width="80">
-                                            <div class="col-md-4" style="margin-left: 20px;">
-                                              </br>
-                                              <p class="card-title font-weight-bold"> Clara Pranomo</p>
-                                              <p class="card-subtitle mb-5"> Pranomo123@gmail.com</p>
-                                            </div>
-                                                       <div class="dropdown" >
-                                                        <button class="btn btn-secondary dropdown-toggle " type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                          Settings
-                                                        </button>
-                                                          <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                                                            <li>
-                                                              <a href="updateUser.html" class="dropdown-item"> Update Account</a>
-                                                            </li>
-                                                              <li>
-                                                              <a href="#" class="dropdown-item"> Delete Account</a>
-                                                            </li>
-                                                          </ul>
-                                                      </div>
-                                            </div>
-                                      </div>
-                                                  
-                                      
-                        </div>
-                    </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-2">
+              <img src="img/emptyprofile.png" alt="" width="100" height="100"
+                class="mr-3 rounded-circle img-thumbnail shadow-sm">
+            </div>
+            <div class="col-md-8">
+              <h6>Clara Pranomo</h6>
+              <p>Pranomo123@gmail.com</p>
+            </div>
+            <!-- //button -->
 
-                     <div class="card" id="searchbox" >
-                      <div class="card-body" >
-                          <div class="row">
-                                        <div class="tweet-header">
-                                          <img class="center rounded-circle mt-4 mb-2" src="{% static 'img/emptyprofile.png' %}" width="80">
-                                        
-                                            <div class="col-md-4" style="margin-left: 20px;">
-                                              </br>
-                                              <p class="card-title font-weight-bold"> Clara Pranomo</p>
-                                              <p class="card-subtitle mb-5"> Pranomo123@gmail.com</p>
-                                            </div>
-                                                       <div class="dropdown" >
-                                                        <button class="btn btn-secondary dropdown-toggle " type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                          Settings
-                                                        </button>
-                                                          <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                                                            <li>
-                                                              <a href="updateUser.html" class="dropdown-item"> Update Account</a>
-                                                            </li>
-                                                              <li>
-                                                              <a href="#" class="dropdown-item"> Delete Account</a>
-                                                            </li>
-                                                          </ul>
-                                                      </div>
-                                            </div>
-                                      </div>
-                                                  
-                                      
-                        </div>
-                    </div>
-        
-            
-            
-         
-     </div>
+            <div class="dropdown col-md-1">
+              <button class="btn btn-secondary dropdown-toggle " type="button" id="dropdownMenu2" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                Settings
+              </button>
+
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                <li>
+                  <a href="updateUser.html" class="dropdown-item"> Update Account</a>
+                </li>
+                <li>
+                  <a href="#" class="dropdown-item"> Delete Account</a>
+                </li>
+              </ul>
+              <!-- //end of button -->
+            </div>
+          </div>
+        </div>
+
+                <div class="card-body">
+          <div class="row">
+            <div class="col-md-2">
+              <img src="img/emptyprofile.png" alt="" width="100" height="100"
+                class="mr-3 rounded-circle img-thumbnail shadow-sm">
+            </div>
+            <div class="col-md-8">
+              <h6>Clara Pranomo</h6>
+              <p>Pranomo123@gmail.com</p>
+            </div>
+            <!-- //button -->
+
+            <div class="dropdown col-md-1">
+              <button class="btn btn-secondary dropdown-toggle " type="button" id="dropdownMenu2" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                Settings
+              </button>
+
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                <li>
+                  <a href="updateUser.html" class="dropdown-item"> Update Account</a>
+                </li>
+                <li>
+                  <a href="#" class="dropdown-item"> Delete Account</a>
+                </li>
+              </ul>
+              <!-- //end of button -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
     
+
+
+
+
+
+    </div>
+
   </form>
   <!-- </div> -->
 
@@ -302,31 +283,37 @@
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
-          const data = {
-            labels: [
-              'Red',
-              'Green',
-              'Yellow',
-              'Grey',
-              'Blue'
-            ],
-            datasets: [{
-              label: 'My First Dataset',
-              data: [11, 16, 7, 3, 14],
-              backgroundColor: [
-                'rgb(255, 99, 132)',
-                'rgb(75, 192, 192)',
-                'rgb(255, 205, 86)',
-                'rgb(201, 203, 207)',
-                'rgb(54, 162, 235)'
-              ]
-            }]
-          };
+    const data = {
+      labels: [
+        'Red',
+        'Green',
+        'Yellow',
+        'Grey',
+        'Blue'
+      ],
+      datasets: [{
+        label: 'My First Dataset',
+        data: [11, 16, 7, 3, 14],
+        backgroundColor: [
+          'rgb(255, 99, 132)',
+          'rgb(75, 192, 192)',
+          'rgb(255, 205, 86)',
+          'rgb(201, 203, 207)',
+          'rgb(54, 162, 235)'
+        ]
+      }]
+    };
   </script>
 
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
 
 </body>
 
