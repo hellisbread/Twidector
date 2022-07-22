@@ -270,6 +270,9 @@ def updateUser(request):
 def modelTesting(request):
     return render(request, 'model-testing.html', {})
 
+def reportedTweets(request):
+    return render(request, 'reported-tweets.html', {})
+
 #Dashboard Views
 @login_required
 def dashboard(request):
