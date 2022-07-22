@@ -31,7 +31,6 @@ urlpatterns = [
     path('free-trial/', views.freeTrial, name='free-trial'),
     path('free-trial-2/', views.freeTrialTwo, name='free-trial-2'),
     path('reset-password/', views.resetPassword, name='reset-password'),
-
     path('dashboard/', views.dashboard, name='dashboard'),
     path('analyse/', views.analyse, name='analyse'),
     path('analyse-2/', views.analyseTwo, name='analyse-2'),
@@ -46,9 +45,8 @@ urlpatterns = [
     path('admin/update-user/', views.updateUser, name='update-user'),
     path('admin/', views.adminLogin, name='admin'),
     path('admin/model-testing', views.modelTesting, name='model-testing'),
+    path('admin/reported-tweets', views.reportedTweets, name='reported-tweets'),
     path('activate/<uidb64>/<token>/', views.activate, name='activate'),
-
-    
     path('password_reset_form/', auth_views.PasswordResetView.as_view(template_name='password_reset_form.html'), name='password_reset_form'),
     path('password_reset_done/', auth_views.PasswordResetDoneView.as_view(template_name='password_reset_done.html'), name = 'password_reset_done'),
     path('password_reset_confirm/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name='password_reset_confirm.html'), name='password_reset_confirm'),
