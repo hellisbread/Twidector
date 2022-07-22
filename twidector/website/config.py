@@ -18,3 +18,9 @@ serverport=25060
 serveruser='doadmin'
 serverpassword='AVNS_8sOuFo_0JsSYDZDq3bL'
 serverdb='defaultdb'
+
+twitter_key = "WkC302nPjoYVv1Jqo0iqylYuC"
+twitter_key_secret = "DVl2UrqBPAo3MORzt97ijYY3xkpDjjh4wNTZ4exRPJL5edLlrz"
+twitter_access = "1538432651266121728-jhXmfUQ0B4Fr5PAxHBtPTYKkznVLJQ"
+twitter_access_secret = "Tt3995pRdxAFD1zOh9AIziL687tdqarU2139MbxjhWzVK"
+twitter_bearer_token = "AAAAAAAAAAAAAAAAAAAAAGe0dwEAAAAAmy8oW7Nxwgg41b9ss1DPSPdJmIY%3DNWjl9LF6yvvbCDBHBFYeFmYk3FUI3MlSHXFsGWST6RHyHyzBD0"
