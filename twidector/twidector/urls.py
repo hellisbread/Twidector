@@ -29,7 +29,6 @@ urlpatterns = [
     path('forgot-password/', views.forgotPassword, name='forgot-password'),
     #path('forgot-username/', views.forgotUsername, name='forgot-username'),
     path('free-trial/', views.freeTrial, name='free-trial'),
-    path('free-trial-2/', views.freeTrialTwo, name='free-trial-2'),
     path('reset-password/', views.resetPassword, name='reset-password'),
     path('dashboard/', views.dashboard, name='dashboard'),
     path('analyse/', views.analyse, name='analyse'),

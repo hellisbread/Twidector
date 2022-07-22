@@ -42,7 +42,7 @@ from website.config import *
 #filePath = r'C:\Users\User\hateDetection.csv'
 global df 
 
-df = pd.read_csv ('HateSpeechData.csv')
+df = pd.read_csv('hateDetection.csv')
 
 ## 1. Removal of punctuation and capitlization
 ## 2. Tokenizing
@@ -129,7 +129,7 @@ print(accuracy_score(y_test, y_pred_svm) * 100)
 def predictHate(tweet):
     tempseries = pd.Series(tweet)
     ct = preprocess(tempseries)
-    print(list(ct))
+    #print(list(ct))
     vectorizer.fit(list(ct) + list(x_train) + list(x_test))
     m = vectorizer.transform(ct)
     pred = svm.predict(m)
@@ -201,25 +201,43 @@ def getuserid(twitterhandle):
     for user in users.data:
         return user.id
 
+def getuserIMG(twitterhandle):
+    users = client.get_users(usernames=[twitterhandle]) 
+    for user in users.data:
+        return user.profile_image_url
+
 def getalltweets(userid):
     tweetarray = []
     tweetidarray = []
+    tweetcount = []
+
+    count = 1
+
     tweets = tweepy.Paginator(client.get_users_tweets,id=userid,max_results=100,limit=5)
     for tweet in tweets.flatten(limit=5000): # Total number of tweets to retrieve
         tweetarray.append(tweet.text)
         tweetidarray.append(tweet.id)
-    temp_df = pd.DataFrame(zip(tweetidarray,tweetarray),columns=['tweetid','tweet'])
+        tweetcount.append(count)
+        count = count + 1
+    temp_df = pd.DataFrame(zip(tweetidarray,tweetarray,tweetcount),columns=['tweetid','tweet','index'])
     return(temp_df)
 
 #this stores tweets into mysql database
-def storetweets(TweetID,userID,Tweettext,predictedscore):
-    sqlcommand = 'INSERT INTO `Tweet`(`TweetID`,`userID`,`Tweettext`,`predictedscore`) VALUES (%s,%s,%s,%s)'
-    with connection.cursor() as cursor:
-        try:
-            cursor.execute(sqlcommand, (TweetID,userID,Tweettext,predictedscore))
-            connection.commit()
-        except pymysql.IntegrityError:
-            return('tweet with ID: ' + TweetID + ' already exists in database')
+def storetweets(df):
+    open_connect()
+    sqlcommand = 'INSERT INTO Tweet(TweetID,userID,Tweettext,predictedscore) VALUES (%s,%s,%s,%s)'
+    for i in df.index:
+        TweetID = df['tweetid'].iloc[i]
+        userID = df['userID'].iloc[i]
+        Tweettext = df['tweet'].iloc[i]
+        predictedscore = df['predicted_score'].iloc[i] 
+        with connection.cursor() as cursor:
+            try:
+                cursor.execute(sqlcommand, (TweetID,userID,Tweettext,predictedscore))
+                connection.commit()
+            except pymysql.IntegrityError:
+                return('tweet with ID: ' + str(TweetID) + ' already exists in database')
+    close_connect()
 
 #stores a twitter user into mysql database
 def storeTwitteruser(UserID):

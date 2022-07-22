@@ -32,6 +32,7 @@ from django.contrib.auth import get_user_model
 user = get_user_model()
 
 from website.functions import *
+from website.hatedetection import *
 
 @csrf_exempt
 
@@ -58,10 +59,30 @@ def aboutTeam(request):
     return render(request,'about-team.html',{})
 
 def freeTrial(request):
-    return render(request, 'free-trial.html', {})
 
-def freeTrialTwo(request):
-    return render(request, 'free-trial-2.html', {})
+    context = {}
+
+    if request.method == 'POST':
+
+        url = request.POST['twitter-url']
+
+        twitterID = getuserid(url)
+
+        twitterIMGURL = getuserIMG(url)
+
+        data = getalltweets(twitterID)
+
+        predicted_score = predictHate(data['tweet'])
+        data['predicted_score'] = predicted_score  
+        data['userID'] = twitterID
+
+        context = {'dataframe': data , 'user' : url, 'img' : twitterIMGURL}
+
+        print(context)
+
+        return render(request, 'free-trial.html', context)
+    else:
+        return render(request, 'free-trial.html', context)
 
 #Login/Register Views
 def login(request):
