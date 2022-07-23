@@ -68,7 +68,7 @@ def freeTrial(request):
 
         twitterID = getuserid(url)
 
-        twitterIMGURL = getuserIMG(url)
+        twitterIMGURL = getuserIMG(twitterID)
 
         data = getalltweets(twitterID)
 

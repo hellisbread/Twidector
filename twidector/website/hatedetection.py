@@ -36,6 +36,9 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 import sshtunnel
 import logging
 from sshtunnel import SSHTunnelForwarder
+
+from datetime import datetime
+
 from website.config import *
 
 #import the dataset
@@ -202,24 +205,38 @@ def getuserid(twitterhandle):
         return user.id
 
 def getuserIMG(twitterhandle):
-    users = client.get_users(usernames=[twitterhandle]) 
+    users = client.get_users(ids=[twitterhandle], user_fields=['profile_image_url'])
+
     for user in users.data:
-        return user.profile_image_url
+
+        imageURL = user.profile_image_url
+
+        print(imageURL)
+
+        return imageURL.replace("_normal", "")
 
 def getalltweets(userid):
     tweetarray = []
     tweetidarray = []
     tweetcount = []
+    tweetdates = []
 
     count = 1
 
-    tweets = tweepy.Paginator(client.get_users_tweets,id=userid,max_results=100,limit=5)
+    tweets = tweepy.Paginator(client.get_users_tweets,id=userid,tweet_fields=['created_at'],max_results=100,limit=5)
+
     for tweet in tweets.flatten(limit=5000): # Total number of tweets to retrieve
         tweetarray.append(tweet.text)
         tweetidarray.append(tweet.id)
         tweetcount.append(count)
+
+        dtime = tweet['created_at']
+        new_datetime = datetime.strftime(dtime, '%d-%m-%Y')
+
+        tweetdates.append(new_datetime)
         count = count + 1
-    temp_df = pd.DataFrame(zip(tweetidarray,tweetarray,tweetcount),columns=['tweetid','tweet','index'])
+
+    temp_df = pd.DataFrame(zip(tweetidarray,tweetarray,tweetcount,tweetdates),columns=['tweetid','tweet','index','date'])
     return(temp_df)
 
 #this stores tweets into mysql database
