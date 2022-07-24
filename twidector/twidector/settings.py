@@ -97,16 +97,10 @@ DATABASES = {
         'NAME': 'twidector$default',
         'USER': 'twidector',
         'PASSWORD': 'FYP22S205',
-        'HOST': 'twidector.mysql.pythonanywhere-services.com',
-        'TEST': {
-          'NAME': "twidector$test_default",
-        },
-        'OPTIONS': {
-            'sql_mode': 'traditional',
-        }
+        'HOST': 'twidector.mysql.pythonanywhere-services.com'
     },
 
-    'backup1': {
+    'backup2': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'twidector$default',
         'USER': 'twidector',
@@ -120,7 +114,7 @@ DATABASES = {
         }
     },
 
-    'backup2': {
+    'backup3': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'twidector$default',
         'USER': 'twidector',
