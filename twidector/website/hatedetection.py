@@ -41,22 +41,51 @@ from datetime import datetime
 
 from website.config import *
 
-#import the dataset
-#filePath = r'C:\Users\User\hateDetection.csv'
-global df 
+global stemmer
+global df
+global vectorizer , x_train, x_test
 
-df = pd.read_csv('hateDetection.csv')
+def prepareDF():
+    #import the dataset
+    #filePath = r'C:\Users\User\hateDetection.csv'
 
-## 1. Removal of punctuation and capitlization
-## 2. Tokenizing
-## 3. Removal of stopwords
-## 4. Stemming
+    df = pd.read_csv('hateDetection.csv')
 
-stopwords = nltk.corpus.stopwords.words("english")
-#extending the stopwords to include other words used in twitter such as retweet(rt) etc.
-other_exclusions = ["#ff", "ff", "rt"]
-stopwords.extend(other_exclusions)
-stemmer = PorterStemmer()
+    ## 1. Removal of punctuation and capitlization
+    ## 2. Tokenizing
+    ## 3. Removal of stopwords
+    ## 4. Stemming
+
+    stopwords = nltk.corpus.stopwords.words("english")
+    #extending the stopwords to include other words used in twitter such as retweet(rt) etc.
+    other_exclusions = ["#ff", "ff", "rt"]
+    stopwords.extend(other_exclusions)
+    stemmer = PorterStemmer()
+
+    clean_Tweets = preprocess(df["tweet"])
+    df['clean_tweet'] = clean_Tweets
+    #split dataset into training and testing
+    y = df["class"].values
+    x = df["clean_tweet"].values
+    x_train, x_test, y_train, y_test = train_test_split(x, y, stratify = y, test_size=0.2)
+
+    # vectorize tweets for model building
+    vectorizer = CountVectorizer(stop_words='english', ngram_range=(1, 1), max_features = 1000)
+
+    # learn a vocabulary dictionary of all tokens in the raw documents
+    vectorizer.fit(list(x_train) + list(x_test))
+
+    # transform documents to document-term matrix
+    x_train_vec = vectorizer.transform(x_train)
+    x_test_vec = vectorizer.transform(x_test)
+
+    svm = SVC(kernel="linear", decision_function_shape='ovr')
+
+    svm.fit(x_train_vec , y_train)
+
+    #y_pred_svm = svm.predict(x_test_vec)
+
+
 
 def preprocess(tweet):
     
@@ -99,34 +128,8 @@ def preprocess(tweet):
 
     return tweets_p
 
-clean_Tweets = preprocess(df["tweet"])
-df['clean_tweet'] = clean_Tweets
-#split dataset into training and testing
-y = df["class"].values
-x = df["clean_tweet"].values
-x_train, x_test, y_train, y_test = train_test_split(x, y, stratify = y, test_size=0.2)
 
-
-
-# vectorize tweets for model building
-vectorizer = CountVectorizer(stop_words='english', ngram_range=(1, 1), max_features = 1000)
-
-# learn a vocabulary dictionary of all tokens in the raw documents
-vectorizer.fit(list(x_train) + list(x_test))
-
-# transform documents to document-term matrix
-x_train_vec = vectorizer.transform(x_train)
-x_test_vec = vectorizer.transform(x_test)
-
-
-svm = SVC(kernel="linear", decision_function_shape='ovr')
-
-svm.fit(x_train_vec , y_train)
-
-y_pred_svm = svm.predict(x_test_vec)
-
-
-print(accuracy_score(y_test, y_pred_svm) * 100)
+#print(accuracy_score(y_test, y_pred_svm) * 100)
 
 
 def predictHate(tweet):

@@ -32,6 +32,7 @@ from django.contrib.auth import get_user_model
 user = get_user_model()
 
 from website.functions import *
+
 from website.hatedetection import *
 
 @csrf_exempt
@@ -63,6 +64,8 @@ def freeTrial(request):
     context = {}
 
     if request.method == 'POST':
+
+        prepareDF()
 
         url = request.POST['twitter-url']
 
