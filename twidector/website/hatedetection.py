@@ -41,11 +41,15 @@ from datetime import datetime
 
 from website.config import *
 
-global stemmer
-global df
-global vectorizer , x_train, x_test
+stop_words = nltk.corpus.stopwords.words("english")
+    #extending the stopwords to include other words used in twitter such as retweet(rt) etc.
+other_exclusions = ["#ff", "ff", "rt"]
+stop_words.extend(other_exclusions)
+stemmer = PorterStemmer()
 
 def prepareDF():
+    global df
+    global vectorizer , x_train, x_test, x_train_vec, y_train , SVM
     #import the dataset
     #filePath = r'C:\Users\User\hateDetection.csv'
 
@@ -55,12 +59,6 @@ def prepareDF():
     ## 2. Tokenizing
     ## 3. Removal of stopwords
     ## 4. Stemming
-
-    stopwords = nltk.corpus.stopwords.words("english")
-    #extending the stopwords to include other words used in twitter such as retweet(rt) etc.
-    other_exclusions = ["#ff", "ff", "rt"]
-    stopwords.extend(other_exclusions)
-    stemmer = PorterStemmer()
 
     clean_Tweets = preprocess(df["tweet"])
     df['clean_tweet'] = clean_Tweets
@@ -79,11 +77,13 @@ def prepareDF():
     x_train_vec = vectorizer.transform(x_train)
     x_test_vec = vectorizer.transform(x_test)
 
-    svm = SVC(kernel="linear", decision_function_shape='ovr')
+    SVM = SVC(kernel="linear", decision_function_shape='ovr')
 
-    svm.fit(x_train_vec , y_train)
+    SVM.fit(x_train_vec , y_train)
 
-    #y_pred_svm = svm.predict(x_test_vec)
+    y_pred_svm = SVM.predict(x_test_vec)
+    
+    print(accuracy_score(y_test, y_pred_svm) * 100)
 
 
 
@@ -117,7 +117,7 @@ def preprocess(tweet):
     tokenized_tweet = tweet_lower.apply(lambda x: x.split())
     
     # removal of stopwords
-    tokenized_tweet=  tokenized_tweet.apply(lambda x: [item for item in x if item not in stopwords])
+    tokenized_tweet=  tokenized_tweet.apply(lambda x: [item for item in x if item not in stop_words])
     
     # stemming of the tweets
     tokenized_tweet = tokenized_tweet.apply(lambda x: [stemmer.stem(i) for i in x]) 
@@ -129,16 +129,16 @@ def preprocess(tweet):
     return tweets_p
 
 
-#print(accuracy_score(y_test, y_pred_svm) * 100)
 
 
 def predictHate(tweet):
+
     tempseries = pd.Series(tweet)
     ct = preprocess(tempseries)
     #print(list(ct))
     vectorizer.fit(list(ct) + list(x_train) + list(x_test))
     m = vectorizer.transform(ct)
-    pred = svm.predict(m)
+    pred = SVM.predict(m)
     return(pred)
 
 sshtunnel.SSH_TIMEOUT = 120.0
@@ -161,7 +161,6 @@ def close_ssh_tunnel():
     tunnel.close
 
 def open_server():
-
     global connection
 
     connection = pymysql.connect(

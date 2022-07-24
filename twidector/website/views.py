@@ -81,7 +81,7 @@ def freeTrial(request):
 
         context = {'dataframe': data , 'user' : url, 'img' : twitterIMGURL}
 
-        print(context)
+        #print(context)
 
         return render(request, 'free-trial.html', context)
     else:
