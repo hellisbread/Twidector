@@ -98,7 +98,6 @@ DATABASES = {
         'USER': 'twidector',
         'PASSWORD': 'FYP22S205',
         'HOST': 'twidector.mysql.pythonanywhere-services.com',
-        'PORT': ssh_tunnel.local_bind_port,
         'TEST': {
           'NAME': "twidector$default",
         },
@@ -113,7 +112,6 @@ DATABASES = {
         'USER': 'twidector',
         'PASSWORD': 'FYP22S205',
         'HOST': 'ssh.pythonanywhere.com',
-        'PORT': ssh_tunnel.local_bind_port,
         'TEST': {
           'NAME': "twidector$default",
         },
