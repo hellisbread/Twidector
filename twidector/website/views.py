@@ -12,6 +12,8 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
+from website.models import CustomTwidectorUser
+
 from .forms import UserRegistrationForm
 from django.contrib.auth import views as auth_views
 
@@ -32,7 +34,6 @@ from django.contrib.auth import get_user_model
 user = get_user_model()
 
 from website.functions import *
-
 from website.hatedetection import *
 
 @csrf_exempt
@@ -65,8 +66,6 @@ def freeTrial(request):
 
     if request.method == 'POST':
 
-        prepareDF()
-
         url = request.POST['twitter-url']
 
         twitterID = getuserid(url)
@@ -81,7 +80,7 @@ def freeTrial(request):
 
         context = {'dataframe': data , 'user' : url, 'img' : twitterIMGURL}
 
-        #print(context)
+        print(context)
 
         return render(request, 'free-trial.html', context)
     else:
@@ -259,23 +258,23 @@ def forgotUsername(request):
 def adminLogin(request):
     if 'adminlog' not in request.session:
         if request.method == 'POST':
-            username = request.POST['username']
+            name  = request.POST['username']
             password = request.POST['password']
 
-            result = validate_login(username, password)
+            result = validate_login(name, password)
 
             if result:
                 messages.success(request, 'Successfully Login to Admin Panel')
 
-                request.session['adminlog'] = username
-                return redirect('admin/home')
+                request.session['adminlog'] = name
+                return redirect('searchAccount')
                 
             else:
                 messages.error(request, 'Invalid Username or Password')
-                return redirect('admin')
+                return redirect('adminLogin')
 
         else:
-            return render(request, 'admin-login.html', {})
+            return render(request,'admin-login.html', {})
     else:
         return redirect('index')
 
@@ -286,7 +285,9 @@ def adminPage(request):
     return render(request, 'admin-page.html', {})
 
 def searchAccount(request):
-    return render(request, 'search-account.html', {})
+   if request.method == "POST":
+       searched = request.POST('searched')
+       return render(request, 'search-account.html' ,{})
 
 def updateUser(request):
     return render(request, 'update-user.html', {})

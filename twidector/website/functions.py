@@ -534,3 +534,21 @@ def unfollow_user(username, target_user):
         connection.commit()
 
         return('you have unfollowed the user:' + target_user)
+
+
+
+#show all users
+def display_all_users(username, email):
+
+    open_connect()
+    with connection.cursor() as cursor:
+        try:
+            sqlcommand  = "SELECT `username`, `email` from `UserInfo`"
+            cursor.executed(sqlcommand,(username , email))
+            close_connect()
+            return True
+        
+        except pymysql.IntegrityError:
+            close_connect()
+            return False
+
