@@ -337,12 +337,14 @@ def recover_username(email):
             cursor.execute(sqlcommand, (email))
             result = cursor.fetchone()
 
+            close_connect()
             return ("Your username has been sent to the email submitted")
         
         except:
+            close_connect()
             return ("Invalid")
 
-    close_connect()
+    
         
 #send to email
 
@@ -363,12 +365,14 @@ def recover_password(username, email):
                 return ("A reset link has been sent to the email submitted. Please continue reset instructions from there.")
             
             else:
+                close_connect()
                 return ("Invalid")
         
         except:
+            close_connect()
             return ("Invalid")
 
-    close_connect()
+    
 
 #will send an email to user
 def change_password(username, password):

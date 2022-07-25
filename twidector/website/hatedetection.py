@@ -266,11 +266,12 @@ def storeTwitteruser(UserID):
         try:
             cursor.execute(sqlcommand,(UserID))
             connection.commit()
+            close_connect()
             return('Twitter user with ID: ' + UserID + ' successfully stored in database')
-            close_connect()
+            
         except pymysql.IntegrityError:
-            return('Twitter user with ID: ' + UserID + ' already exists in database')
             close_connect()
+            return('Twitter user with ID: ' + UserID + ' already exists in database')
 
 #checks if a user exists within the db
 def checkifuserexists(userID):

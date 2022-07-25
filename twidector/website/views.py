@@ -136,6 +136,7 @@ def register(request):
                 user = get_user_model()
                 user = form.save(commit=False)
                 user.is_active = False
+                #user.is_staff = True
                 user.save()  
                 current_site = get_current_site(request)
                 message = render_to_string('link_to_activate_account.html', {

@@ -15,4 +15,3 @@ class CustomTwidectorUser(AbstractUser):
 
     class Meta:
         db_table = 'website_user'
-

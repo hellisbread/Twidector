@@ -92,29 +92,15 @@ ssh_tunnel.start()
 
 DATABASES = {
 
+    #'default': {
+    #    'ENGINE': 'django.db.backends.mysql',
+    #    'NAME': 'twidector$default',
+    #    'USER': 'twidector',
+    #    'PASSWORD': 'FYP22S205',
+    #    'HOST': 'twidector.mysql.pythonanywhere-services.com'
+    #},
+
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'twidector$default',
-        'USER': 'twidector',
-        'PASSWORD': 'FYP22S205',
-        'HOST': 'twidector.mysql.pythonanywhere-services.com'
-    },
-
-    'backup2': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'twidector$default',
-        'USER': 'twidector',
-        'PASSWORD': 'FYP22S205',
-        'HOST': 'ssh.pythonanywhere.com',
-        'TEST': {
-          'NAME': "twidector$default",
-        },
-        'OPTIONS': {
-            'sql_mode': 'traditional',
-        }
-    },
-
-    'backup3': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'twidector$default',
         'USER': 'twidector',
