@@ -8,6 +8,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login
 from django.urls import reverse_lazy
 from django.contrib.auth.views import PasswordResetView
+from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.messages.views import SuccessMessageMixin
 
 from django.http import HttpResponse
@@ -30,6 +31,7 @@ from django.template.loader import render_to_string
 #from django.contrib.auth import login, authenticate
 #from django.contrib.auth.models import User
 #from django.core.mail import EmailMessage
+from django.core.mail import send_mail, BadHeaderError
 
 from django.contrib.auth import get_user_model
 
@@ -138,22 +140,28 @@ def register(request):
 
                 user.save()  
                 current_site = get_current_site(request)
-                message = render_to_string('link_to_activate_account.html', {
+                subject = "Twidector Account Activation"
+                message = render_to_string('activate_account_email.html', {
                 'user': user,
                 'domain': current_site.domain,
                 'uid':urlsafe_base64_encode(force_bytes(user.pk)),  
-                'token':account_activation_token.make_token(user)
+                'token':account_activation_token.make_token(user),
+                'protocol': 'http',
             })
-                send_registration_email(email, message)
-                messages.success(request, 'Successfully created account. Please activate your account through the link sent to the email.')
-                return redirect('login')
+                try:
+                    send_mail(subject, message, 'twidector@gmail.com' , [user.email], fail_silently=False, html_message=message)
+                    messages.success(request, 'Successfully created account. Please activate your account through the link sent to the email.')
+                    return redirect('login')
+
+                except:
+                    return HttpResponse('Invalid header found.')
+
             else:
                 for msg in form.error_messages:
                     messages.error(request, f"{msg}: {form.error_messages[msg]}")
                     print(msg)  
 
-        else:
-            form = UserRegistrationForm()
+        form = UserRegistrationForm()
 
         return render(request, 'register.html', {'form':form})
             
@@ -176,7 +184,7 @@ def activate(request, uidb64, token):
         activate_user(user.username)
 
         # return redirect('home')
-        messages.success('Successfully sent to email on how to reset password')
+        messages.success(request,'Successfully activated account')
         return redirect('login')
     else:
         messages.error('Activation link invalid.')
@@ -190,6 +198,7 @@ def forgotPassword(request):
 def password_reset_form(request):
 
     if request.method == 'POST':
+        #form = PasswordResetForm(request.POST)
         form = auth_views.PasswordResetView(request.POST)
         email = request.POST.get('email')
         
@@ -199,24 +208,24 @@ def password_reset_form(request):
             user.set_unusable_password()
             user.save()  
             current_site = get_current_site(request)
+            subject = "Twidector Password Reset Requested"
             message = render_to_string('password_reset_email.html', {
+            'email' : user.email,    
             'user': user,
             'domain': current_site.domain,
+            'site_name': 'Twidector',
             'uid':urlsafe_base64_encode(force_bytes(user.pk)),  
             'token':account_activation_token.make_token(user),
             'protocol': 'http',
         })
-            send_reset_password_email(email, message)
-            messages.success(request, 'Successfully sent to email on how to reset password')
-            return redirect('login')
-        else:
-            messages.error(request, 'An error has occured.')
-            return redirect('login')
+            try:
+                send_mail(subject, message, 'twidector@gmail.com' , [user.email], fail_silently=False, html_message=message)
+                messages.success(request, 'Successfully sent to email on how to reset password')
+                return redirect('login')
+            except:
+                return HttpResponse('Invalid header found.')
 
-        #return redirect('login')
-
-    else:
-        form = auth_views.PasswordResetView()
+    form = auth_views.PasswordResetView()
 
     return render(request, 'password_reset_form.html', {'form':form})
 
