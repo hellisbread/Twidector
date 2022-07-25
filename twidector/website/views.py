@@ -198,11 +198,12 @@ def password_reset_form(request):
             user.set_unusable_password()
             user.save()  
             current_site = get_current_site(request)
-            message = render_to_string('link_to_reset_password.html', {
+            message = render_to_string('password_reset_email.html', {
             'user': user,
             'domain': current_site.domain,
             'uid':urlsafe_base64_encode(force_bytes(user.pk)),  
-            'token':account_activation_token.make_token(user),  
+            'token':account_activation_token.make_token(user),
+            'protocol': 'http',
         })
             send_reset_password_email(email, message)
             messages.success(request, 'Successfully sent to email on how to reset password')
@@ -211,10 +212,12 @@ def password_reset_form(request):
             messages.error(request, 'An error has occured.')
             return redirect('login')
 
+        #return redirect('login')
+
     else:
         form = auth_views.PasswordResetView()
 
-    return render(request, 'password_reset_request.html', {'form':form})
+    return render(request, 'password_reset_form.html', {'form':form})
 
 
 def resetForgotPassword(request):
@@ -222,7 +225,7 @@ def resetForgotPassword(request):
     return render(request, 'resetForgotPassword ', {})
 
 
-def password_reset_confirm(request, uidb64, token):
+#def password_reset_confirm(request, uidb64, token):
     user = get_user_model()  
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))  
@@ -249,10 +252,10 @@ def password_reset_confirm(request, uidb64, token):
     else:
         return HttpResponse('Reset link is invalid!')
 
-def resetPassword(request):
+#def resetPassword(request):
     return render(request, 'reset-password.html', {})
 
-def forgotUsername(request):
+#def forgotUsername(request):
     return render(request, 'forgot-password.html', {})
 
 #Admin Views
@@ -260,15 +263,14 @@ def forgotUsername(request):
 def adminLogin(request):
     if 'adminlog' not in request.session:
         if request.method == 'POST':
-            name  = request.POST['username']
+            username  = request.POST['username']
             password = request.POST['password']
+            user = authenticate(request, username=username, password=password)
 
-            result = validate_login(name, password)
-
-            if result:
+            if user is not None:
+                request.session['loggedin'] = username
+                login(request, user)
                 messages.success(request, 'Successfully Login to Admin Panel')
-
-                request.session['adminlog'] = name
                 return redirect('searchAccount')
                 
             else:
