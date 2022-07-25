@@ -16,6 +16,7 @@ from website.models import CustomTwidectorUser
 
 from .forms import UserRegistrationForm
 from django.contrib.auth import views as auth_views
+from django.contrib.admin.views.decorators import staff_member_required
 
 from .tokens import account_activation_token
 #from django.contrib.auth.models import User
@@ -114,12 +115,9 @@ def logout(request):
         messages.success(request, 'Successfully Logged out.')
         return redirect('login')
 
-#def register(request):
-    return render(request, 'register.html', {})
-
 def register(request):
 
-    #if 'loggedin' not in request.session:
+    if 'loggedin' not in request.session:
         if request.method == 'POST':
             form = UserRegistrationForm(request.POST)
             #username = request.POST.get('username')
@@ -136,7 +134,7 @@ def register(request):
                 user = get_user_model()
                 user = form.save(commit=False)
                 user.is_active = False
-                #user.is_staff = True
+
                 user.save()  
                 current_site = get_current_site(request)
                 message = render_to_string('link_to_activate_account.html', {
@@ -149,15 +147,16 @@ def register(request):
                 messages.success(request, 'Successfully created account. Please activate your account through the link sent to the email.')
                 return redirect('login')
             else:
-                messages.error(request, 'This username may already exist.')
-                return redirect('register')
+                for msg in form.error_messages:
+                    messages.error(request, f"{msg}: {form.error_messages[msg]}")
+                    print(msg)  
 
         else:
             form = UserRegistrationForm()
 
         return render(request, 'register.html', {'form':form})
             
-    #else:
+    else:
         return redirect('index')
 
 #def activate(request):
@@ -176,9 +175,11 @@ def activate(request, uidb64, token):
         activate_user(user.username)
 
         # return redirect('home')
-        return HttpResponse('Thank you for your email confirmation. You can now login your account.')
+        messages.success('Successfully sent to email on how to reset password')
+        return redirect('login')
     else:
-        return HttpResponse('Activation link is invalid!')
+        messages.error('Activation link invalid.')
+        return redirect('login')
 
 def forgotPassword(request):
 
@@ -255,7 +256,7 @@ def forgotUsername(request):
     return render(request, 'forgot-password.html', {})
 
 #Admin Views
-
+@staff_member_required
 def adminLogin(request):
     if 'adminlog' not in request.session:
         if request.method == 'POST':
