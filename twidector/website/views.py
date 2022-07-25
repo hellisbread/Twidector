@@ -4,7 +4,8 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate
+from django.contrib.auth import login as auth_login
 from django.urls import reverse_lazy
 from django.contrib.auth.views import PasswordResetView
 from django.contrib.messages.views import SuccessMessageMixin
@@ -96,7 +97,7 @@ def login(request):
 
         if user is not None:
             request.session['loggedin'] = username
-            login(request, user)
+            auth_login(request, user)
             return redirect('dashboard')
             
         else:
@@ -259,7 +260,6 @@ def resetForgotPassword(request):
     return render(request, 'forgot-password.html', {})
 
 #Admin Views
-@staff_member_required
 def adminLogin(request):
     if 'adminlog' not in request.session:
         if request.method == 'POST':
@@ -269,7 +269,7 @@ def adminLogin(request):
 
             if user is not None:
                 request.session['loggedin'] = username
-                login(request, user)
+                auth_login(request, user)
                 messages.success(request, 'Successfully Login to Admin Panel')
                 return redirect('searchAccount')
                 
@@ -288,6 +288,7 @@ def accuracyScore(request):
 def adminPage(request):
     return render(request, 'admin-page.html', {})
 
+@staff_member_required
 def searchAccount(request):
    if request.method == "POST":
        searched = request.POST('searched')
