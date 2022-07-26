@@ -104,8 +104,8 @@
 
                         <input type="text" id="email" class="form-control" name="twitter-url"
                             placeholder="Twitter User's URL" />
-                        <small class="text-muted text-form">Enter a Twitter's user URL. E.g:
-                            https://www.twitter.com/UserIGN . We will text-scrape the profile and begin our hate
+                        <small class="text-muted text-form">Enter a Twitter's user IGN. E.g:
+                            We will text-scrape the profile and begin our hate 
                             detection algorithm. <br /> Note: Ensure that the user profile is public.</small>
                     </div>
                     <!-- search Button -->
@@ -119,9 +119,14 @@
             </div>
             {% else %}
             <div class="row justify-content-md-center">
-                <!-- 
-                <h3 class="text-center mt-4"> Analysed <strong>200</strong> Tweets from user - TestUser123</h3>
-                <p class="text-center"><small >You have reached the limit of max analysed tweets for free users. Join us to analyse more!</small></p> -->
+                
+                <h3 class="text-center mt-4"> Analysed <strong>{{dataframe|length}}</strong> Tweets from user - {{user}}</h3>
+
+                {% if dataframe|length >= 200 %}
+
+                <p class="text-center"><small >You have reached the limit of max analysed tweets for free users. Join us to analyse more!</small></p>
+
+                {% endif %}
 
                 <div class="card" style="box-shadow:5px 3px red;">
                     <div class="card-header pt-4">
@@ -137,9 +142,11 @@
                             </div>
                             <div class="col-md-5">
                                 <h5 class="card-title">Scan Result:</h5>
-                                <p class="card-text"> Found <strong>150</strong> Negative Tweets. <br /> 75/150 are
-                                    racist. <br /> 50/150
-                                    are vulgar <br /> 25/150 are others.</p>
+                                <p class="card-text"> Found <strong>{{hateCount}}</strong> Negative Tweets. 
+                                    <!-- <br /> 75/150 are racist. 
+                                    <br /> 50/150 are vulgar 
+                                    <br /> 25/150 are others. -->
+                                </p>
                             </div>
                         </div>
 

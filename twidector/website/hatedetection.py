@@ -60,7 +60,8 @@ def prepareDF():
     ## 3. Removal of stopwords
     ## 4. Stemming
 
-    clean_Tweets = preprocess(df["tweet"])
+    #clean_Tweets = preprocess(df["tweet"])
+    clean_Tweets = df["tweet"]
     df['clean_tweet'] = clean_Tweets
     #split dataset into training and testing
     y = df["class"].values
@@ -213,11 +214,11 @@ def getuserIMG(twitterhandle):
 
         imageURL = user.profile_image_url
 
-        print(imageURL)
+        #print(imageURL)
 
         return imageURL.replace("_normal", "")
 
-def getalltweets(userid):
+def getalltweets(userid, limiter):
     tweetarray = []
     tweetidarray = []
     tweetcount = []
@@ -227,7 +228,7 @@ def getalltweets(userid):
 
     tweets = tweepy.Paginator(client.get_users_tweets,id=userid,tweet_fields=['created_at'],max_results=100,limit=5)
 
-    for tweet in tweets.flatten(limit=5000): # Total number of tweets to retrieve
+    for tweet in tweets.flatten(limit=limiter): # Total number of tweets to retrieve
         tweetarray.append(tweet.text)
         tweetidarray.append(tweet.id)
         tweetcount.append(count)
@@ -266,12 +267,11 @@ def storeTwitteruser(UserID):
         try:
             cursor.execute(sqlcommand,(UserID))
             connection.commit()
-            close_connect()
             return('Twitter user with ID: ' + UserID + ' successfully stored in database')
-            
-        except pymysql.IntegrityError:
             close_connect()
+        except pymysql.IntegrityError:
             return('Twitter user with ID: ' + UserID + ' already exists in database')
+            close_connect()
 
 #checks if a user exists within the db
 def checkifuserexists(userID):
@@ -330,5 +330,16 @@ def returnhatefultweets(df):
         dictoftweet = {'tweet' : tweet, 'score': score}
         listofdictofhatefultweets.append(dictoftweet)
     return listofdictofhatefultweets
+
+def getHatefulTweetCount(df):
+
+    count = 0
+
+    for i in df.index:
+        score = df['predicted_score'].iloc[i]
+        if (score!=2):
+            count+=1
+
+    return count
         
 

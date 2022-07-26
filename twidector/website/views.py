@@ -72,17 +72,21 @@ def freeTrial(request):
 
         url = request.POST['twitter-url']
 
+        prepareDF()
+
         twitterID = getuserid(url)
 
         twitterIMGURL = getuserIMG(twitterID)
 
-        data = getalltweets(twitterID)
+        data = getalltweets(twitterID, 200)
 
         predicted_score = predictHate(data['tweet'])
         data['predicted_score'] = predicted_score  
         data['userID'] = twitterID
 
-        context = {'dataframe': data , 'user' : url, 'img' : twitterIMGURL}
+        hateCount = getHatefulTweetCount(data)
+
+        context = {'dataframe': data , 'user' : url, 'img' : twitterIMGURL, 'hateCount' : hateCount}
 
         print(context)
 
@@ -466,10 +470,3 @@ def settings(request):
         else:
 
             return render(request, 'settings.html', {})
-
-            
-
-
-        
-
-
