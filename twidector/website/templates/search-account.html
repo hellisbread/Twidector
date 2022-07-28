@@ -30,7 +30,7 @@
 <body>
   <!--Navigation-->
   <!-- Vertical navbar -->
- <div class="vertical-nav bg-white" id="sidebar">
+  <div class="vertical-nav bg-white" id="sidebar">
     </br></br></br>
     <p class="text-gray font-weight-bold text-uppercase px-3 small pb-4 mb-0">
       Admin Dashboard
@@ -86,8 +86,8 @@
     </ul>
 
   </div>
-  
-  
+
+
   <!-- End vertical navbar -->
 
   <!-- the header bar -->
@@ -129,7 +129,9 @@
 
   <!-- CONTENT -->
   <!-- <div class="page-content p-3" id="content"> -->
-  <form class="page-content p-3" id="content">
+  <form class="page-content p-3" id="content" action="/admin/search-account/" method="POST">
+
+    {% csrf_token %}
     <!-- <div class="separator"></div> -->
     <div class="container">
       <!-- <h3>Twidector</h3> -->
@@ -137,15 +139,24 @@
       <!-- <div class="row"> -->
       <div class="col-md-8">
         <h4 for="exampleInputEmail1">Search Account</h4>
+
+        <!--Error Messages-->
+        {% if messages %}
+        {% for message in messages %}
+        <p class="alert alert-{{ message.tags }}">
+          {{ message }}
+        </p>
+        {% endfor %}
+        {% endif %}
+
         <div class="input-group mb-2">
           <div class="input-group-prepend">
             <div class="input-group-text">@</div>
           </div>
-          <input type="text" class="form-control" id="datasetCheck" placeholder="Search the account">
+          <input type="text" class="form-control" id="datasetCheck" placeholder="Search the account" name="searched">
         </div>
       </div>
       <!-- </div> -->
-
 
       <!--  Search button -->
       <div class="row mb-4">
@@ -158,112 +169,54 @@
 
       <!-- list of accounts -->
 
-      
-      <h2 style="margin-left: 30px;">List of Accounts</h2>
-      <div class="card" id="searchbox">
-        <div class="card-body">
+      {% if searched %}
+      <h2 style="margin-left: 30px;">The Account</h2>
+      <div class="card" id="searchbox" style="width: 80%">
+        <div class="card-body container" >
           <div class="row">
-            <div class="col-md-2">
+            <div class="col-md-2 mt-4">
               <img src="{% static 'img/emptyprofile.png' %}" alt="" width="100" height="100"
                 class="mr-3 rounded-circle img-thumbnail shadow-sm">
             </div>
-            <div class="col-md-8">
-              <h6>Clara Pranomo</h6>
-              <p>Pranomo123@gmail.com</p>
-            </div>
+            <div class="col-md-8 mt-4">
+
+              {%for item in user %}
+              <h6><strong>Username</strong></h6>
+             <p>{{item.username}}</p> 
+
+              <h6><strong>Email</strong></h6>
+              <p>{{item.email}}</p>
+
+              <!-- {{item.id}} -->
+
+              </div>
+
+              <div class="dropdown col-md-1 mt-4">
+                <button class="btn btn-secondary dropdown-toggle " type="button" id="dropdownMenu2"
+                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Settings
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                  <li>
+                    <a href="{%url 'update-user' item.id%}" class="dropdown-item">Update Account</a>
+                  </li>
+                  <li>
+                    <a href="{%url 'delete-user' item.id%}" class="dropdown-item"> Delete Account</a>
+                  </li>
+                </ul>
+
+                <!-- //end of button -->
+              </div>
+
+              {% endfor %}
+              {% endif %}
+              <p></p>
+          
             <!-- //button -->
 
-            <div class="dropdown col-md-1">
-              <button class="btn btn-secondary dropdown-toggle " type="button" id="dropdownMenu2" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
-                Settings
-              </button>
-
-              <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                <li>
-                  <a href="updateUser.html" class="dropdown-item"> Update Account</a>
-                </li>
-                <li>
-                  <a href="#" class="dropdown-item"> Delete Account</a>
-                </li>
-              </ul>
-              <!-- //end of button -->
-            </div>
-          </div>
-        </div>
-
-
-        <div class="card-body">
-          <div class="row">
-            <div class="col-md-2">
-              <img src= "{% static 'img/emptyprofile.png' %}" alt="" width="100" height="100"
-                class="mr-3 rounded-circle img-thumbnail shadow-sm">
-            </div>
-            <div class="col-md-8">
-              <h6>Clara Pranomo</h6>
-              <p>Pranomo123@gmail.com</p>
-            </div>
-            <!-- //button -->
-
-            <div class="dropdown col-md-1">
-              <button class="btn btn-secondary dropdown-toggle " type="button" id="dropdownMenu2" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
-                Settings
-              </button>
-
-              <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                <li>
-                  <a href="updateUser.html" class="dropdown-item"> Update Account</a>
-                </li>
-                <li>
-                  <a href="#" class="dropdown-item"> Delete Account</a>
-                </li>
-              </ul>
-              <!-- //end of button -->
-            </div>
-          </div>
-        </div>
-
-                <div class="card-body">
-          <div class="row">
-            <div class="col-md-2">
-              <img src="{% static 'img/emptyprofile.png' %}" alt="" width="100" height="100"
-                class="mr-3 rounded-circle img-thumbnail shadow-sm">
-            </div>
-            <div class="col-md-8">
-              <h6>Clara Pranomo</h6>
-              <p>Pranomo123@gmail.com</p>
-            </div>
-            <!-- //button -->
-
-            <div class="dropdown col-md-1">
-              <button class="btn btn-secondary dropdown-toggle " type="button" id="dropdownMenu2" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
-                Settings
-              </button>
-
-              <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                <li>
-                  <a href="updateUser.html" class="dropdown-item"> Update Account</a>
-                </li>
-                <li>
-                  <a href="#" class="dropdown-item"> Delete Account</a>
-                </li>
-              </ul>
-              <!-- //end of button -->
-            </div>
           </div>
         </div>
       </div>
-
-
-
-    
-
-
-
-
-
     </div>
 
   </form>

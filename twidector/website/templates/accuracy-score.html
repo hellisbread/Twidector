@@ -15,10 +15,12 @@
   <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}" />
 
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+    integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
-  
+
   <!--Favicon-->
   <link rel="icon" href="img/cropped-twidector-1-1.png" sizes="32x32" />
   <link rel="icon" href="img/cropped-twidector-1-2.png" sizes="192x192" />
@@ -28,7 +30,7 @@
 <body>
   <!--Navigation-->
   <!-- Vertical navbar -->
-<div class="vertical-nav bg-white" id="sidebar">
+  <div class="vertical-nav bg-white" id="sidebar">
     </br></br></br>
     <p class="text-gray font-weight-bold text-uppercase px-3 small pb-4 mb-0">
       Admin Dashboard
@@ -124,33 +126,51 @@
     </div>
   </nav>
 
-    <!-- CONTENT -->
+  <!-- CONTENT -->
   <!-- <div class="page-content p-3" id="content"> -->
   <form class="page-content p-3" id="content">
     <!-- <div class="separator"></div> -->
     <div class="container">
 
-                </br> </br>
-                 <div class="card-body">
-                          <div class="row">
-                            <div class="col-md-6">
-                              <div class="chart-container" style="position: relative; height:36vh; width:36vw; display: inline;">
-                                <canvas id="myChart"></canvas>
-                              </div>
-                            </div>
+      </br> </br>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="chart-container" style="position: relative; height:36vh; width:36vw; display: inline;">
+              <canvas id="myChart"></canvas>
+            </div>
+          </div>
 
-                          <div class="col-md-1"></div>
-                          <div class="col-md-4">
-                            <div class="toxicity__left glue-grid__col glue-grid__col--span-6 glue-grid__col--span-12-md glue-grid__col--span-12-sm">
-                            <h1 style="margin-top: 250px;">The Accuracy Score of our dataset is <strong>90%</strong>  </h1>
-                            
-                            </div>
-                          </div>
-                            </div>
-                        </div>
-                        <br>
-     </div>
-    
+          <div class="col-md-1"></div>
+          <div class="col-md-4">
+            <div
+              class="toxicity__left glue-grid__col glue-grid__col--span-6 glue-grid__col--span-12-md glue-grid__col--span-12-sm">
+              <h1 style="margin-top: 250px;">The Accuracy Score of our dataset is <strong>90%</strong> </h1>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+
+      <div class="container" style="padding:20px;">
+        <div class="row">
+          <div class="col-12">
+            <form method="POST" class="post-form" enctype="multipart/form-data">
+              <p>
+              <label for = "id_file"> File: </label>
+             </br>
+              <input type="file" name="file" required_id="id_file" >
+              </p>
+              {% csrf_token %}
+              {{ form.as_p }}
+              <button type="submit" class="btn btn-primary">Save</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </form>
   <!-- </div> -->
 
@@ -168,107 +188,107 @@
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
-      // setup
-      const data = {
-        labels: ["Hate", "Non-Hate", "Offensive"],
-        datasets: [
-          {
-            label: "Accuracy Score",
-            data: [56 ,77,89],
-            data_1: [92],
-            backgroundColor: [
-              "rgba(255, 26, 104, 0.2)",
-              "rgba(54, 162, 235, 0.2)",
-              "rgba(255, 206, 86, 0.2)",
-              "rgba(75, 192, 192, 0.2)",
-              "rgba(153, 102, 255, 0.2)",
-              "rgba(255, 159, 64, 0.2)",
-              "rgba(0, 0, 0, 0.2)",
-            ],
-            borderColor: [
-              "rgba(255, 26, 104, 1)",
-              "rgba(54, 162, 235, 1)",
-              "rgba(255, 206, 86, 1)",
-              "rgba(75, 192, 192, 1)",
-              "rgba(153, 102, 255, 1)",
-              "rgba(255, 159, 64, 1)",
-              "rgba(0, 0, 0, 1)",
-            ],
-            borderWidth: 1,
-            cutout: "90%",
-            offset: 5,
-            borderRadius: 20,
-          },
-        ],
-      };
-
-      // customDatalabels plugin block
-      const customDatalabels = {
-        id: "customDatalabels",
-        afterDatasetsDraw(chart, args, pluginOptions) {
-          const {
-            ctx,
-            data,
-            chartArea: { top, bottom, left, right, width, height },
-          } = chart;
-
-          ctx.save();
-          const halfWidth = width / 2 + left;
-          const halfHeight = height / 2 + top;
-
-          data.datasets[0].data.forEach((datapoint, index) => {
-            const { x, y } = chart
-              .getDatasetMeta(0)
-              .data[index].tooltipPosition();
-            ctx.font = "bold 12px sans-serif";
-            ctx.fillStyle = data.datasets[0].borderColor[index];
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
-
-       
-              const xLine = x >= halfWidth ? x + 15 : x - 15;
-              const yLine = y >= halfHeight ? y + 30 : y - 30;
-              const extraLine = x >= halfWidth ? 15 : -15;
-              const textWidth = ctx.measureText(datapoint).width;
-              const textWidthPosition = x >= halfWidth ? textWidth : -textWidth;
-
-              ctx.strokeStyle = data.datasets[0].borderColor[index];
-              ctx.beginPath();
-              ctx.moveTo(x, y);
-              ctx.lineTo(xLine, yLine);
-              ctx.lineTo(xLine + extraLine, yLine);
-              ctx.stroke();
-
-              ctx.fillText(
-                datapoint,
-                xLine + extraLine + textWidthPosition,
-                yLine
-              );
-            
-          });
+    // setup
+    const data = {
+      labels: ["Hate", "Non-Hate", "Offensive"],
+      datasets: [
+        {
+          label: "Accuracy Score",
+          data: [56, 77, 89],
+          data_1: [92],
+          backgroundColor: [
+            "rgba(255, 26, 104, 0.2)",
+            "rgba(54, 162, 235, 0.2)",
+            "rgba(255, 206, 86, 0.2)",
+            "rgba(75, 192, 192, 0.2)",
+            "rgba(153, 102, 255, 0.2)",
+            "rgba(255, 159, 64, 0.2)",
+            "rgba(0, 0, 0, 0.2)",
+          ],
+          borderColor: [
+            "rgba(255, 26, 104, 1)",
+            "rgba(54, 162, 235, 1)",
+            "rgba(255, 206, 86, 1)",
+            "rgba(75, 192, 192, 1)",
+            "rgba(153, 102, 255, 1)",
+            "rgba(255, 159, 64, 1)",
+            "rgba(0, 0, 0, 1)",
+          ],
+          borderWidth: 1,
+          cutout: "90%",
+          offset: 5,
+          borderRadius: 20,
         },
-      };
+      ],
+    };
 
-      // config
-      const config = {
-        type: "pie",
-        data,
-        options: {
-          layout: {
-            padding: 30,
-          },
-          plugins: {
-            legend: {
-              display: true,
-            },
+    // customDatalabels plugin block
+    const customDatalabels = {
+      id: "customDatalabels",
+      afterDatasetsDraw(chart, args, pluginOptions) {
+        const {
+          ctx,
+          data,
+          chartArea: { top, bottom, left, right, width, height },
+        } = chart;
+
+        ctx.save();
+        const halfWidth = width / 2 + left;
+        const halfHeight = height / 2 + top;
+
+        data.datasets[0].data.forEach((datapoint, index) => {
+          const { x, y } = chart
+            .getDatasetMeta(0)
+            .data[index].tooltipPosition();
+          ctx.font = "bold 12px sans-serif";
+          ctx.fillStyle = data.datasets[0].borderColor[index];
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+
+
+          const xLine = x >= halfWidth ? x + 15 : x - 15;
+          const yLine = y >= halfHeight ? y + 30 : y - 30;
+          const extraLine = x >= halfWidth ? 15 : -15;
+          const textWidth = ctx.measureText(datapoint).width;
+          const textWidthPosition = x >= halfWidth ? textWidth : -textWidth;
+
+          ctx.strokeStyle = data.datasets[0].borderColor[index];
+          ctx.beginPath();
+          ctx.moveTo(x, y);
+          ctx.lineTo(xLine, yLine);
+          ctx.lineTo(xLine + extraLine, yLine);
+          ctx.stroke();
+
+          ctx.fillText(
+            datapoint,
+            xLine + extraLine + textWidthPosition,
+            yLine
+          );
+
+        });
+      },
+    };
+
+    // config
+    const config = {
+      type: "pie",
+      data,
+      options: {
+        layout: {
+          padding: 30,
+        },
+        plugins: {
+          legend: {
+            display: true,
           },
         },
-        plugins: [customDatalabels],
-      };
+      },
+      plugins: [customDatalabels],
+    };
 
-      // render init block
-      const myChart = new Chart(document.getElementById("myChart"), config);
-    </script>
+    // render init block
+    const myChart = new Chart(document.getElementById("myChart"), config);
+  </script>
 
 </body>
 

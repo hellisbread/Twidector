@@ -10,6 +10,8 @@ from .models import CustomTwidectorUser
 #User = get_user_model()
 from django.contrib.auth import views as auth_views
 
+from django.forms import ModelForm
+
 class UserRegistrationForm(UserCreationForm):
     username = forms.CharField(label=_('Username'),
                                 widget=(forms.TextInput(attrs={'class': 'form-control'})),
@@ -50,3 +52,17 @@ class UserResetPasswordForm(auth_views.PasswordResetView):
         del self.fields['password2']
 
         '''
+
+class user_info(ModelForm):
+        class Meta:
+            model = CustomTwidectorUser
+            fields = ('username', 'email')
+            labels = {
+                'username' : 'Username',
+                'email' : 'Email',
+            }
+            widget = {
+                'username' : forms.TextInput(attrs={'class': 'form-control'}),
+                'email': forms.TextInput(attrs={'class': 'form-control'})
+            }
+     

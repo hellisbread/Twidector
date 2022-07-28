@@ -29,7 +29,7 @@
 <body>
   <!--Navigation-->
   <!-- Vertical navbar -->
-<div class="vertical-nav bg-white" id="sidebar">
+  <div class="vertical-nav bg-white" id="sidebar">
     </br></br></br>
     <p class="text-gray font-weight-bold text-uppercase px-3 small pb-4 mb-0">
       Admin Dashboard
@@ -127,55 +127,34 @@
 
   <!-- CONTENT -->
   <!-- <div class="page-content p-3" id="content"> -->
-  <form class="page-content p-3" id="content">
+  <form class="page-content p-3" id="content" method="POST">
     </br>
-    <h2 style="margin-left: 30px;">User Profile</h2>
-    <div class="card" id="searchbox">
-      <div class="card-body">
-        <div class="row">
-          <div class="tweet-header">
-            <img class="center rounded-circle mt-4 mb-2" src="{% static 'img/emptyprofile.png' %}" width="80">
+    {% csrf_token %}
+    <h2 style="margin-left: auto;">User Profile</h2>
 
-            <div class="col-md-4" style="margin-left: 20px;">
-              </br>
-              <div class="form-group row">
-                <label><strong>Username</strong></label>
-                <div class="col-sm-10">
-                  <input class="form-control" placeholder="Username" value="clare123">
-                </div>
-              </div>
-
-              <div class="form-group row">
-                <label><strong>Email</strong></label>
-                <div class="col-sm-10">
-                  <input type="email" class="form-control" placeholder="Email" value="clar123@gmail.com">
-                </div>
-              </div>
-
-              <div class="form-group row">
-                <label><strong>Twitter Username</strong></label>
-                <div class="col-sm-10">
-                  <input class="form-control" placeholder="twitter-username" value="@clar123">
-
-                </div>
-              </div>
-            </div>
+    <!-- Error Messages -->
+    {% if messages %}
+    {% for message in messages %}
+    <p class="alert alert-{{ message.tags }}">
+      {{ message }}
+    </p>
+    {% endfor %}
+    {% endif %}
 
 
+    {{form.as_p}}
 
-            <!-- update button -->
-            <div class="dropdown">
+    <!-- update button  -->
+    <div class="dropdown">
 
-              <button type="submit" class="btn btn-primary mb-2" style="margin-top: 20px;">Update </button>
+      <button type="submit" class="btn btn-primary mb-2" style="margin-top: 20px;">Update </button>
 
-              <button type="submit" class="btn btn-primary mb-2" style="margin-top: 20px;">Update </button>
-
-            </div>
-          </div>
-        </div>
+    </div>
+    </div>
+    </div>
 
 
-      </div>
+    </div>
     </div>
 
 

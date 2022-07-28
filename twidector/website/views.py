@@ -16,6 +16,8 @@ from django.views.decorators.csrf import csrf_exempt
 
 from website.models import CustomTwidectorUser
 
+from .forms import user_info
+
 from .forms import UserRegistrationForm
 from django.contrib.auth import views as auth_views
 from django.contrib.admin.views.decorators import staff_member_required
@@ -284,7 +286,7 @@ def adminLogin(request):
                 request.session['loggedin'] = username
                 auth_login(request, user)
                 messages.success(request, 'Successfully Login to Admin Panel')
-                return redirect('searchAccount')
+                return redirect('search-account')
                 
             else:
                 messages.error(request, 'Invalid Username or Password')
@@ -303,12 +305,46 @@ def adminPage(request):
 
 @staff_member_required
 def searchAccount(request):
-   if request.method == "POST":
-       searched = request.POST('searched')
-       return render(request, 'search-account.html' ,{})
 
-def updateUser(request):
-    return render(request, 'update-user.html', {})
+    #retrieve the user from the database
+    
+    if request.method == "POST":
+        user = get_user_model()
+        #user input
+        searched = request.POST['searched']
+        user = user.objects.filter(username__icontains= searched)
+
+        if user:
+            messages.success(request, 'Successfully Found!')
+            return render(request, 'search-account.html' ,{'searched' : searched, 'user': user})
+            
+        else:
+            messages.error(request,"Sorry! No user found!")
+            return render(request, 'search-account.html' , {})
+
+    else:
+        return render(request, 'search-account.html' , {})
+
+
+def updateUser(request,user_id):
+
+    user = get_user_model()
+    #getting the id for each user
+    user = user.objects.get(pk = user_id)
+    form = user_info(request.POST or None, instance=user)
+
+    if form.is_valid():
+        form.save()
+        return redirect('search-account')
+
+    return render(request, 'update-user.html', {'user' : user, 'form' : form})
+
+def delete_user(request,user_id):
+    user = get_user_model()
+    #getting the id for each user
+    user = user.objects.get(pk = user_id)
+    user.delete()
+    return render(request, 'search-account.html' , {})
 
 def modelTesting(request):
     return render(request, 'model-testing.html', {})
