@@ -91,7 +91,8 @@ ssh_tunnel = SSHTunnelForwarder(
 ssh_tunnel.start()
 
 DATABASES = {
-  'default': {
+    #production settings
+    'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'twidector$default',
         'USER': 'twidector',
