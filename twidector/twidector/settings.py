@@ -91,20 +91,12 @@ ssh_tunnel = SSHTunnelForwarder(
 ssh_tunnel.start()
 
 DATABASES = {
-    #development settings
-    'default': {
+  'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'twidector$default',
         'USER': 'twidector',
         'PASSWORD': 'FYP22S205',
-        'HOST': '127.0.0.1',
-        'PORT': ssh_tunnel.local_bind_port,
-        'TEST': {
-          'NAME': "twidector$default",
-        },
-        'OPTIONS': {
-            'sql_mode': 'traditional',
-        }
+        'HOST': 'twidector.mysql.pythonanywhere-services.com'
     }
 }
 
