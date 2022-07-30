@@ -69,7 +69,7 @@ def prepareDF():
     x_train, x_test, y_train, y_test = train_test_split(x, y, stratify = y, test_size=0.2)
 
     # vectorize tweets for model building
-    vectorizer = CountVectorizer(stop_words='english', ngram_range=(1, 1), max_features = 1000)
+    vectorizer = CountVectorizer(ngram_range=(1, 4), max_features = 1000)
 
     # learn a vocabulary dictionary of all tokens in the raw documents
     vectorizer.fit(list(x_train) + list(x_test))
