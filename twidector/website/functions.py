@@ -257,27 +257,6 @@ def retrieve_user_by_username(username):
             return False
 
 
-
-def activate_user(username):
-    
-    open_connect()
-
-    with connection.cursor() as cursor:
-
-        sqlcommand = "UPDATE `website_user` SET `is_active` = %s WHERE `username` = %s"
-
-        try:
-
-            cursor.execute(sqlcommand, (1, username))
-            connection.commit()
-
-            close_connect()
-            return True
-
-        except pymysql.IntegrityError:
-            close_connect()
-            return False
-
 #def retrieve_salt_by_email(email):
     
     open_connect()

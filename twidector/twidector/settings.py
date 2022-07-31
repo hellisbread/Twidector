@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config
 
 import os
 
@@ -91,20 +92,13 @@ ssh_tunnel = SSHTunnelForwarder(
 ssh_tunnel.start()
 
 DATABASES = {
-    #development settings
+    #production settings
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'twidector$default',
         'USER': 'twidector',
         'PASSWORD': 'FYP22S205',
-        'HOST': '127.0.0.1',
-        'PORT': ssh_tunnel.local_bind_port,
-        'TEST': {
-          'NAME': "twidector$default",
-        },
-        'OPTIONS': {
-            'sql_mode': 'traditional',
-        }
+        'HOST': 'twidector.mysql.pythonanywhere-services.com'
     }
 }
 
@@ -192,3 +186,10 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'twidector@gmail.com'
 EMAIL_HOST_PASSWORD = 'hvxxdoxsxrtsinbu'
+
+#TWITTER SETTINGS
+TWITTER_API_KEY='WkC302nPjoYVv1Jqo0iqylYuC'
+TWITTER_API_SECRET='DVl2UrqBPAo3MORzt97ijYY3xkpDjjh4wNTZ4exRPJL5edLlrz'
+TWITTER_CLIENT_ID='SFF5WXd1OXA2UmhmVUM2RWUwbnI6MTpjaQ'
+TWITTER_CLIENT_SECRET='dIGkajGTH4MazVhypl7GVoUYLYtiuKP4Qnd4dOmffd4KoTBrTA'
+TWITTER_OAUTH_CALLBACK_URL='https://twidector.pythonanywhere.com/dashboard/'

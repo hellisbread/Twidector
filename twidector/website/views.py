@@ -196,7 +196,8 @@ def activate(request, uidb64, token):
         user = None
 
     if user is not None and account_activation_token.check_token(user, token):
-        activate_user(user.username)
+        user.is_active = True
+        user.save()
 
         # return redirect('home')
         messages.success(request,'Successfully activated account')
