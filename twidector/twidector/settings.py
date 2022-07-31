@@ -24,7 +24,7 @@ TEMPLATE_DIR = os.path.join(BASE_DIR, "templates")
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure--cp+kvfnrpoqe-***y9swd7&!du&x@)x6zo41ry1qc_5u1cwc+'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -94,11 +94,11 @@ ssh_tunnel.start()
 DATABASES = {
     #production settings
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'twidector$default',
-        'USER': 'twidector',
-        'PASSWORD': 'FYP22S205',
-        'HOST': 'twidector.mysql.pythonanywhere-services.com'
+        'ENGINE': config('PROD_SQL_ENGINE'),
+        'NAME': config('PROD_SQL_NAME'),
+        'USER': config('PROD_SQL_USER'),
+        'PASSWORD': config('PROD_SQL_PASSWORD'),
+        'HOST': config('PROD_SQL_HOST'),
     }
 }
 
@@ -120,6 +120,19 @@ DATABASES = {
         'USER': 'twidector',
         'PASSWORD': 'FYP22S205',
         'HOST': '127.0.0.1',
+        'PORT': ssh_tunnel.local_bind_port,
+        'OPTIONS': {
+            'sql_mode': 'traditional',
+        }
+    }
+
+    #development settings
+    'default': {
+        'ENGINE': config('DEV_SQL_ENGINE'),
+        'NAME': config('DEV_SQL_NAME'),
+        'USER': config('DEV_SQL_USER'),
+        'PASSWORD': config('DEV_SQL_PASSWORD'),
+        'HOST': config('DEV_SQL_HOST'),
         'PORT': ssh_tunnel.local_bind_port,
         'TEST': {
           'NAME': "twidector$default",
@@ -179,17 +192,17 @@ LOGIN_REDIRECT_URL = 'dashboard'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-DEFAULT_FROM_EMAIL = 'twidector@gmail.com'
-SERVER_EMAIL = 'twidector@gmail.com'
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'twidector@gmail.com'
-EMAIL_HOST_PASSWORD = 'hvxxdoxsxrtsinbu'
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')
+SERVER_EMAIL = config('SERVER_EMAIL')
+EMAIL_USE_TLS = config('EMAIL_USE_TLS')
+EMAIL_HOST = config('EMAIL_HOST')
+EMAIL_PORT = config('EMAIL_PORT')
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
 #TWITTER SETTINGS
-TWITTER_API_KEY='WkC302nPjoYVv1Jqo0iqylYuC'
-TWITTER_API_SECRET='DVl2UrqBPAo3MORzt97ijYY3xkpDjjh4wNTZ4exRPJL5edLlrz'
-TWITTER_CLIENT_ID='SFF5WXd1OXA2UmhmVUM2RWUwbnI6MTpjaQ'
-TWITTER_CLIENT_SECRET='dIGkajGTH4MazVhypl7GVoUYLYtiuKP4Qnd4dOmffd4KoTBrTA'
-TWITTER_OAUTH_CALLBACK_URL='https://twidector.pythonanywhere.com/dashboard/'
+TWITTER_API_KEY=config('TWITTER_API_KEY')
+TWITTER_API_SECRET=config('TWITTER_API_SECRET')
+TWITTER_CLIENT_ID=config('TWITTER_CLIENT_ID')
+TWITTER_CLIENT_SECRET=config('TWITTER_CLIENT_SECRET')
+TWITTER_OAUTH_CALLBACK_URL=config('TWITTER_OAUTH_CALLBACK_URL')
