@@ -5,7 +5,7 @@ from django.contrib.auth import password_validation
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.validators import UnicodeUsernameValidator
 
-from .models import CustomTwidectorUser
+#from .models import CustomTwidectorUser
 #from django.contrib.auth import get_user_model
 #User = get_user_model()
 from django.contrib.auth import views as auth_views
@@ -26,7 +26,7 @@ class UserRegistrationForm(UserCreationForm):
                             widget=(forms.TextInput(attrs={'class': 'form-control'})))
 
     class Meta:
-        model = CustomTwidectorUser
+        model = User
         fields = ('username', 'password1', 'password2', 'email')
         #abstract = True
 
@@ -55,7 +55,7 @@ class UserResetPasswordForm(auth_views.PasswordResetView):
 
 class user_info(ModelForm):
         class Meta:
-            model = CustomTwidectorUser
+            model = User
             fields = ('username', 'email')
             labels = {
                 'username' : 'Username',

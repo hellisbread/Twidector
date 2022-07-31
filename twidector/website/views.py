@@ -7,6 +7,8 @@ from django.contrib.auth.decorators import login_required
 from .decorators import twitter_login_required
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login
+from django.contrib.auth import logout as auth_logout
+
 from django.urls import reverse_lazy
 from django.contrib.auth.views import PasswordResetView
 from django.contrib.auth.forms import PasswordResetForm
@@ -15,7 +17,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from website.models import CustomTwidectorUser
+#from website.models import CustomTwidectorUser
 
 from .forms import user_info
 
@@ -127,6 +129,7 @@ def logout(request):
 
     else:
         del request.session['loggedin']
+        auth_logout(request)
         messages.success(request, 'Successfully Logged out.')
         return redirect('login')
 

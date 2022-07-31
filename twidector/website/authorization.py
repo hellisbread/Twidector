@@ -1,17 +1,15 @@
-
+from django.contrib.auth.models import User
 from website.twitter_api import TwitterAPI
-from website.models import CustomTwidectorUser
+#from website.models import CustomTwidectorUser
 from .models import TwitterUser
 
 
 def create_update_user_from_twitter(twitter_user_new):
     twitter_user = TwitterUser.objects.filter(twitter_id=twitter_user_new.twitter_id).first()
     if twitter_user is None:
-
-        user = CustomTwidectorUser.objects.filter(username=twitter_user_new.screen_name).first()
+        user = User.objects.filter(username=twitter_user_new.screen_name).first()
         if user is None:
-            user = CustomTwidectorUser(username=twitter_user_new.screen_name)
-            user.is_active = True
+            user = User(username=twitter_user_new.screen_name)
             user.save()
         twitter_user = TwitterUser(twitter_id=twitter_user_new.twitter_id,
                                    screen_name=twitter_user_new.screen_name)

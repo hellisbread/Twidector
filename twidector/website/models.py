@@ -1,6 +1,4 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
-
 
 # Create your models here.
 class TwitterAuthToken(models.Model):
@@ -9,23 +7,15 @@ class TwitterAuthToken(models.Model):
 
     def __str__(self):
         return self.oauth_token
-        
-class CustomTwidectorUser(AbstractUser):
-    username = models.CharField(max_length=191, unique=True)
-    email = models.EmailField(max_length=191, unique=True, null=True)
-    password = models.CharField(max_length=128, null=True)
-
-    EMAIL_FIELD = "email"
-    USERNAME_FIELD = "username"
 
     class Meta:
-        db_table = 'website_user'
+        db_table = 'website_twitter_auth_token'
 
 class TwitterUser(models.Model):
     twitter_id = models.CharField(max_length=255)
     screen_name = models.CharField(max_length=255)
     twitter_oauth_token = models.ForeignKey(TwitterAuthToken, on_delete=models.CASCADE)
-    user = models.ForeignKey('CustomTwidectorUser', on_delete=models.CASCADE)
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.screen_name
