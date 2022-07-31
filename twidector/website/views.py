@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth.decorators import login_required
+from .decorators import twitter_login_required
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login
 from django.urls import reverse_lazy
@@ -38,9 +39,13 @@ from django.core.mail import send_mail, BadHeaderError
 from django.contrib.auth import get_user_model
 
 user = get_user_model()
+from .models import TwitterAuthToken, TwitterUser
 
 from website.functions import *
 from website.hatedetection import *
+
+from website.twitter_api import TwitterAPI
+from website.authorization import create_update_user_from_twitter, check_token_still_valid
 
 @csrf_exempt
 
@@ -114,6 +119,7 @@ def login(request):
     else:
         return redirect('index')
 
+@login_required
 def logout(request):
     if 'loggedin' not in request.session:
 
@@ -143,7 +149,7 @@ def register(request):
                 user = get_user_model()
                 user = form.save(commit=False)
                 user.is_active = False
-
+                #user.is_staff = True
                 user.save()  
                 current_site = get_current_site(request)
                 subject = "Twidector Account Activation"
@@ -273,6 +279,56 @@ def resetForgotPassword(request):
 
 #def forgotUsername(request):
     return render(request, 'forgot-password.html', {})
+    
+def login_twitter(request):
+    twitter_api = TwitterAPI()
+    url, oauth_token, oauth_token_secret = twitter_api.twitter_login()
+    if url is None or url == '':
+        messages.error('Error.')
+        return redirect('index')
+    else:
+        twitter_auth_token = TwitterAuthToken.objects.filter(oauth_token=oauth_token).first()
+        if twitter_auth_token is None:
+            twitter_auth_token = TwitterAuthToken(oauth_token=oauth_token, oauth_token_secret=oauth_token_secret)
+            twitter_auth_token.save()
+        else:
+            twitter_auth_token.oauth_token_secret = oauth_token_secret
+            twitter_auth_token.save()
+        return redirect(url)
+
+
+def twitter_callback(request):
+    if 'denied' in request.GET:
+        messages.error('Error.')
+        return redirect('index')
+    twitter_api = TwitterAPI()
+    oauth_verifier = request.GET.get('oauth_verifier')
+    oauth_token = request.GET.get('oauth_token')
+    twitter_auth_token = TwitterAuthToken.objects.filter(oauth_token=oauth_token).first()
+    if twitter_auth_token is not None:
+        access_token, access_token_secret = twitter_api.twitter_callback(oauth_verifier, oauth_token, twitter_auth_token.oauth_token_secret)
+        if access_token is not None and access_token_secret is not None:
+            twitter_auth_token.oauth_token = access_token
+            twitter_auth_token.oauth_token_secret = access_token_secret
+            twitter_auth_token.save()
+            # Create user
+            info = twitter_api.get_me(access_token, access_token_secret)
+            if info is not None:
+                twitter_user_new = TwitterUser(twitter_id=info[0]['id'], username=info[0]['username'])
+                twitter_user_new.twitter_oauth_token = twitter_auth_token
+                user, twitter_user_new = create_update_user_from_twitter(twitter_user_new)
+                if user is not None:
+                    login(request, user)
+                    return redirect('dashboard')
+            else:
+                messages.error('Error.')
+                return redirect('index')
+        else:
+            messages.error('Error.')
+            return redirect('index')
+    else:
+        messages.error('Error.')
+        return redirect('index')
 
 #Admin Views
 def adminLogin(request):

@@ -24,6 +24,8 @@ urlpatterns = [
     path('about-us/',views.aboutUs, name='about-us'),
     path('about-team/', views.aboutTeam, name='about-team'),
     path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
+    path('login_twitter/', views.login_twitter, name='login_twitter'),
+    path('login_twitter_callback/', views.twitter_callback, name='twitter_callback'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('register/', views.register, name='register'),
     path('forgot-password/', views.forgotPassword, name='forgot-password'),
