@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth.decorators import login_required
+from pymysql import NULL
 from .decorators import twitter_login_required
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login
@@ -416,153 +417,123 @@ def reportedTweets(request):
 @login_required
 def dashboard(request):
     return render(request, 'dashboard.html', {})
-    #if 'loggedin' not in request.session:
-        #messages.error(request, 'please login before entering the dashboard.')
-        #return redirect('login')
 
-    #else:
-        #return render(request, 'dashboard.html', {})
-
+@login_required
 def analyse(request):
-    if 'loggedin' not in request.session:
-        messages.error(request, 'please login before enterring the dashboard.')
-        return redirect('login')
+    return render(request, 'analyse.html', {})
 
-    else:
-        return render(request, 'analyse.html', {})
-
+@login_required
 def analyseTwo(request):
-    if 'loggedin' not in request.session:
-        messages.error(request, 'please login before enterring the dashboard.')
-        return redirect('login')
+    return render(request, 'analyse-2.html', {})
 
-    else:
-        return render(request, 'analyse-2.html', {})
-
+@login_required
 def viewTweet(request):
-    if 'loggedin' not in request.session:
-        messages.error(request, 'please login before enterring the dashboard.')
-        return redirect('login')
+    return render(request, 'view-tweet.html', {})
 
-    else:
-        return render(request, 'view-tweet.html', {})
-
+@login_required
 def blacklist(request):
 
-    if 'loggedin' not in request.session:
-        messages.error(request, 'please login before enterring the dashboard.')
-        return redirect('login')
+    context = {}
+
+    loggedUser = request.session.get('loggedin')
+
+    #Retrieve List
+    blacklisted_users = retrieve_blacklist(loggedUser)
+
+    #Convert List to context dict
+    list_of_blacklisted_users = []
+    for user in blacklisted_users:
+        list_of_blacklisted_users.append(user)
+
+    context['list_of_blacklisted_users'] = list_of_blacklisted_users
+
+    #POST
+    if request.method == 'POST':
+        #Add new blacklisted user
+        blacklist_username = request.POST['blacklist-user']
+
+        result = blacklist_user(loggedUser , blacklist_username)
+
+        if result:
+            messages.success(request, "Successfully blacklisted " + blacklist_username)
+        else:
+            messages.error(request, "This username exists in your blacklist.")
+
+        return redirect('blacklist')
 
     else:
-        context = {}
+        
+        return render(request, 'blacklist.html', context)
 
-        loggedUser = request.session.get('loggedin')
-
-        #Retrieve List
-        blacklisted_users = retrieve_blacklist(loggedUser)
-
-        #Convert List to context dict
-        list_of_blacklisted_users = []
-        for user in blacklisted_users:
-            list_of_blacklisted_users.append(user)
-
-        context['list_of_blacklisted_users'] = list_of_blacklisted_users
-
-        #POST
-        if request.method == 'POST':
-            #Add new blacklisted user
-            blacklist_username = request.POST['blacklist-user']
-
-            result = blacklist_user(loggedUser , blacklist_username)
-
-            if result:
-                messages.success(request, "Successfully blacklisted " + blacklist_username)
-            else:
-                messages.error(request, "This username exists in your blacklist.")
-
-            return redirect('blacklist')
-
-        else:
-            
-            return render(request, 'blacklist.html', context)
-
+@login_required
 def whitelist(request):
 
-    if 'loggedin' not in request.session:
-        messages.error(request, 'please login before enterring the dashboard.')
-        return redirect('login')
+    context = {}
+
+    loggedUser = request.user.id
+
+    #Retrieve List
+    whitelisted_users = retrieve_whitelist(loggedUser)
+
+    #Convert List to context dict
+    list_of_whitelisted_users = []
+    for user in whitelisted_users:
+        list_of_whitelisted_users.append(user)
+
+    context['list_of_whitelisted_users'] = list_of_whitelisted_users
+
+    #POST
+    if request.method == 'POST':
+        #Add new blacklisted user
+        whitelist_username = request.POST['whitelist-user']
+
+        result = whitelist_user(loggedUser , whitelist_username)
+
+        if result:
+            messages.success(request, "Successfully whitelisted " + whitelist_username)
+        else:
+            messages.error(request, "This username exists in your whitelist.")
+
+        return redirect('whitelist')
+
     else:
-        context = {}
+        
+        return render(request, 'whitelist.html', context)
+
+@login_required
+def settings(request):
+    
+    if 'change-password' in request.POST:
 
         loggedUser = request.session.get('loggedin')
+        old_password = request.POST['old-password']
+        new_password = request.POST['new-password']
+        confirm_new_password = request.POST['confirm-new-password']
 
-        #Retrieve List
-        whitelisted_users = retrieve_whitelist(loggedUser)
+        checkPassword = validate_login(loggedUser, old_password)
 
-        #Convert List to context dict
-        list_of_whitelisted_users = []
-        for user in whitelisted_users:
-            list_of_whitelisted_users.append(user)
+        if checkPassword:
 
-        context['list_of_whitelisted_users'] = list_of_whitelisted_users
+            #check password
+            if (new_password == confirm_new_password):
+                result = change_password(loggedUser, new_password)
 
-        print(context)
-
-        #POST
-        if request.method == 'POST':
-            #Add new blacklisted user
-            whitelist_username = request.POST['whitelist-user']
-
-            result = whitelist_user(loggedUser , whitelist_username)
-
-            if result:
-                messages.success(request, "Successfully whitelisted " + whitelist_username)
-            else:
-                messages.error(request, "This username exists in your whitelist.")
-
-            return redirect('whitelist')
-
-        else:
-            
-            return render(request, 'whitelist.html', context)
-
-def settings(request):
-    if 'loggedin' not in request.session:
-        messages.error(request, 'please login before enterring the dashboard.')
-        return redirect('login')
-    else:
-
-        if 'change-password' in request.POST:
-
-            loggedUser = request.session.get('loggedin')
-            old_password = request.POST['old-password']
-            new_password = request.POST['new-password']
-            confirm_new_password = request.POST['confirm-new-password']
-
-            checkPassword = validate_login(loggedUser, old_password)
-
-            if checkPassword:
-
-                #check password
-                if (new_password == confirm_new_password):
-                    result = change_password(loggedUser, new_password)
-
-                    if result:
-                        messages.success(request,"You have successfully changed your password!")
-
-                    else:
-                        messages.error(request, "There was an error changing your password.")
-
-                    return redirect('settings')
+                if result:
+                    messages.success(request,"You have successfully changed your password!")
 
                 else:
-                    messages.error(request, "The password confirmation does not match.")
-                    return redirect('settings')
+                    messages.error(request, "There was an error changing your password.")
+
+                return redirect('settings')
 
             else:
-                messages.error(request, "Invalid Password.")
+                messages.error(request, "The password confirmation does not match.")
                 return redirect('settings')
-        
-        else:
 
-            return render(request, 'settings.html', {})
+        else:
+            messages.error(request, "Invalid Password.")
+            return redirect('settings')
+    
+    else:
+
+        return render(request, 'settings.html', {})
