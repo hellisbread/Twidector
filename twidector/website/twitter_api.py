@@ -1,5 +1,5 @@
 import tweepy
-from decouple import config
+#from decouple import config
 import os
 
 class TwitterAPI:
