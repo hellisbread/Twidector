@@ -94,11 +94,11 @@ ssh_tunnel.start()
 DATABASES = {
     #production settings
     'default': {
-        'ENGINE': config('PROD_SQL_ENGINE'),
-        'NAME': config('PROD_SQL_NAME'),
-        'USER': config('PROD_SQL_USER'),
-        'PASSWORD': config('PROD_SQL_PASSWORD'),
-        'HOST': config('PROD_SQL_HOST'),
+        'ENGINE': os.getenv('PROD_SQL_ENGINE'),
+        'NAME': os.getenv('PROD_SQL_NAME'),
+        'USER': os.getenv('PROD_SQL_USER'),
+        'PASSWORD': os.getenv('PROD_SQL_PASSWORD'),
+        'HOST': os.getenv('PROD_SQL_HOST'),
     }
 }
 
@@ -110,6 +110,15 @@ DATABASES = {
         'USER': 'twidector',
         'PASSWORD': 'FYP22S205',
         'HOST': 'twidector.mysql.pythonanywhere-services.com'
+    }
+
+    #production settings
+    'default': {
+        'ENGINE': os.getenv('PROD_SQL_ENGINE'),
+        'NAME': os.getenv('PROD_SQL_NAME'),
+        'USER': os.getenv('PROD_SQL_USER'),
+        'PASSWORD': os.getenv('PROD_SQL_PASSWORD'),
+        'HOST': os.getenv('PROD_SQL_HOST'),
     }
 """
 """
@@ -128,11 +137,11 @@ DATABASES = {
 
     #development settings
     'default': {
-        'ENGINE': config('DEV_SQL_ENGINE'),
-        'NAME': config('DEV_SQL_NAME'),
-        'USER': config('DEV_SQL_USER'),
-        'PASSWORD': config('DEV_SQL_PASSWORD'),
-        'HOST': config('DEV_SQL_HOST'),
+        'ENGINE': os.getenv('DEV_SQL_ENGINE'),
+        'NAME': os.getenv('DEV_SQL_NAME'),
+        'USER': os.getenv('DEV_SQL_USER'),
+        'PASSWORD': os.getenv('DEV_SQL_PASSWORD'),
+        'HOST': os.getenv('DEV_SQL_HOST'),
         'PORT': ssh_tunnel.local_bind_port,
         'TEST': {
           'NAME': "twidector$default",
@@ -192,17 +201,17 @@ LOGIN_REDIRECT_URL = 'dashboard'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')
-SERVER_EMAIL = config('SERVER_EMAIL')
-EMAIL_USE_TLS = config('EMAIL_USE_TLS')
-EMAIL_HOST = config('EMAIL_HOST')
-EMAIL_PORT = config('EMAIL_PORT')
-EMAIL_HOST_USER = config('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
+SERVER_EMAIL = os.getenv('SERVER_EMAIL')
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS')
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+EMAIL_PORT = os.getenv('EMAIL_PORT')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 
 #TWITTER SETTINGS
-TWITTER_API_KEY=config('TWITTER_API_KEY')
-TWITTER_API_SECRET=config('TWITTER_API_SECRET')
-TWITTER_CLIENT_ID=config('TWITTER_CLIENT_ID')
-TWITTER_CLIENT_SECRET=config('TWITTER_CLIENT_SECRET')
-TWITTER_OAUTH_CALLBACK_URL=config('TWITTER_OAUTH_CALLBACK_URL')
+TWITTER_API_KEY=os.getenv('TWITTER_API_KEY')
+TWITTER_API_SECRET=os.getenv('TWITTER_API_SECRET')
+TWITTER_CLIENT_ID=os.getenv('TWITTER_CLIENT_ID')
+TWITTER_CLIENT_SECRET=os.getenv('TWITTER_CLIENT_SECRET')
+TWITTER_OAUTH_CALLBACK_URL=os.getenv('TWITTER_OAUTH_CALLBACK_URL')
