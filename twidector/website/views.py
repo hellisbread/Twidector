@@ -319,7 +319,7 @@ def twitter_callback(request):
             # Create user
             info = twitter_api.get_me(access_token, access_token_secret)
             if info is not None:
-                twitter_user_new = TwitterUser(twitter_id=info[0]['id'], username=info[0]['username'])
+                twitter_user_new = TwitterUser(twitter_id=info[0]['id'], screen_name=info[0]['username'])
                 twitter_user_new.twitter_oauth_token = twitter_auth_token
                 user, twitter_user_new = create_update_user_from_twitter(twitter_user_new)
                 if user is not None:
