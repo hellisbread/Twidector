@@ -105,6 +105,8 @@ def freeTrial(request):
         return render(request, 'free-trial.html', context)
 
 #Login/Register Views
+@login_required
+@twitter_login_required
 def login(request):
     if 'loggedin' not in request.session:
         username = request.POST['username']
@@ -223,6 +225,7 @@ def password_reset_form(request):
             user = get_user_model()
             user = form.save(commit=False)
             user.set_unusable_password()
+            user.is_active = True
             user.save()  
             current_site = get_current_site(request)
             subject = "Twidector Password Reset Requested"
