@@ -112,15 +112,6 @@ DATABASES = {
 """
     #production settings
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'twidector$default',
-        'USER': 'twidector',
-        'PASSWORD': 'FYP22S205',
-        'HOST': 'twidector.mysql.pythonanywhere-services.com'
-    }
-
-    #production settings
-    'default': {
         'ENGINE': os.getenv('PROD_SQL_ENGINE'),
         'NAME': os.getenv('PROD_SQL_NAME'),
         'USER': os.getenv('PROD_SQL_USER'),
@@ -129,19 +120,6 @@ DATABASES = {
     }
 """
 """
-    #development settings
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'twidector$default',
-        'USER': 'twidector',
-        'PASSWORD': 'FYP22S205',
-        'HOST': '127.0.0.1',
-        'PORT': ssh_tunnel.local_bind_port,
-        'OPTIONS': {
-            'sql_mode': 'traditional',
-        }
-    }
-
     #development settings
     'default': {
         'ENGINE': os.getenv('DEV_SQL_ENGINE'),
