@@ -467,15 +467,24 @@ def returnhatefultweets(df):
         listofdictofhatefultweets.append(dictoftweet)
     return listofdictofhatefultweets
 
-def getHatefulTweetCount(df):
+def getTweetTypeCount(df):
 
-    count = 0
+    offensive = 0
+    hateful = 0
+    neutral = 0
 
     for i in df.index:
         score = df['predicted_score'].iloc[i]
-        if (score!=2):
-            count+=1
+        
+        if (score == 0):
+            offensive +=1
+        elif(score == 1):
+            hateful += 1
+        elif(score == 2):
+            neutral += 1
 
-    return count
+    counts = {'offensive': offensive, 'hateful': hateful ,'total_negative': offensive + hateful, 'neutral': neutral}
+
+    return counts
         
 

@@ -94,9 +94,9 @@ def freeTrial(request):
         data['predicted_score'] = predicted_score  
         data['userID'] = twitterID
 
-        hateCount = getHatefulTweetCount(data)
+        typeCount = getTweetTypeCount(data)
 
-        context = {'dataframe': data , 'user' : url, 'img' : twitterIMGURL, 'hateCount' : hateCount}
+        context = {'dataframe': data , 'user' : url, 'img' : twitterIMGURL, 'TypeCount' : typeCount}
 
         print(context)
 
@@ -423,11 +423,32 @@ def dashboard(request):
 
 @login_required
 def analyse(request):
-    return render(request, 'analyse.html', {})
+    context = {}
 
-@login_required
-def analyseTwo(request):
-    return render(request, 'analyse-2.html', {})
+    if request.method == "POST":
+        url = request.POST["twitter-url"]
+
+        prepareDF()
+
+        twitterID = getuserid(url)
+
+        twitterIMGURL = getuserIMG(twitterID)
+
+        data = retrieveAndScoreTweets(twitterID)
+
+        predicted_score = predictHate(data['tweet'])
+        data['predicted_score'] = predicted_score  
+        data['userID'] = twitterID
+
+        typeCount = getTweetTypeCount(data)
+
+        context = {'dataframe': data , 'user' : url, 'img' : twitterIMGURL, 'typeCount' : typeCount}
+
+        print(context)
+
+        return render(request, 'analyse.html', context)
+    else:
+        return render(request, 'analyse.html', {})
 
 @login_required
 def viewTweet(request):

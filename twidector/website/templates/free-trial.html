@@ -142,10 +142,10 @@
                             </div>
                             <div class="col-md-5">
                                 <h5 class="card-title">Scan Result:</h5>
-                                <p class="card-text"> Found <strong>{{hateCount}}</strong> Negative Tweets. 
-                                    <!-- <br /> 75/150 are racist. 
-                                    <br /> 50/150 are vulgar 
-                                    <br /> 25/150 are others. -->
+                                <p class="card-text"> Found <strong>{{TypeCount.total_negative}}</strong> Negative Tweets. 
+                                    <br /> {{TypeCount.offensive}}/{{dataframe|length}} are offensive. 
+                                    <br /> {{TypeCount.hateful}}/{{dataframe|length}} are hateful. 
+                                    <br /> {{TypeCount.neutral}}/{{dataframe|length}} are neutral.
                                 </p>
                             </div>
                         </div>
