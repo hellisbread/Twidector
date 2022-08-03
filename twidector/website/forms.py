@@ -11,7 +11,6 @@ from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.contrib.auth import views as auth_views
 
 from django.forms import ModelForm
-from django.core.exceptions import ValidationError
 
 class UserRegistrationForm(UserCreationForm):
     username = forms.CharField(label=_('Username'),
@@ -25,12 +24,6 @@ class UserRegistrationForm(UserCreationForm):
                                 help_text=_('Enter the same password to confirm'))
     email = forms.EmailField(max_length=50, help_text='Required. Inform a valid email address.',
                             widget=(forms.TextInput(attrs={'class': 'form-control'})))
-
-    def clean_email(self):
-        email = self.cleaned_data["email"]
-        if User.objects.filter(email=email).exists():
-            raise ValidationError("An user with this email already exists!")
-        return email    
 
     class Meta:
         model = User
