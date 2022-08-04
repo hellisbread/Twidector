@@ -107,7 +107,7 @@
 
 
   <!-- CONTENT -->
-  <form class="page-content p-3" id="content" method="POST" action="/analyse">
+  <form class="page-content p-3" id="content" method="POST" action="/analyse/">
     {% csrf_token %}
     <div class="container mt-4">
       <div class="col-md-10">
@@ -116,7 +116,7 @@
           <div class="input-group-prepend">
             <div class="input-group-text">@</div>
           </div>
-          <input type="text" class="form-control" id="Analyse-User" placeholder="Twitter Username">
+          <input type="text" class="form-control" id="Analyse-User" placeholder="Twitter Username" name="twitter-url">
         </div>
 
         <!--  Search button -->

@@ -434,11 +434,7 @@ def analyse(request):
 
         twitterIMGURL = getuserIMG(twitterID)
 
-        data = retrieveAndScoreTweets(twitterID)
-
-        predicted_score = predictHate(data['tweet'])
-        data['predicted_score'] = predicted_score  
-        data['userID'] = twitterID
+        data = retrieveAndScoreTweets(url)
 
         typeCount = getTweetTypeCount(data)
 
