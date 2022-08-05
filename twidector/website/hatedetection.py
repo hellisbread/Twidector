@@ -86,9 +86,16 @@ def prepareDF():
     y_pred_svm = SVM.predict(x_test_vec)
     
     # print(accuracy_score(y_test, y_pred_svm) * 100)
+    #number of hate, offensive and neutral
     return (accuracy_score(y_test, y_pred_svm) * 100)
 
+def graph_values():
+   graph_val =  df["class"].value_counts()
+   offensive_num = graph_val[1]
+   hate_num = graph_val[0]
+   non_hate = graph_val[2]
 
+   return [hate_num, non_hate, offensive_num]
 
 def preprocess(tweet):
     
@@ -143,6 +150,8 @@ def predictHate(tweet):
     m = vectorizer.transform(ct)
     pred = SVM.predict(m)
     return(pred)
+
+
 
 
 sshtunnel.SSH_TIMEOUT = 120.0

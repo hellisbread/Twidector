@@ -208,11 +208,11 @@ accuracy score.html
   <script>
     // setup
     const data = {
-      labels: ["Hate", "Non-Hate", "Offensive"],
+      labels: ["Hateful", "Non-Hateful", "Offensive"],
       datasets: [
         {
           label: "Accuracy Score",
-          data: [56, 77, 89],
+          data: [{% for i in graph_interpretation %} '{{i}}', {% endfor %}],
           data_1: [92],
           backgroundColor: [
             "rgba(255, 26, 104, 0.2)",

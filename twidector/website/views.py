@@ -360,7 +360,9 @@ def adminLogin(request):
 #showing the accuracy score 
 def accuracyScore(request):
     value = prepareDF()
-    return render(request, 'accuracy-score.html', {'value': value})
+    graph_interpretation = graph_values()
+    print(graph_interpretation)
+    return render(request, 'accuracy-score.html', {'value': value , 'graph_interpretation': graph_interpretation})
 
 
 def file_upload(request):
