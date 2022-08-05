@@ -504,8 +504,6 @@ def uploadScoring(filename):
     global vectorizer 
 
     df = pd.read_csv(filename)
-    print(df)
-    print(len(df))
 
     test_sentence = df['tweet']
     # expected_result = df['expected']
@@ -517,14 +515,12 @@ def uploadScoring(filename):
     y = df['Label'].values 
 
     expected_Result = predictHate(x)
-    print(expected_Result)
-    print(y)
+ 
 
     score = 0
     for row in df.index:
         if expected_Result[row] == y[row]:
           score+=1
     final_score = score/len(df)*100
-    print(final_score)
     return final_score
             

@@ -205,14 +205,16 @@ accuracy score.html
   <script src="js/sideBar.js"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script>
+ <script type="text/javascript">
+
+    var scores = {{graph_interpretation}}
     // setup
     const data = {
       labels: ["Hateful", "Non-Hateful", "Offensive"],
       datasets: [
         {
           label: "Accuracy Score",
-          data: [{% for i in graph_interpretation %} '{{i}}', {% endfor %}],
+          data: scores,
           data_1: [92],
           backgroundColor: [
             "rgba(255, 26, 104, 0.2)",

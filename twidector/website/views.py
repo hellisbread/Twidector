@@ -361,7 +361,6 @@ def adminLogin(request):
 def accuracyScore(request):
     value = prepareDF()
     graph_interpretation = graph_values()
-    print(graph_interpretation)
     return render(request, 'accuracy-score.html', {'value': value , 'graph_interpretation': graph_interpretation})
 
 
@@ -376,8 +375,9 @@ def file_upload(request):
 
         result = uploadScoring(csv_file)
         value = prepareDF()
+        graph_interpretation = graph_values()
 
-        return render(request, 'accuracy-score.html', {'result': result, 'value': value})
+        return render(request, 'accuracy-score.html', {'result': result, 'value': value ,'graph_interpretation': graph_interpretation})
 
 def adminPage(request):
     return render(request, 'admin-page.html', {})
