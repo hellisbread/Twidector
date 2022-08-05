@@ -85,7 +85,8 @@ def prepareDF():
 
     y_pred_svm = SVM.predict(x_test_vec)
     
-    print(accuracy_score(y_test, y_pred_svm) * 100)
+    # print(accuracy_score(y_test, y_pred_svm) * 100)
+    return (accuracy_score(y_test, y_pred_svm) * 100)
 
 
 
@@ -116,7 +117,7 @@ def preprocess(tweet):
     tweet_lower = newtweet.str.lower()
     
     # tokenizing
-    tokenized_tweet = tweet_lower.apply(lambda x: x.split())
+    tokenized_tweet = tweet_lower.apply(lambda x:str(x).split())
     
     # removal of stopwords
     tokenized_tweet=  tokenized_tweet.apply(lambda x: [item for item in x if item not in stop_words])
@@ -134,14 +135,15 @@ def preprocess(tweet):
 
 
 def predictHate(tweet):
-
+    
     tempseries = pd.Series(tweet)
     ct = preprocess(tempseries)
     #print(list(ct))
-    vectorizer.fit(list(ct) + list(x_train) + list(x_test))
+    # vectorizer.fit(list(ct) + list(x_train) + list(x_test))
     m = vectorizer.transform(ct)
     pred = SVM.predict(m)
     return(pred)
+
 
 sshtunnel.SSH_TIMEOUT = 120.0
 sshtunnel.TUNNEL_TIMEOUT = 120.0
@@ -488,3 +490,32 @@ def getTweetTypeCount(df):
     return counts
         
 
+def uploadScoring(filename):
+    global df
+    global vectorizer 
+
+    df = pd.read_csv(filename)
+    print(df)
+    print(len(df))
+
+    test_sentence = df['tweet']
+    # expected_result = df['expected']
+    df['clean_tweets'] = test_sentence
+    
+    #expected value form the test case
+
+    x = df['clean_tweets'].values
+    y = df['Label'].values 
+
+    expected_Result = predictHate(x)
+    print(expected_Result)
+    print(y)
+
+    score = 0
+    for row in df.index:
+        if expected_Result[row] == y[row]:
+          score+=1
+    final_score = score/len(df)*100
+    print(final_score)
+    return final_score
+            

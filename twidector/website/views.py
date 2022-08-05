@@ -357,8 +357,25 @@ def adminLogin(request):
     else:
         return redirect('index')
 
+#showing the accuracy score 
 def accuracyScore(request):
-    return render(request, 'accuracy-score.html', {})
+    value = prepareDF()
+    return render(request, 'accuracy-score.html', {'value': value})
+
+
+def file_upload(request):
+    if request.method == "POST":
+    # do the reading inside here (the checking, the reading)
+
+        csv_file = request.FILES['file']
+        if not csv_file.name.endswith('.csv'):
+            messages.error(request, 'This is not a csv file!')
+            return redirect('accuracy-score')
+
+        result = uploadScoring(csv_file)
+        value = prepareDF()
+
+        return render(request, 'accuracy-score.html', {'result': result, 'value': value})
 
 def adminPage(request):
     return render(request, 'admin-page.html', {})

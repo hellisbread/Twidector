@@ -1,3 +1,4 @@
+accuracy score.html
 <!DOCTYPE html>
 {% load static %}
 <html lang="en">
@@ -128,10 +129,10 @@
 
   <!-- CONTENT -->
   <!-- <div class="page-content p-3" id="content"> -->
-  <form class="page-content p-3" id="content">
+  <div class="page-content p-3" id="content">
     <div class="container">
-          <h1>Accuracy Score</h1>
-                <h6>
+      <h1>Accuracy Score</h1>
+      <h6>
         Twidector is a web-app that aids to have a safer and healthier environment in Twitter. The following concepts
         will help you understand how the Twidector uses machine learning models to score the perceived impact a comment
         might have on a conversation. </h6>
@@ -146,36 +147,49 @@
           <div class="col-md-4">
             <div
               class="toxicity__left glue-grid__col glue-grid__col--span-6 glue-grid__col--span-12-md glue-grid__col--span-12-sm">
-              <h1 style="margin-top: 110px;">The Accuracy Score of our dataset is <strong>90.5%</strong> </h1>
+              <h1 style="margin-top: 110px;">The Accuracy Score of our dataset is <strong> {{value}}</strong> </h1>
             </div>
           </div>
         </div>
       </div>
-<!-- #drop your test case here -->
+      <!-- #drop your test case here -->
       <div class="container" style="padding:20px;">
         <div class="row">
           <h1></h1>
           <div class="col-12">
             <h1>Drop it right here:</h1>
             <h4>Feel free to test your own test-case below to see how our product works! </h4>
-            <form method="POST" class="post-form" enctype="multipart/form-data">
-              <p>
-                <label for="id_file"> File: </label>
-                </br>
-                <input type="file" name="file" required_id="id_file">
-              </p>
+
+
+            <!--Error Messages-->
+            {% if messages %}
+            {% for message in messages %}
+            <p class="alert alert-{{ message.tags }}">
+              {{ message | safe }}
+            </p>
+            {% endfor %}
+            {% else %}
+            {{order}}
+            <form action="{% url 'file-upload' %}" method="POST" class="post-form" enctype="multipart/form-data">
+
               {% csrf_token %}
               {{ form.as_p }}
+              <label> Upload a file </label>
+              <input type="file" name="file" required_id="id_file">
               <button type="submit" class="btn btn-primary">Submit</button>
+            </br> </br>
+            <h4>{{result}}</h4>
+              
             </form>
-          </div>
-        </div>
-      </div>
+  {% endif %}
+  </div>
+  </div>
+  </div>
 
 
-    </div>
+  </div>
 
-  </form>
+</div>
   <!-- </div> -->
 
 

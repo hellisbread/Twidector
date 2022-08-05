@@ -535,3 +535,9 @@ def display_all_users(username, email):
             close_connect()
             return False
 
+# def tweets_Score(reported_id, reported_status):
+
+#     open_connect()
+#     #sql command for re-clasifying tweets
+#     # "UPDATE `reported_tweet` SET `reported_status` = %s WHERE `reported_id` = %s"
+
