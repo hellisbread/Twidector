@@ -147,10 +147,6 @@ def register(request):
             passwordcheck = request.POST.get('password2')
             #usertype = 0
 
-            if(password != passwordcheck):
-                messages.error(request, 'Error. Password does not match.')
-                return redirect('register')
-
             if form.is_valid():
                 user = get_user_model()
                 user = form.save(commit=False)

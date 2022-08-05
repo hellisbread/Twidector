@@ -29,13 +29,20 @@ class UserRegistrationForm(UserCreationForm):
     def clean_email(self):
         email = self.cleaned_data["email"]
         if User.objects.filter(email=email).exists():
-            raise ValidationError("An user with this email already exists!")
+            raise ValidationError("A user with this email already exists!")
         return email    
+
+    def clean_username(self):
+        username = self.cleaned_data["username"]
+        if User.objects.filter(username=username).exists():
+            raise ValidationError("A user with this username already exists!")
+        return username    
 
     class Meta:
         model = User
         fields = ('username', 'password1', 'password2', 'email')
         #abstract = True
+
 
 '''
 class UserResetPasswordForm(auth_views.PasswordResetView):
