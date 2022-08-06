@@ -441,9 +441,10 @@ def dashboard(request):
     user_id = request.user.id
 
     twitter_id = TwitterUser.objects.get(user = user_id)
-    print(twitter_id)
 
-    context = assess_relationship(TwitterHandle)
+    context = assess_relationship(twitter_id)
+
+    print(context)
 
     return render(request, 'dashboard.html', {})
 
