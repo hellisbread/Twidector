@@ -434,6 +434,14 @@ def reportedTweets(request):
 #Dashboard Views
 @login_required
 def dashboard(request):
+
+    context = {}
+
+    user_id = request.user.id
+
+    twitter_id = TwitterUser.objects.get(user = user_id)
+    print(twitter_id)
+
     return render(request, 'dashboard.html', {})
 
 @login_required
