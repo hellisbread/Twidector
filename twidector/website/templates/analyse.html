@@ -121,186 +121,125 @@
 
         <!--  Search button -->
         <div class="">
-          <input type="submit" class="btn btn-block btn-black-outline-secondary text-center" value="Analyse">
+          <input type="submit" class="btn btn-block btn-black-outline-secondary text-center" value="Analyse" name="search-url">
           </a>
         </div>
 
         <hr>
       </div>
 
-            <!-- profile picture - rounded image + profile of the account -->
-            <div class="mt-5 mb-5">
-              <div class="row">
-                <div class="col-md-10 pt-4 ">
-                  <div class="row mb-4">
-                    <div class="col-md-3">
-                      <img loading="lazy" src="https://pbs.twimg.com/profile_images/1012717264108318722/9lP-d2yM_400x400.jpg"
-                        alt="..." width="80" height="80" class="mr-3 rounded-circle img-thumbnail shadow-sm" />
-                      <!-- USERNAME -->
-                      <div class="media-body">
-                        <p class="m-0" style="font-weight:bold">@SteveSchorge</p>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <p class="card-text"> Summary: <br /> This user is a <strong>negative</strong> twitter user.</p>
-                      
-                      <p class="card-text"> Found <strong>400</strong> Negative Tweets. 
-                        <br /> 200/400 are Toxic. 
-                        <br /> 85/400 are Misinformation
-                        <br /> 100/400 are Hateful.
-                        </br> 25/400 are others.
-                      </p>
-                    </div>
-                    <div class="col-md-5">
-                      <h5 class="card-title text-center">Analysis Result</h5>
-                      <canvas id="myChart" width="300" height="150"></canvas>
-                    </div>
-                  </div>
-      
-                  <hr>
+      {% if not dataframe %}
+
+      {%else%}
+      <!-- profile picture - rounded image + profile of the account -->
+      <div class="mt-5 mb-5">
+        <div class="row">
+          <div class="col-md-10 pt-4 ">
+            <div class="row mb-4">
+              <div class="col-md-3">
+                <img loading="lazy" src="{{img}}"
+                  alt="..." width="80" height="80" class="mr-3 rounded-circle img-thumbnail shadow-sm" />
+                <!-- USERNAME -->
+                <div class="media-body">
+                  <p class="m-0" style="font-weight:bold">@{{user}}</p>
                 </div>
               </div>
-      
-              <!-- sorting and filtering -->
-              <div class='form-inline row mt-4'>
-                <div class='form-group col-sm-3'>
-                  <h3>Twitter History</h3>
-                </div>
-                <div class="input-group col-md-3">
-                  <label class="input-group-text" for="inputGroupSelect01">Filter by</label>
-                  <select class="form-select" id="inputGroupSelect01">
-                    <option selected>Choose...</option>
-                    <option value="1">Hate</option>
-                    <option value="2">Fraud</option>
-                    <option value="3">Misinformation</option>
-                  </select>
-                </div>
-                <div class='input-group col-md-3'>
-                  <label class="input-group-text" for="inputGroupSelect01">Sort by</label>
-                  <select class="form-select" id="inputGroupSelect01">
-                    <option selected>Choose...</option>
-                    <option value="1">Newest Tweet</option>
-                    <option value="2">Oldest Tweet</option>
-                  </select>
-                </div>
-                <div class='input-group col-md-3'>
-                  <input type="submit" class="btn btn-block bg-dark text-white" value="Filter">
-                </div>
+              <div class="col-md-4">
+                <p class="card-text"> Summary: <br /> This user is a <strong>negative</strong> twitter user.</p>
+
+                <p class="card-text"> Found <strong>{{TypeCount.total_negative}}</strong> Negative Tweets. 
+                  <br /> {{TypeCount.offensive}}/{{dataSize}} are offensive. 
+                  <br /> {{TypeCount.hateful}}/{{dataSize}} are hateful. 
+                  <br /> {{TypeCount.neutral}}/{{dataSize}} are neutral.
+              </p>
               </div>
-      
-      
-              <!-- content tweets -->
-              <div class="card-body mt-4">
-                <div class="row">
-                  <div class="tweet-header col-md-10">
-                    <div class="row mb-3">
-                      <div class="col-md-4">
-                        <img src="https://pbs.twimg.com/profile_images/1012717264108318722/9lP-d2yM_400x400.jpg" alt=""
-                          width="80" height="80" class="mr-3 rounded-circle img-thumbnail shadow-sm">
-                      </div>
-                      <div class="col-md-8">
-                        <div class="btn-group pt-3" style="float:right;">
-                          <button type="button" class="btn bg-dark text-white dropdown-toggle" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            Actions
-                          </button>
-                          <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="{% url 'view-tweet'%}">View Tweet Analysis</a></li>
-                            <li><a class="dropdown-item" href="#">Add to Blacklist</a></li>
-                            <li><a class="dropdown-item" href="#">Add to Whitelist</a></li>
-                            <li><a class="dropdown-item" href="#">Follow</a></li>
-                            <li><a class="dropdown-item" href="#">Block</a></li>
-                            <li><a class="dropdown-item" href="#">Report</a></li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="mb-4">
-                      <h6>@SteveSchorge <small>Jun 30 </small> <span
-                          style="float:right; color:red;"><strong>Hateful</strong></span></h6>
-      
-                      <p class="mt-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                        incididunt ut labore
-                        et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                        aliquip ex ea commodo consequat.</p>
-                    </div>
-                    <hr>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="tweet-header col-md-10">
-                    <div class="row mb-3">
-                      <div class="col-md-4">
-                        <img src="https://pbs.twimg.com/profile_images/1012717264108318722/9lP-d2yM_400x400.jpg" alt=""
-                          width="80" height="80" class="mr-3 rounded-circle img-thumbnail shadow-sm">
-                      </div>
-                      <div class="col-md-8">
-                        <div class="btn-group pt-3" style="float:right;">
-                          <button type="button" class="btn bg-dark text-white dropdown-toggle" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            Actions
-                          </button>
-                          <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="{% url 'view-tweet'%}">View Tweet Analysis</a></li>
-                            <li><a class="dropdown-item" href="#">Add to Blacklist</a></li>
-                            <li><a class="dropdown-item" href="#">Add to Whitelist</a></li>
-                            <li><a class="dropdown-item" href="#">Follow</a></li>
-                            <li><a class="dropdown-item" href="#">Block</a></li>
-                            <li><a class="dropdown-item" href="#">Report</a></li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="mb-4">
-                      <h6>@SteveSchorge <small>Jun 30 </small> <span
-                          style="float:right; color:red;"><strong>Fraud</strong></span></h6>
-      
-                      <p class="mt-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                        incididunt ut labore
-                        et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                        aliquip ex ea commodo consequat.</p>
-                    </div>
-                    <hr>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="tweet-header col-md-10">
-                    <div class="row mb-3">
-                      <div class="col-md-4">
-                        <img src="https://pbs.twimg.com/profile_images/1012717264108318722/9lP-d2yM_400x400.jpg" alt=""
-                          width="80" height="80" class="mr-3 rounded-circle img-thumbnail shadow-sm">
-                      </div>
-                      <div class="col-md-8">
-                        <div class="btn-group pt-3" style="float:right;">
-                          <button type="button" class="btn bg-dark text-white dropdown-toggle" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            Actions
-                          </button>
-                          <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="{% url 'view-tweet'%}">View Tweet Analysis</a></li>
-                            <li><a class="dropdown-item" href="#">Add to Blacklist</a></li>
-                            <li><a class="dropdown-item" href="#">Add to Whitelist</a></li>
-                            <li><a class="dropdown-item" href="#">Follow</a></li>
-                            <li><a class="dropdown-item" href="#">Block</a></li>
-                            <li><a class="dropdown-item" href="#">Report</a></li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="mb-4">
-                      <h6>@SteveSchorge <small>Jun 30 </small> <span
-                          style="float:right; color:red;"><strong>Misinformation</strong></span></h6>
-      
-                      <p class="mt-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                        incididunt ut labore
-                        et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                        aliquip ex ea commodo consequat.</p>
-                    </div>
-                    <hr>
-                  </div>
-                </div>
+              <div class="col-md-5">
+                <h5 class="card-title text-center">Analysis Result</h5>
+                <canvas id="myChart" width="300" height="150"></canvas>
               </div>
             </div>
+
+            <hr>
+          </div>
+        </div>
+
+        <!-- sorting and filtering -->
+        <div class='form-inline row mt-4'>
+          <div class='form-group col-sm-3'>
+            <h3>Twitter History</h3>
+          </div>
+          <div class="input-group col-md-3">
+            <label class="input-group-text" for="inputGroupSelect01">Filter by</label>
+            <select class="form-select" id="inputGroupSelect01" name="filter-by">
+              <option selected>Choose...</option>
+              <option value="0">Offensive</option>
+              <option value="1">Hateful</option>
+              <option value="2">Neutral</option>
+            </select>
+          </div>
+          <div class='input-group col-md-3'>
+            <label class="input-group-text" for="inputGroupSelect01">Sort by</label>
+            <select class="form-select" id="inputGroupSelect01">
+              <option selected>Choose...</option>
+              <option value="1">Newest Tweet</option>
+              <option value="2">Oldest Tweet</option>
+            </select>
+          </div>
+          <div class='input-group col-md-3'>
+            <input type="submit" class="btn btn-block bg-dark text-white" value="Filter" name="filter">
+          </div>
+        </div>
+
+
+        <!-- content tweets -->
+        <div class="card-body mt-4">
+
+          {% for tweet_item in dataframe.itertuples%}
+
+          <div class="row">
+            <div class="tweet-header col-md-10">
+              <div class="row mb-3">
+                <div class="col-md-4">
+                  <img src="{{img}}" alt=""
+                    width="80" height="80" class="mr-3 rounded-circle img-thumbnail shadow-sm">
+                </div>
+                <div class="col-md-8">
+                  <div class="btn-group pt-3" style="float:right;">
+                    <button type="button" class="btn bg-dark text-white dropdown-toggle" data-bs-toggle="dropdown"
+                      aria-expanded="false">
+                      Actions
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                      <li><a class="dropdown-item" href="{% url 'view-tweet'%}">View Tweet Analysis</a></li>
+                      <li><a class="dropdown-item" href="#">Add to Blacklist</a></li>
+                      <li><a class="dropdown-item" href="#">Add to Whitelist</a></li>
+                      <li><a class="dropdown-item" href="#">Report Inaccuracy</a></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-4">
+                <h6>@{{user}} <small>{{tweet_item.date}}</small> 
+                  {% if tweet_item.predicted_score == 0 %}
+                    
+                    <span style="float:right; color:red;"><strong>Offensive</strong></span></h6>
+                    {% elif tweet_item.predicted_score == 1 %}
+                    <span style="float:right; color:red;"><strong>Hateful</strong></span></h6>
+                    {% else %}
+                    <span style="float:right; color:lightskyblue;"><strong>Neutral</strong></span></h6>
+                  {%endif%}
+
+                <p class="mt-3">{{tweet_item.tweet}}</p>
+              </div>
+              <hr>
+            </div>
+          </div>
+
+          {%endfor%}
+        </div>
+      </div>
+
+      {% endif %}
     </div>
 
   </form>
@@ -316,45 +255,45 @@
     integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
     crossorigin="anonymous"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.8.0/dist/chart.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.8.0/dist/chart.min.js"></script>
 
-    <script>
-      var ctx = document.getElementById('myChart').getContext('2d');
-      var myChart = new Chart(ctx, {
-          type: 'bar',
-          data: {
-              labels: ['Toxic', 'Misinformation', 'Hateful', 'Others'],
-              datasets: [{
-                  label: '# of Tweets',
-                  data: [200, 85, 100, 25],
-                  backgroundColor: [
-                      'rgba(255, 99, 132, 0.2)',
-                      'rgba(54, 162, 235, 0.2)',
-                      'rgba(255, 206, 86, 0.2)',
-                      'rgba(75, 192, 192, 0.2)'
-                  ],
-                  borderColor: [
-                      'rgba(255, 99, 132, 1)',
-                      'rgba(54, 162, 235, 1)',
-                      'rgba(255, 206, 86, 1)',
-                      'rgba(75, 192, 192, 1)'
-                  ],
-                  borderWidth: 1
-              }]
-          },
-          options: {
-            indexAxis: 'y',
-    // Elements options apply to all of the options unless overridden in a dataset
-    // In this case, we are setting the border of each horizontal bar to be 2px wide
-            elements: {
-              bar: {
-                  borderWidth: 2,
-                }
-            },
-          
+  <script>
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Offensive', 'Hateful', 'Neutral'],
+        datasets: [{
+          label: '# of Tweets',
+          data: [{{TypeCount.offensive}}, {{TypeCount.hateful}}, {{TypeCount.neutral}}],
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)'
+          ],
+          borderColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        // Elements options apply to all of the options unless overridden in a dataset
+        // In this case, we are setting the border of each horizontal bar to be 2px wide
+        elements: {
+          bar: {
+            borderWidth: 2,
+          }
+        },
+
       },
     });
-      </script>
+  </script>
 
   <script src="{% static 'js/sideBar.js' %}"></script>
 </body>

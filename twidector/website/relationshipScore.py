@@ -26,7 +26,7 @@ def assess_replies(twitterHandle):
     accountIDs = []
 
     #retrieve 100 tweet results
-    tweets = api.user_timeline(id = twitterHandle, count = 100)
+    tweets = api.user_timeline(user_id = twitterHandle, count = 100)
     for tweet in tweets:
         accountUser = tweet.in_reply_to_user_id
         if(type(accountUser) == int):
@@ -132,5 +132,3 @@ def assess_relationship(TwitterHandle):
             results[user] += 1
 
     return results
-
-assess_relationship("Ballislife")

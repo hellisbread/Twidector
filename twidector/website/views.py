@@ -440,18 +440,29 @@ def dashboard(request):
 
     user_id = request.user.id
 
-    twitter_id = TwitterUser.objects.get(user = user_id)
+    try:
+        twitter_id = TwitterUser.objects.get(user = user_id)
+    except:
+        return render(request, 'dashboard.html', {})
+    
+    twitter_id = "hellisbread"
+    
     print(twitter_id)
 
-    context = assess_relationship(TwitterHandle)
+    context = assess_relationship(twitter_id)
 
-    return render(request, 'dashboard.html', {})
+    print(context)
+
+    return render(request, 'dashboard.html', context)
 
 @login_required
 def analyse(request):
-    context = {}
 
-    if request.method == "POST":
+    if 'search-url' in request.POST:
+
+        if 'current-search' in request.session:
+            del request.session['current-search']
+
         url = request.POST["twitter-url"]
 
         prepareDF()
@@ -460,16 +471,49 @@ def analyse(request):
 
         twitterIMGURL = getuserIMG(twitterID)
 
-        data = retrieveAndScoreTweets(url)
+        data = getalltweets(twitterID, 1000)
+
+        predicted_score = predictHate(data['tweet'])
+        data['predicted_score'] = predicted_score  
+        data['userID'] = twitterID
 
         typeCount = getTweetTypeCount(data)
 
-        context = {'dataframe': data , 'user' : url, 'img' : twitterIMGURL, 'typeCount' : typeCount}
+        dataSize = data.shape[0]
 
-        print(context)
+        context = {'dataframe': data ,'dataSize': dataSize, 'user' : url, 'img' : twitterIMGURL, 'TypeCount' : typeCount}
+
+        transfer = {'dataframe': data.to_json() ,'dataSize':int(dataSize), 'user' : url, 'img' : twitterIMGURL, 'TypeCount' : typeCount}
+
+        request.session['current-search'] = transfer
 
         return render(request, 'analyse.html', context)
+
+    elif 'filter' in request.POST:
+
+        context = request.session.get('current-search')
+
+        filterOption = request.POST['filter-by']
+
+        if(filterOption=='Choose...'):
+
+            data = {'dataframe': pd.read_json(context.get('dataframe'))}
+
+            context.update(data)
+
+            return render(request, 'analyse.html', context) 
+
+        data = pd.read_json(context.get('dataframe'))
+
+        filtered_data = {'dataframe': data[data['predicted_score']==int(filterOption)]}
+
+        context.update(filtered_data)
+       
+        return render(request, 'analyse.html', context) 
     else:
+        if 'current-search' in request.session:
+            del request.session['current-search']
+
         return render(request, 'analyse.html', {})
 
 @login_required

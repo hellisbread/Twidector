@@ -349,7 +349,7 @@ def retrieveAndScoreTweets(twitterhandle):
                     else:
                         temp_df.iloc[row, temp_df.columns.get_loc('retweet')] = 'false'
 
-                return(temp_df) 
+                return
 
             
     else:
