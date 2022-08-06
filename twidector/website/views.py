@@ -46,6 +46,7 @@ from .models import TwitterAuthToken, TwitterUser
 
 from website.functions import *
 from website.hatedetection import *
+from website.relationshipScore import *
 
 from website.twitter_api import TwitterAPI
 from website.authorization import create_update_user_from_twitter, check_token_still_valid
@@ -441,6 +442,8 @@ def dashboard(request):
 
     twitter_id = TwitterUser.objects.get(user = user_id)
     print(twitter_id)
+
+    context = assess_relationship(TwitterHandle)
 
     return render(request, 'dashboard.html', {})
 
