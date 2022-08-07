@@ -1,3 +1,4 @@
+model-testing
 <!DOCTYPE html>
 {% load static %}
 <html lang="en">
@@ -130,59 +131,10 @@
   <form class="page-content p-3" id="content">
 
 
-    <div class="container mb-8">
-      <div class="row justify-content-md-center">
-        <div class="card" style="box-shadow:5px 3px black;">
-          <div class="card-header pt-4">
-            <div class="row">
-              <h1>Model Testing</h1>
-            </div>
-            <div class="card-body">
-              <div class="row">
-                <div class="col-md-8">
-                  <h6> Result #1 </h6>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-                    et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                    aliquip ex ea commodo consequat.</p>
-                </div>
+    {% csrf_token %}
 
-              </div>
-              <hr>
-              <div class="row">
-                <div class="col-md-8">
-                  <h6> Result #2 </h6>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-                    et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                    aliquip ex ea commodo consequat.</p>
-                </div>
-
-              </div>
-              <hr>
-              <div class="row">
-                <div class="col-md-8">
-                  <h6>Result #3 </h6>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-                    et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                    aliquip ex ea commodo consequat.</p>
-                </div>
-
-              </div>
-              <hr>
-              <div class="row">
-                <div class="col-md-8">
-                  <h6> Result #4</h6>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-                    et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                    aliquip ex ea commodo consequat.</p>
-                </div>
-
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </div>
+        {{display_graph|safe}}
+ 
 
 
   </form>
