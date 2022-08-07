@@ -453,8 +453,6 @@ def dashboard(request):
 
     # print(context)
 
-    #return render(request, 'dashboard.html', context)
-
     return render(request, 'dashboard.html')
 
 @login_required
