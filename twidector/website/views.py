@@ -40,7 +40,7 @@ from django.template.loader import render_to_string
 from django.core.mail import send_mail, BadHeaderError
 
 from django.contrib.auth import get_user_model
-
+from django.contrib.auth.models import User
 user = get_user_model()
 from .models import TwitterAuthToken, TwitterUser, SyncTwitterAccount
 
@@ -368,9 +368,8 @@ def sync_twitter_callback(request):
                 sync_account = SyncTwitterAccount.objects.filter(twitter_id=info[0]['id']).first()
                 if sync_account is None:
                     current_username = request.user.get_username()
-
-                    user = get_user_model()
-                    current_user = user.objects.get(username=current_username)
+                    current_user = User.objects.get(username=current_username)
+                    #sync_pair = SyncTwitterAccount(current_user.is_active, twitter_id=info[0]['id'])
                     sync_pair = SyncTwitterAccount(current_user.id, twitter_id=info[0]['id'])
                     #sync_pair = SyncTwitterAccount(current_username, twitter_id=info[0]['id'])
                     sync_pair.save()
