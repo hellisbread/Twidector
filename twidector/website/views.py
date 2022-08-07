@@ -367,8 +367,8 @@ def sync_twitter_callback(request):
             if info is not None:
                 sync_account = SyncTwitterAccount.objects.filter(twitter_id=info[0]['id']).first()
                 if sync_account is None:
-                    user = request.user
-                    sync_pair = SyncTwitterAccount(user.id, twitter_id=info[0]['id'])
+                    current_user = request.user
+                    sync_pair = SyncTwitterAccount(current_user.id, twitter_id=info[0]['id'])
                     sync_pair.save()
                     return redirect('settings')
 
