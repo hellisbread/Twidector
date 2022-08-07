@@ -371,9 +371,6 @@ def sync_twitter_callback(request):
                     sync_pair = SyncTwitterAccount(user.id, twitter_id=info[0]['id'])
                     sync_pair.save()
                     return redirect('settings')
-                else:
-                    messages.error('Error.')
-                    return redirect('index') 
             else:
                 messages.error('Error.')
                 return redirect('index')
