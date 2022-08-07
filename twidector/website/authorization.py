@@ -32,3 +32,4 @@ def check_token_still_valid(twitter_user):
     info = twitter_api.get_me(twitter_user.twitter_oauth_token.oauth_token,
                               twitter_user.twitter_oauth_token.oauth_token_secret)
     return info
+

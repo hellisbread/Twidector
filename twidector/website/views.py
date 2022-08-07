@@ -42,7 +42,7 @@ from django.core.mail import send_mail, BadHeaderError
 from django.contrib.auth import get_user_model
 
 user = get_user_model()
-from .models import TwitterAuthToken, TwitterUser
+from .models import TwitterAuthToken, TwitterUser, SyncTwitterAccount
 
 from website.functions import *
 from website.hatedetection import *
@@ -106,8 +106,6 @@ def freeTrial(request):
         return render(request, 'free-trial.html', context)
 
 #Login/Register Views
-@login_required
-@twitter_login_required
 def login(request):
     if 'loggedin' not in request.session:
         username = request.POST['username']
@@ -302,7 +300,7 @@ def login_twitter(request):
         return redirect(url)
 
 
-def twitter_callback(request):
+def login_twitter_callback(request):
     if 'denied' in request.GET:
         messages.error('Error.')
         return redirect('index')
@@ -334,6 +332,58 @@ def twitter_callback(request):
     else:
         messages.error('Error.')
         return redirect('index')
+
+def sync_twitter(request):
+    twitter_api = TwitterAPI()
+    url, oauth_token, oauth_token_secret = twitter_api.twitter_sync()
+    if url is None or url == '':
+        messages.error('Error.')
+        return redirect('index')
+    else:
+        twitter_auth_token = TwitterAuthToken.objects.filter(oauth_token=oauth_token).first()
+        if twitter_auth_token is None:
+            twitter_auth_token = TwitterAuthToken(oauth_token=oauth_token, oauth_token_secret=oauth_token_secret)
+            twitter_auth_token.save()
+        else:
+            twitter_auth_token.oauth_token_secret = oauth_token_secret
+            twitter_auth_token.save()
+        return redirect(url)
+
+def sync_twitter_callback(request):
+    if 'denied' in request.GET:
+        messages.error('Error.')
+        return redirect('index')
+    twitter_api = TwitterAPI()
+    oauth_verifier = request.GET.get('oauth_verifier')
+    oauth_token = request.GET.get('oauth_token')
+    twitter_auth_token = TwitterAuthToken.objects.filter(oauth_token=oauth_token).first()
+    if twitter_auth_token is not None:
+        access_token, access_token_secret = twitter_api.twitter_callback_sync(oauth_verifier, oauth_token, twitter_auth_token.oauth_token_secret)
+        if access_token is not None and access_token_secret is not None:
+            twitter_auth_token.oauth_token = access_token
+            twitter_auth_token.oauth_token_secret = access_token_secret
+            twitter_auth_token.save()
+            info = twitter_api.get_me(access_token, access_token_secret)
+            if info is not None:
+                sync_account = SyncTwitterAccount.objects.filter(twitter_id=info[0]['id']).first()
+                if sync_account is not None:
+                    user = request.user
+                    sync_pair = SyncTwitterAccount(user.id, twitter_id=info[0]['id'])
+                    sync_pair.save()
+                    return redirect('settings')
+                else:
+                    messages.error('Error.')
+                    return redirect('index') 
+            else:
+                messages.error('Error.')
+                return redirect('index')
+        else:
+            messages.error('Error.')
+            return redirect('index')
+    else:
+        messages.error('Error.')
+        return redirect('index')
+
 
 #Admin Views
 def adminLogin(request):
@@ -434,26 +484,28 @@ def reportedTweets(request):
 
 #Dashboard Views
 @login_required
+#@twitter_login_required
 def dashboard(request):
 
-    context = {}
+    # context = {}
 
-    user_id = request.user.id
+    # user_id = request.user.id
 
-    try:
-        twitter_id = TwitterUser.objects.get(user = user_id)
-    except:
-        return render(request, 'dashboard.html', {})
+    # try:
+    #     twitter_id = TwitterUser.objects.get(user = user_id)
+    # except:
+    #     return render(request, 'dashboard.html', {})
     
-    twitter_id = "hellisbread"
+    # twitter_id = "hellisbread"
     
-    print(twitter_id)
+    # print(twitter_id)
 
-    context = assess_relationship(twitter_id)
+    # context = assess_relationship(twitter_id)
 
-    print(context)
+    # print(context)
 
-    return render(request, 'dashboard.html', context)
+    # return render(request, 'dashboard.html', context)
+    return render(request, 'dashboard.html')
 
 @login_required
 def analyse(request):
