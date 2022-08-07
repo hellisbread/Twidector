@@ -370,7 +370,7 @@ def sync_twitter_callback(request):
                     current_username = request.user.get_username()
 
                     user = get_user_model()
-                    current_user = user.objects.get(username=current_username).first()
+                    current_user = user.objects.get(username=current_username)
                     sync_pair = SyncTwitterAccount(current_user.id, twitter_id=info[0]['id'])
                     #sync_pair = SyncTwitterAccount(current_username, twitter_id=info[0]['id'])
                     sync_pair.save()
