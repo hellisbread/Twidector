@@ -68,7 +68,7 @@ class FakeNews(models.Model):
         db_table = 'fake_news_score'
 
 class SyncTwitterAccount(models.Model):
-    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    user_id = models.IntegerField()
     twitter_id = models.CharField(max_length=255)
 
     class Meta:
