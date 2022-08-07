@@ -436,24 +436,24 @@ def reportedTweets(request):
 @login_required
 def dashboard(request):
 
-    context = {}
+    # context = {}
 
-    user_id = request.user.id
+    # user_id = request.user.id
 
-    try:
-        twitter_id = TwitterUser.objects.get(user = user_id)
-    except:
-        return render(request, 'dashboard.html', {})
+    # try:
+    #     twitter_id = TwitterUser.objects.get(user = user_id)
+    # except:
+    #     return render(request, 'dashboard.html', {})
     
-    twitter_id = "hellisbread"
+    # twitter_id = "hellisbread"
     
-    print(twitter_id)
+    # print(twitter_id)
 
-    context = assess_relationship(twitter_id)
+    # context = assess_relationship(twitter_id)
 
-    print(context)
+    # print(context)
 
-    return render(request, 'dashboard.html', context)
+    return render(request, 'dashboard.html')
 
 @login_required
 def analyse(request):
