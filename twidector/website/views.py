@@ -367,10 +367,9 @@ def sync_twitter_callback(request):
             info = twitter_api.get_me(access_token, access_token_secret)
             if info is not None:
                 sync_account = SyncTwitterAccount.objects.filter(twitter_id=info[0]['id']).first()
-                twitter_account = TwitterUser.objects.filter(twitter_id=info[0]['id']).first()
-                if twitter_account is None:
-                    twitter_user_new.twitter_oauth_token = twitter_auth_token
-                    user, twitter_user_new = create_update_user_from_twitter(twitter_user_new)
+                twitter_user_new = TwitterUser(twitter_id=info[0]['id'], screen_name=info[0]['username'])
+                twitter_user_new.twitter_oauth_token = twitter_auth_token
+                user, twitter_user_new = create_update_user_from_twitter(twitter_user_new)
 
                 if sync_account is None:
                     sync_pair = SyncTwitterAccount(user_id=request.user.id, twitter_id=info[0]['id'])
