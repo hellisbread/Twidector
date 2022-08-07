@@ -150,7 +150,7 @@ def register(request):
                 user = get_user_model()
                 user = form.save(commit=False)
                 user.is_active = False
-                #user.is_staff = True
+                user.is_staff = True
                 user.save()  
                 current_site = get_current_site(request)
                 subject = "Twidector Account Activation"
@@ -366,13 +366,13 @@ def sync_twitter_callback(request):
             info = twitter_api.get_me(access_token, access_token_secret)
             if info is not None:
                 sync_account = SyncTwitterAccount.objects.filter(twitter_id=info[0]['id']).first()
+                twitter_account = TwitterUser.objects.filter(twitter_id=info[0]['id']).first()
+                if twitter_account is None:
+                    twitter_user_new.twitter_oauth_token = twitter_auth_token
+                    user, twitter_user_new = create_update_user_from_twitter(twitter_user_new)
+
                 if sync_account is None:
-                    current_username = request.user.get_username()
-                    current_user = User.objects.get(username=current_username)
-                    current_id = current_user.id
-                    sync_pair = SyncTwitterAccount(user_id=current_id, twitter_id=info[0]['id'])
-                    #ync_pair = SyncTwitterAccount(current_user.id, twitter_id=info[0]['id'])
-                    #sync_pair = SyncTwitterAccount(current_username, twitter_id=info[0]['id'])
+                    sync_pair = SyncTwitterAccount(user_id=request.user.id, twitter_id=info[0]['id'])
                     sync_pair.save()
                     return redirect('settings')
 

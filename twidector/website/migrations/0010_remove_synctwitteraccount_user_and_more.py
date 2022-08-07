@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='synctwitteraccount',
             name='user_id',
-            field=models.IntegerField(default=0),
+            field=models.IntegerField(),
             preserve_default=False,
         ),
     ]
