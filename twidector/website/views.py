@@ -47,6 +47,7 @@ from .models import TwitterAuthToken, TwitterUser, SyncTwitterAccount
 from website.functions import *
 from website.hatedetection import *
 from website.relationshipScore import *
+from website.graphs import *
 
 from website.twitter_api import TwitterAPI
 from website.authorization import create_update_user_from_twitter, check_token_still_valid
@@ -482,7 +483,8 @@ def delete_user(request,user_id):
     return render(request, 'search-account.html' , {})
 
 def modelTesting(request):
-    return render(request, 'model-testing.html', {})
+    display_graph = get_graph()
+    return render(request, 'model-testing.html', {'display_graph': display_graph})
 
 def reportedTweets(request):
     return render(request, 'reported-tweets.html', {})
