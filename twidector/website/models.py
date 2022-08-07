@@ -71,5 +71,8 @@ class SyncTwitterAccount(models.Model):
     user_id = models.IntegerField()
     twitter_id = models.CharField(max_length=255)
 
+    def __str__(self):
+        return self.twitter_id
+
     class Meta:
         db_table = 'sync_twitter'
