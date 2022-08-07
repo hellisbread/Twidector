@@ -353,6 +353,7 @@ def sync_twitter_callback(request):
     if 'denied' in request.GET:
         messages.error('Error.')
         return redirect('index')
+    current_user = request.user
     twitter_api = TwitterAPI()
     oauth_verifier = request.GET.get('oauth_verifier')
     oauth_token = request.GET.get('oauth_token')
@@ -367,7 +368,7 @@ def sync_twitter_callback(request):
             if info is not None:
                 sync_account = SyncTwitterAccount.objects.filter(twitter_id=info[0]['id']).first()
                 if sync_account is None:
-                    sync_pair = SyncTwitterAccount(request.user.id, twitter_id=info[0]['id'])
+                    sync_pair = SyncTwitterAccount(current_user.id, twitter_id=info[0]['id'])
                     sync_pair.save()
                     return redirect('settings')
 
