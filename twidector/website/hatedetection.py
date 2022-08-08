@@ -47,6 +47,7 @@ stop_words = nltk.corpus.stopwords.words("english")
 other_exclusions = ["#ff", "ff", "rt"]
 stop_words.extend(other_exclusions)
 stemmer = PorterStemmer()
+vectorizer = CountVectorizer(ngram_range=(1, 4), max_features = 1000)
 
 def prepareDF():
     global df
@@ -79,7 +80,7 @@ def prepareDF():
     x_train_vec = vectorizer.transform(x_train)
     x_test_vec = vectorizer.transform(x_test)
 
-    SVM = SVC(kernel="linear", decision_function_shape='ovr')
+    SVM = LinearSVC(C = 0.8)
 
     SVM.fit(x_train_vec , y_train)
 

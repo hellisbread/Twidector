@@ -1,3 +1,4 @@
+from socket import has_dualstack_ipv6
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import validation_curve
 import matplotlib.pyplot as plt
@@ -11,10 +12,8 @@ from website.hatedetection import *
 def get_graph():
 
   global df
-  global vectorizer
+  global vectorizer, x_train, x_test, x_train_vec, y_train , SVM
   
-  vectorizer = CountVectorizer()
-
   df = pd.read_csv('hateDetection.csv')
   clean_Tweets = df["tweet"]
   df['clean_tweet'] = clean_Tweets
@@ -23,9 +22,15 @@ def get_graph():
 
   x = df["clean_tweet"].values
   # hu = vectorizer.fit(x)
-  x_transformed = vectorizer.fit_transform(x)
+
+  x_train, x_test, y_train, y_test = train_test_split(x, y, stratify = y, test_size=0.2)
+
+  # learn a vocabulary dictionary of all tokens in the raw documents
+  vectorizer.fit(list(x_train) + list(x_test))
+
+  x_transformed = vectorizer.transform(x)
   param_range = [0.05, 0.1 , 0.5, 1]
-  model_for_validation = LinearSVC()
+  model_for_validation = LinearSVC(C = 0.8)
   train_scores, test_scores = validation_curve(model_for_validation, x_transformed, y, param_name="C", param_range = param_range, cv = 5 , scoring = "accuracy")
 
   train_scores_mean = np.mean(train_scores, axis=1)
