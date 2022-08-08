@@ -119,35 +119,43 @@
               {% endif %}
                 <h4 class="mb-4">Change password</h4>
                 <div class="col-md-8">
-
+                  {% load crispy_forms_tags %}  
+                  <form method="POST">
+                      <div style="display:none">
+                          <input type="hidden" value="{{ csrf_token }}" name="csrfmiddlewaretoken">
+                      </div>
+                    <div class="col-md-6">
                     <div class="form-outline mb-4">
-                        <label class="form-label">Current Password:</label>
-                        <input type="password" id="old-password" name="old-password" class="form-control" placeholder="Old Password" />
+                          <label class="form-label">Current Password:</label>
+                          <input type="password" id="old_password" name="old_password" class="form-control" placeholder="Old Password" />
+                    </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-outline mb-4">
-                                <label class="form-label">New Password:</label>
-                                <input type="password" id="new-password" name="new-password" class="form-control"
-                                    placeholder="New Password" />
-                            </div>
-                        </div>
-                        <div class="col-md-6">
 
-                            <div class="form-outline mb-4">
-                                <label class="form-label">Confirm New Password:</label>
-                                <input type="password" id="confirm-new-password" name="confirm-new-password" class="form-control"
-                                    placeholder="New Password" />
-                            </div>
-                        </div>
+                    <div class="col-md-6">
+                    <div class="form-outline mb-4">
+                            <label class="form-label">New Password:</label>
+                            <input type="password" id="new_password1" name="new_password1" class="form-control"
+                                placeholder="New Password" />
+                    </div>
                     </div>
 
-                    <div class="pt-1 mb-5 pb-1">
-                        <input type="submit" class="btn btn-block btn-outline-secondary" name="change-password" href="login.html"
-                            value="Change Your Password" />
+                    <div class="col-md-6">
+                    <div class="form-outline mb-4">
+                            <label class="form-label">Confirm New Password:</label>
+                            <input type="password" id="new_password2" name="new_password2" class="form-control"
+                                placeholder="New Password" />
                     </div>
+                    </div>
+
+
+                      <div class="pt-1 mb-5 pb-1">
+                          <input type="submit" class="btn btn-block btn-outline-secondary" name="change-password"
+                              value="Change Your Password" />
+                      </div>
+                  </form>
                 </div>
+             
             </div>
             <hr>
             <div class="row mt-5">

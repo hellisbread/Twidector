@@ -2,7 +2,7 @@
 Greetings {{ user.username }},<br>
 <br>
 Please click on the link below to confirm your registration,<br>
-http://{{ domain }}{% url 'activate' uidb64=uid token=token %}<br>
+{{ request.scheme }}://{{ domain }}{% url 'activate' uidb64=uid token=token %}<br>
 <br>
 Sincerely,<br>
 Twidector

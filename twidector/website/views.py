@@ -12,7 +12,7 @@ from django.contrib.auth import logout as auth_logout
 
 from django.urls import reverse_lazy
 from django.contrib.auth.views import PasswordResetView
-from django.contrib.auth.forms import PasswordResetForm
+from django.contrib.auth.forms import PasswordResetForm, PasswordChangeForm, SetPasswordForm
 from django.contrib.messages.views import SuccessMessageMixin
 
 from django.http import HttpResponse
@@ -27,6 +27,7 @@ from django.contrib.auth import views as auth_views
 from django.contrib.admin.views.decorators import staff_member_required
 
 from .tokens import account_activation_token
+from django.contrib.auth.tokens import default_token_generator
 #from django.contrib.auth.models import User
 #from django.core.mail import EmailMessage
 
@@ -39,7 +40,7 @@ from django.template.loader import render_to_string
 #from django.core.mail import EmailMessage
 from django.core.mail import send_mail, BadHeaderError
 
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, update_session_auth_hash
 from django.contrib.auth.models import User
 user = get_user_model()
 from .models import TwitterAuthToken, TwitterUser, SyncTwitterAccount
@@ -162,7 +163,7 @@ def register(request):
                 'domain': current_site.domain,
                 'uid':urlsafe_base64_encode(force_bytes(user.pk)),  
                 'token':account_activation_token.make_token(user),
-                'protocol': 'http',
+                'protocol': request.scheme,
             })
                 try:
                     send_mail(subject, message, 'twidector@gmail.com' , [user.email], fail_silently=False, html_message=message)
@@ -234,8 +235,8 @@ def password_reset_form(request):
                 'domain': current_site.domain,
                 'site_name': 'Twidector',
                 'uid':urlsafe_base64_encode(force_bytes(user.pk)),  
-                'token':account_activation_token.make_token(user),
-                'protocol': 'http',
+                'token':default_token_generator.make_token(user),
+                'protocol': 'both',
             })
                 try:
                     send_mail(subject, message, 'twidector@gmail.com' , [user.email], fail_silently=False, html_message=message)
@@ -266,21 +267,32 @@ def resetForgotPassword(request):
 
     if user is not None and account_activation_token.check_token(user, token):
         if request.method == 'POST':
-            password = request.POST.get('password1')
-            passwordcheck = request.POST.get('password2')
+            form = SetPasswordForm(request.user, request.POST)
+            if form.is_valid():
+                update_session_auth_hash(request, user)
+                new_password = request.get('new_password1')
+                user.set_password(new_password)
+                user.save()
+                form.save()
+                messages.success(request,"You have successfully changed your password!")
+                return redirect('login')
 
-            if(password != passwordcheck):
-                messages.error(request, 'Error. Password does not match.')
-
-            reset_user_password(user.email, password)
-
-        # return redirect('home')
-
-
-        return render(request, 'resetForgotPassword ', {})
+            else:
+                messages.error(request,"You have failed to changed your password!")
+                return redirect('login')
+                
 
     else:
-        return HttpResponse('Reset link is invalid!')
+        messages.error('Reset link invalid.')
+        return redirect('login')
+
+    form = SetPasswordForm(request.user)
+
+    return render(request, 'password_reset_confirm.html', {'form': form})
+
+
+
+
 
 #def resetPassword(request):
     return render(request, 'reset-password.html', {})
@@ -671,36 +683,20 @@ def whitelist(request):
 def settings(request):
     
     if 'change-password' in request.POST:
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            form.save()
+            #user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request,"You have successfully changed your password!")
 
-        loggedUser = request.session.get('loggedin')
-        old_password = request.POST['old-password']
-        new_password = request.POST['new-password']
-        confirm_new_password = request.POST['confirm-new-password']
 
-        checkPassword = validate_login(loggedUser, old_password)
 
-        if checkPassword:
-
-            #check password
-            if (new_password == confirm_new_password):
-                result = change_password(loggedUser, new_password)
-
-                if result:
-                    messages.success(request,"You have successfully changed your password!")
-
-                else:
-                    messages.error(request, "There was an error changing your password.")
-
-                return redirect('settings')
-
-            else:
-                messages.error(request, "The password confirmation does not match.")
-                return redirect('settings')
 
         else:
-            messages.error(request, "Invalid Password.")
-            return redirect('settings')
-    
-    else:
+            messages.error(request, "There was an error changing your password.")
 
-        return render(request, 'settings.html', {})
+    else:
+        form = PasswordChangeForm(request.user)
+
+    return render(request, 'settings.html', {'form': form})
