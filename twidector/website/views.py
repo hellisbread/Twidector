@@ -236,7 +236,7 @@ def password_reset_form(request):
                 'site_name': 'Twidector',
                 'uid':urlsafe_base64_encode(force_bytes(user.pk)),  
                 'token':default_token_generator.make_token(user),
-                'protocol': 'both',
+                'protocol': request.scheme,
             })
                 try:
                     send_mail(subject, message, 'twidector@gmail.com' , [user.email], fail_silently=False, html_message=message)
