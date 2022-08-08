@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.timezone import now
 
 # Create your models here.
 class TwitterAuthToken(models.Model):
@@ -63,6 +64,7 @@ class TwitterUserScore(models.Model):
 class FakeNews(models.Model):
     fake_news_text = models.TextField()
     fake_news_score = models.BooleanField()
+    date_time = models.DateTimeField(default=now, blank=True)
 
     class Meta:
         db_table = 'fake_news_score'

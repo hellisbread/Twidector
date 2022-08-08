@@ -51,8 +51,8 @@ class UserResetPasswordForm(auth_views.PasswordResetView):
                             widget=(forms.TextInput(attrs={'class': 'form-control'})))
 
     class Meta:
-        #model = CustomTwidectorUser
-        fields = ('username', 'email')
+        model = User
+        fields = ('email')
         
 
 #class tempForm(UserCreationForm):

@@ -52,6 +52,8 @@ from website.graphs import *
 from website.twitter_api import TwitterAPI
 from website.authorization import create_update_user_from_twitter, check_token_still_valid
 
+import time
+
 @csrf_exempt
 
 def update(request):
@@ -200,6 +202,7 @@ def activate(request, uidb64, token):
 
         # return redirect('home')
         messages.success(request,'Successfully activated account')
+        time.sleep(2)
         return redirect('login')
     else:
         messages.error('Activation link invalid.')
@@ -213,35 +216,36 @@ def forgotPassword(request):
 def password_reset_form(request):
 
     if request.method == 'POST':
-        #form = PasswordResetForm(request.POST)
-        form = auth_views.PasswordResetView(request.POST)
+        form = PasswordResetForm(request.POST)
+        #form = auth_views.PasswordResetView(request.POST)
         email = request.POST.get('email')
         
         if form.is_valid():
-            user = get_user_model()
-            user = form.save(commit=False)
-            user.set_unusable_password()
-            user.is_active = True
-            user.save()  
-            current_site = get_current_site(request)
-            subject = "Twidector Password Reset Requested"
-            message = render_to_string('password_reset_email.html', {
-            'email' : user.email,    
-            'user': user,
-            'domain': current_site.domain,
-            'site_name': 'Twidector',
-            'uid':urlsafe_base64_encode(force_bytes(user.pk)),  
-            'token':account_activation_token.make_token(user),
-            'protocol': 'http',
-        })
-            try:
-                send_mail(subject, message, 'twidector@gmail.com' , [user.email], fail_silently=False, html_message=message)
-                messages.success(request, 'Successfully sent to email on how to reset password')
-                return redirect('login')
-            except:
-                return HttpResponse('Invalid header found.')
+            user = User.objects.filter(email=email).first()
+            if user is not None:
+                user.set_unusable_password()
+                user.is_active = True
+                user.save()  
+                current_site = get_current_site(request)
+                subject = "Twidector Password Reset Requested"
+                message = render_to_string('password_reset_email.html', {
+                'email' : user.email,    
+                'user': user,
+                'domain': current_site.domain,
+                'site_name': 'Twidector',
+                'uid':urlsafe_base64_encode(force_bytes(user.pk)),  
+                'token':account_activation_token.make_token(user),
+                'protocol': 'http',
+            })
+                try:
+                    send_mail(subject, message, 'twidector@gmail.com' , [user.email], fail_silently=False, html_message=message)
+                    messages.success(request, 'Successfully sent to email on how to reset password')
+                    return redirect('login')
+                except:
+                    return HttpResponse('Invalid header found.')
 
-    form = auth_views.PasswordResetView()
+    form = PasswordResetForm()
+    #form = auth_views.PasswordResetView()
 
     return render(request, 'password_reset_form.html', {'form':form})
 
@@ -389,6 +393,21 @@ def sync_twitter_callback(request):
         messages.error('Error.')
         return redirect('index')
 
+
+def deactivate_account(request):
+    return render(request, 'deactivate_account.html')
+
+def deactivate_account_true(request):
+    user = request.user
+    user.is_active = False
+    user.save()
+    auth_logout(request)
+    messages.success(request, 'Successfully deactivated account. If you would like to reactivate your account, submit a password reset request on the login page.')
+    return redirect('index')
+
+def deactivate_account_false(request):
+
+    return redirect('settings')
 
 #Admin Views
 def adminLogin(request):

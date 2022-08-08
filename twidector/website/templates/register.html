@@ -99,9 +99,9 @@
                                     {% csrf_token %}
                                     <div class="d-flex align-items-center justify-content-center pb-3 pt-2">
                                         <h5 class="mb-0 me-2">Register via Twitter: </h4>
-                                            <button type="button" class="btn btn-outline-secondary mx-1">
+                                            <a type="button" class="btn btn-outline-secondary mx-1" href="{% url 'login_twitter' %}">
                                                 <i class="fab fa-twitter twitter-icon"></i>
-                                            </button>
+                                              </a>
                                     </div>
 
                                     <div class="text-center">
