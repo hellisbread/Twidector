@@ -240,10 +240,11 @@ def password_reset_form(request):
             })
                 try:
                     send_mail(subject, message, 'twidector@gmail.com' , [user.email], fail_silently=False, html_message=message)
-                    messages.success(request, 'Successfully sent to email on how to reset password')
-                    return redirect('login')
+                    # messages.success(request, 'Successfully sent to email on how to reset password')
+                    # return redirect('login')
                 except:
                     return HttpResponse('Invalid header found.')
+                return redirect ("/password_reset_done/")
 
     form = PasswordResetForm()
     #form = auth_views.PasswordResetView()
