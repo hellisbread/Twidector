@@ -76,3 +76,22 @@ class SyncTwitterAccount(models.Model):
 
     class Meta:
         db_table = 'sync_twitter'
+
+class Favourited(models.Model):
+    favourited_twitter_id = models.CharField(max_length=255)
+    favourited_username = models.CharField(max_length=255)
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    soft_delete = models.BooleanField()
+
+    class Meta:
+        db_table = 'favourited'
+
+class Blocked(models.Model):
+    blocked_twitter_id = models.CharField(max_length=255)
+    blocked_username = models.CharField(max_length=255)
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    soft_delete = models.BooleanField()
+
+    class Meta:
+        db_table = 'blocked'
+
