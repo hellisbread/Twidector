@@ -53,11 +53,13 @@ stop_words.extend(other_exclusions)
 stemmer = PorterStemmer()
 vectorizer = CountVectorizer(ngram_range=(1, 4), max_features = 1000)
 
+model_filename = 'model.sav'
+
 def save_model(model):
-    pickle.dump(model, open('', 'the_model'))
+    pickle.dump(model, open('model.sav', 'wb'))
 
 def load_model():
-    model = pickle.load(open('', 'the_model'))
+    model = pickle.load(open('model.sav', 'rb'))
     
     return model
 

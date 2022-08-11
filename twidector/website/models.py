@@ -95,4 +95,3 @@ class Blocked(models.Model):
 
     class Meta:
         db_table = 'blocked'
-
