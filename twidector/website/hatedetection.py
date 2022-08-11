@@ -49,6 +49,17 @@ stop_words.extend(other_exclusions)
 stemmer = PorterStemmer()
 vectorizer = CountVectorizer(ngram_range=(1, 4), max_features = 1000)
 
+import pickle
+
+def save_model(model):
+    pickle.dump(model, open('', 'the_model'))
+    
+
+def load_model():
+    model = pickle.load(open('', 'the_model'))
+    
+    return model
+
 def prepareDF():
     global df
     global vectorizer , x_train, x_test, x_train_vec, y_train , SVM
