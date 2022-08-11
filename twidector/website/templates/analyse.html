@@ -210,10 +210,10 @@
                       Actions
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end">
-                      <li><a class="dropdown-item" href="{% url 'view-tweet'%}">View Tweet Analysis</a></li>
-                      <li><a class="dropdown-item" href="#">Add to Blacklist</a></li>
-                      <li><a class="dropdown-item" href="#">Add to Whitelist</a></li>
-                      <li><a class="dropdown-item" href="#">Report Inaccuracy</a></li>
+                      <!-- <li><a class="dropdown-item" href="{% url 'view-tweet'%}">View Tweet Analysis</a></li> -->
+                      <li><a class="dropdown-item" href="#">Favourite User</a></li>
+                      <li><a class="dropdown-item" href="#">Block User</a></li>
+                      <li><a class="dropdown-item" href="{% url 'report-tweet' tweet_item.tweetid %}">Report Inaccuracy</a></li>
                     </ul>
                   </div>
                 </div>

@@ -567,6 +567,8 @@ def analyse(request):
 
         data = getalltweets(twitterID, 1000)
 
+        print(data)
+
         predicted_score = predictHate(data['tweet'])
         data['predicted_score'] = predicted_score  
         data['userID'] = twitterID
@@ -609,6 +611,18 @@ def analyse(request):
             del request.session['current-search']
 
         return render(request, 'analyse.html', {})
+
+def reportTweets(request, tweet_id):
+
+    context = request.session.get('current-search')
+
+    data = {'dataframe': pd.read_json(context.get('dataframe'))}
+
+    context.update(data)
+
+    print(tweet_id)
+
+    return render(request, 'analyse.html', context) 
 
 @login_required
 def viewTweet(request):
