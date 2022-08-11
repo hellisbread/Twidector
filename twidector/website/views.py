@@ -525,25 +525,28 @@ def reportedTweets(request):
 #@twitter_login_required
 def dashboard(request):
 
-    # context = {}
+    context = {'twitter_id_exist':True}
 
-    # user_id = request.user.id
+    user_id = request.user.id
+    print(user_id)
 
-    # try:
-    #     twitter_id = TwitterUser.objects.get(user = user_id)
-    # except:
-    #     return render(request, 'dashboard.html', {})
+    try:
+        print("twitter id attempt")
+        twitter_id = TwitterUser.objects.get(user = user_id)
+
+    except:
+        return render(request, 'dashboard.html', {'twitter-id-exist':False})
     
-    # twitter_id = "hellisbread"
+    twitter_id = "hellisbread"
     
-    # print(twitter_id)
+    print(twitter_id)
 
-    # context = assess_relationship(twitter_id)
+    context = assess_relationship(twitter_id)
 
-    # print(context)
+    print(context)
 
-    # return render(request, 'dashboard.html', context)
-    return render(request, 'dashboard.html')
+    return render(request, 'dashboard.html', context)
+    #return render(request, 'dashboard.html')
 
 @login_required
 def analyse(request):
