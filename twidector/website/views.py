@@ -28,22 +28,18 @@ from django.contrib.admin.views.decorators import staff_member_required
 
 from .tokens import account_activation_token
 from django.contrib.auth.tokens import default_token_generator
-#from django.contrib.auth.models import User
-#from django.core.mail import EmailMessage
 
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
 #from django.utils import six
 #from django.contrib.auth import login, authenticate
-#from django.contrib.auth.models import User
-#from django.core.mail import EmailMessage
 from django.core.mail import send_mail, BadHeaderError
 
 from django.contrib.auth import get_user_model, update_session_auth_hash
 from django.contrib.auth.models import User
 user = get_user_model()
-from .models import TwitterAuthToken, TwitterUser, SyncTwitterAccount
+from .models import TwitterAuthToken, TwitterUser, SyncTwitterAccount, Blocked, Favourited
 
 from website.functions import *
 from website.hatedetection import *
@@ -632,6 +628,33 @@ def viewTweet(request):
 def blocklist(request):
 
     context = {}
+
+    if 'add-block' in request.POST:
+
+        twitter_handle = request.POST['blacklist-user']
+
+        try:
+            twitter_id = getuserid(twitter_handle)
+        except:
+            messages.error(request, 'Invalid Twitter User')
+            return redirect('block-list')
+
+        new_block_user = Blocked(
+                            blocked_twitter_id = twitter_id,
+                            blocked_username = twitter_handle,
+                            user = request.user,
+                            soft_delete = 0
+                            )
+
+        new_block_user.save()
+
+        return redirect('block-list')
+
+    blocked_objectlist = Blocked.objects.filter(user = request.user).filter(soft_delete=0).values_list('blocked_twitter_id', 'blocked_username')
+
+    print(blocked_objectlist)
+
+    context = {'blocked_list': blocked_objectlist}
 
     return render(request, 'blacklist.html', context)
 
