@@ -30,6 +30,7 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn import svm, linear_model
 from sklearn.svm import SVC
 from sklearn.multiclass import OneVsRestClassifier
+
 import numpy as np
 from nltk.sentiment.vader import SentimentIntensityAnalyzer as VS
 import warnings
@@ -42,6 +43,9 @@ from datetime import datetime
 
 from website.config import *
 
+import pickle
+
+
 stop_words = nltk.corpus.stopwords.words("english")
     #extending the stopwords to include other words used in twitter such as retweet(rt) etc.
 other_exclusions = ["#ff", "ff", "rt"]
@@ -49,11 +53,8 @@ stop_words.extend(other_exclusions)
 stemmer = PorterStemmer()
 vectorizer = CountVectorizer(ngram_range=(1, 4), max_features = 1000)
 
-import pickle
-
 def save_model(model):
     pickle.dump(model, open('', 'the_model'))
-    
 
 def load_model():
     model = pickle.load(open('', 'the_model'))
@@ -96,6 +97,8 @@ def prepareDF():
     SVM.fit(x_train_vec , y_train)
 
     y_pred_svm = SVM.predict(x_test_vec)
+
+    save_model(SVM)
     
     # print(accuracy_score(y_test, y_pred_svm) * 100)
     #number of hate, offensive and neutral
@@ -150,6 +153,44 @@ def preprocess(tweet):
 
     return tweets_p
 
+def sql_to_dataframe():
+    open_connect()
+    #still wondering which table to extract from#######################################################
+    sqlcommand = 'SELECT * FROM `reported_tweet`'
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute(sqlcommand)
+            connection.commit()
+            close_connect()
+            return pd.df(cursor.fetchall())
+            
+        except:
+            close_connect()
+            return('Unexpected error has occurred.')
+
+def retrain(dataframe):
+    #load from file saved model
+    clf = load_model()
+    
+    cleaned_tweets = preprocess(dataframe)
+    df['clean_tweet'] = cleaned_tweets
+    y = df["class"].values
+    x = df["clean_tweet"].values
+    
+    vectorizer = CountVectorizer(stop_words='english', ngram_range=(1, 1), max_features = 1000)
+    
+    vectorizer.fit(list(x))
+    
+    x_train_vec = vectorizer.transform(x_train)
+
+    clf = linear_model.SGDClassifier(max_iter=1000)
+    
+    clf.partial_fit(x_train_vec, y)
+    
+    #save into file model
+    save_model(clf)
+    
+   
 def predictHate(tweet):
     
     tempseries = pd.Series(tweet)
@@ -157,7 +198,9 @@ def predictHate(tweet):
     #print(list(ct))
     # vectorizer.fit(list(ct) + list(x_train) + list(x_test))
     m = vectorizer.transform(ct)
-    pred = SVM.predict(m)
+    #pred = SVM.predict(m)
+    clf = load_model()
+    pred = clf.predict(m)
     return(pred)
 
 sshtunnel.SSH_TIMEOUT = 120.0

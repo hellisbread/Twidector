@@ -49,7 +49,7 @@ class ReportedTweet(models.Model):
     reported_id = models.IntegerField(primary_key=True, unique=True)
     reported_status = models.SmallIntegerField()
     tweet_id = models.IntegerField(unique=True)
-    report_date = models.DateTimeField(null = True)
+    report_date = models.DateTimeField(null = True, default=now)
 
     class Meta:
         db_table = 'reported_tweet'
@@ -58,6 +58,7 @@ class TwitterUserScore(models.Model):
     twitter_id = models.CharField(max_length=255, primary_key=True)
     hate_score = models.IntegerField()
     fake_news_score = models.IntegerField()
+    last_retrieved = models.DateTimeField(default=now)
 
     class Meta:
         db_table = 'twitter_user_score'
