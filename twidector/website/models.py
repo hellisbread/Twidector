@@ -40,6 +40,7 @@ class Tweet(models.Model):
     predicted_score = models.CharField(max_length=1)
     flagged = models.CharField(max_length=1)
     retweet = models.CharField(max_length=5)
+    predicted_fake_news_score = models.CharField(max_length=1, null = True)
 
     class Meta:
         db_table = 'tweet'
