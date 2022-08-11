@@ -27,7 +27,7 @@ from sklearn.metrics import accuracy_score
 from sklearn.svm import LinearSVC
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.naive_bayes import GaussianNB
-from sklearn import svm
+from sklearn import svm, linear_model
 from sklearn.svm import SVC
 from sklearn.multiclass import OneVsRestClassifier
 import numpy as np
@@ -80,7 +80,7 @@ def prepareDF():
     x_train_vec = vectorizer.transform(x_train)
     x_test_vec = vectorizer.transform(x_test)
 
-    SVM = LinearSVC(C = 0.8)
+    SVM = linear_model.SGDClassifier()
 
     SVM.fit(x_train_vec , y_train)
 
@@ -139,9 +139,6 @@ def preprocess(tweet):
 
     return tweets_p
 
-
-
-
 def predictHate(tweet):
     
     tempseries = pd.Series(tweet)
@@ -151,9 +148,6 @@ def predictHate(tweet):
     m = vectorizer.transform(ct)
     pred = SVM.predict(m)
     return(pred)
-
-
-
 
 sshtunnel.SSH_TIMEOUT = 120.0
 sshtunnel.TUNNEL_TIMEOUT = 120.0
@@ -499,7 +493,6 @@ def getTweetTypeCount(df):
 
     return counts
         
-
 def uploadScoring(filename):
     global df
     global vectorizer 
