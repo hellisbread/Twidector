@@ -80,12 +80,13 @@ def assess_mentions(UserID):
     authorID_list = []
     topFive_authors = []
 
-    responses = client.get_users_mentions(id = UserID, max_results = 50, expansions = 'author_id')
-    count = 0 
-    while count < len(responses.data):
+    responses = client.get_users_mentions(id = UserID, max_results = 100, expansions = 'author_id')
+    count = 0
+    while count < len(responses):
         try:
             authorID_list.append(responses.data[count].author_id)
         except:
+            count += 1
             continue
         count += 1 
 
@@ -130,5 +131,4 @@ def assess_relationship(TwitterHandle):
     for user in total_score:
         if(user in following_list):
             results[user] += 1
-
     return results

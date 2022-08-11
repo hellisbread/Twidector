@@ -530,20 +530,21 @@ def dashboard(request):
     user_id = request.user.id
     print(user_id)
 
-    try:
+    try: #Get from sync
         print("twitter id attempt")
-        twitter_id = TwitterUser.objects.get(user = user_id)
+        twitter_obj = SyncTwitterAccount.objects.get(user = user_id)
+        twitter_id = twitter_obj.twitter_id
 
-    except:
-        return render(request, 'dashboard.html', {'twitter-id-exist':False})
-    
-    twitter_id = "hellisbread"
+    except: #Get from twitter user
+
+        try:
+            twitter_obj = TwitterUser.objects.get(user = user_id)
+            twitter_id = twitter_obj.twitter_id
+            
+        except:
+            return render(request, 'dashboard.html', {'twitter-id-exist':False})
     
     print(twitter_id)
-
-    context = assess_relationship(twitter_id)
-
-    print(context)
 
     return render(request, 'dashboard.html', context)
     #return render(request, 'dashboard.html')
