@@ -629,74 +629,18 @@ def viewTweet(request):
     return render(request, 'view-tweet.html', {})
 
 @login_required
-def blacklist(request):
+def blocklist(request):
 
     context = {}
 
-    loggedUser = request.session.get('loggedin')
-
-    #Retrieve List
-    blacklisted_users = retrieve_blacklist(loggedUser)
-
-    #Convert List to context dict
-    list_of_blacklisted_users = []
-    for user in blacklisted_users:
-        list_of_blacklisted_users.append(user)
-
-    context['list_of_blacklisted_users'] = list_of_blacklisted_users
-
-    #POST
-    if request.method == 'POST':
-        #Add new blacklisted user
-        blacklist_username = request.POST['blacklist-user']
-
-        result = blacklist_user(loggedUser , blacklist_username)
-
-        if result:
-            messages.success(request, "Successfully blacklisted " + blacklist_username)
-        else:
-            messages.error(request, "This username exists in your blacklist.")
-
-        return redirect('blacklist')
-
-    else:
-        
-        return render(request, 'blacklist.html', context)
+    return render(request, 'blacklist.html', context)
 
 @login_required
-def whitelist(request):
+def favouritelist(request):
 
     context = {}
 
-    loggedUser = request.user.id
-
-    #Retrieve List
-    whitelisted_users = retrieve_whitelist(loggedUser)
-
-    #Convert List to context dict
-    list_of_whitelisted_users = []
-    for user in whitelisted_users:
-        list_of_whitelisted_users.append(user)
-
-    context['list_of_whitelisted_users'] = list_of_whitelisted_users
-
-    #POST
-    if request.method == 'POST':
-        #Add new blacklisted user
-        whitelist_username = request.POST['whitelist-user']
-
-        result = whitelist_user(loggedUser , whitelist_username)
-
-        if result:
-            messages.success(request, "Successfully whitelisted " + whitelist_username)
-        else:
-            messages.error(request, "This username exists in your whitelist.")
-
-        return redirect('whitelist')
-
-    else:
-        
-        return render(request, 'whitelist.html', context)
+    return render(request, 'whitelist.html', context)
 
 @login_required
 def settings(request):
