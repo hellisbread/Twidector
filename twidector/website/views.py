@@ -206,7 +206,7 @@ def activate(request, uidb64, token):
         time.sleep(2)
         return redirect('login')
     else:
-        messages.error('Activation link invalid.')
+        messages.error(request, 'Activation link invalid.')
         return redirect('login')
 
 def forgotPassword(request):
@@ -284,7 +284,7 @@ def resetForgotPassword(request):
                 
 
     else:
-        messages.error('Reset link invalid.')
+        messages.error(request, 'Reset link invalid.')
         return redirect('login')
 
     form = SetPasswordForm(request.user)
@@ -305,7 +305,7 @@ def login_twitter(request):
     twitter_api = TwitterAPI()
     url, oauth_token, oauth_token_secret = twitter_api.twitter_login()
     if url is None or url == '':
-        messages.error('Error.')
+        messages.error(request, 'Error.')
         return redirect('index')
     else:
         twitter_auth_token = TwitterAuthToken.objects.filter(oauth_token=oauth_token).first()
@@ -320,7 +320,7 @@ def login_twitter(request):
 
 def login_twitter_callback(request):
     if 'denied' in request.GET:
-        messages.error('Error.')
+        messages.error(request, 'Error.')
         return redirect('index')
     twitter_api = TwitterAPI()
     oauth_verifier = request.GET.get('oauth_verifier')
@@ -342,20 +342,20 @@ def login_twitter_callback(request):
                     auth_login(request, user)
                     return redirect('dashboard')
             else:
-                messages.error('Error.')
+                messages.error(request, 'Error.')
                 return redirect('index')
         else:
-            messages.error('Error.')
+            messages.error(request, 'Error.')
             return redirect('index')
     else:
-        messages.error('Error.')
+        messages.error(request, 'Error.')
         return redirect('index')
 
 def sync_twitter(request):
     twitter_api = TwitterAPI()
     url, oauth_token, oauth_token_secret = twitter_api.twitter_sync()
     if url is None or url == '':
-        messages.error('Error.')
+        messages.error(request,'Error.')
         return redirect('index')
     else:
         twitter_auth_token = TwitterAuthToken.objects.filter(oauth_token=oauth_token).first()
@@ -369,7 +369,7 @@ def sync_twitter(request):
 
 def sync_twitter_callback(request):
     if 'denied' in request.GET:
-        messages.error('Error.')
+        messages.error(request,'Error.')
         return redirect('index')
     twitter_api = TwitterAPI()
     oauth_verifier = request.GET.get('oauth_verifier')
@@ -394,16 +394,16 @@ def sync_twitter_callback(request):
                     return redirect('settings')
 
                 else:
-                    messages.error('Error.')
+                    messages.error(request,'Error.')
                     return redirect('index')
             else:
-                messages.error('Error.')
+                messages.error(request,'Error.')
                 return redirect('index')
         else:
-            messages.error('Error.')
+            messages.error(request,'Error.')
             return redirect('index')
     else:
-        messages.error('Error.')
+        messages.error(request,'Error.')
         return redirect('index')
 
 
@@ -525,25 +525,29 @@ def reportedTweets(request):
 #@twitter_login_required
 def dashboard(request):
 
-    # context = {}
+    context = {'twitter_id_exist':True}
 
-    # user_id = request.user.id
+    user_id = request.user.id
+    print(user_id)
 
-    # try:
-    #     twitter_id = TwitterUser.objects.get(user = user_id)
-    # except:
-    #     return render(request, 'dashboard.html', {})
+    try: #Get from sync
+        print("twitter id attempt")
+        twitter_obj = SyncTwitterAccount.objects.get(user = user_id)
+        twitter_id = twitter_obj.twitter_id
+
+    except: #Get from twitter user
+
+        try:
+            twitter_obj = TwitterUser.objects.get(user = user_id)
+            twitter_id = twitter_obj.twitter_id
+            
+        except:
+            return render(request, 'dashboard.html', {'twitter-id-exist':False})
     
-    # twitter_id = "hellisbread"
-    
-    # print(twitter_id)
+    print(twitter_id)
 
-    # context = assess_relationship(twitter_id)
-
-    # print(context)
-
-    # return render(request, 'dashboard.html', context)
-    return render(request, 'dashboard.html')
+    return render(request, 'dashboard.html', context)
+    #return render(request, 'dashboard.html')
 
 @login_required
 def analyse(request):
@@ -690,9 +694,6 @@ def settings(request):
             #user = form.save()
             update_session_auth_hash(request, user)
             messages.success(request,"You have successfully changed your password!")
-
-
-
 
         else:
             messages.error(request, "There was an error changing your password.")
