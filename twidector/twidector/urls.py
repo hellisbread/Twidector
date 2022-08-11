@@ -47,6 +47,7 @@ urlpatterns = [
     path('admin/accuracy-score/', views.accuracyScore, name='accuracy-score'),
     path('admin/home/', views.adminPage, name='admin-page'),
     path('admin/search-account/', views.searchAccount, name='search-account'),
+    path('admin/report-tweet/<str:tweet_id>/', views.reportTweets, name='report-tweet'),
     path('admin/update-user/<str:user_id>/', views.updateUser, name='update-user'),
     path('admin/delete-user/<str:user_id>/', views.delete_user, name='delete-user'),
     path('admin/file-upload/', views.file_upload, name='file-upload'),
