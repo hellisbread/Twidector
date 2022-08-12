@@ -83,7 +83,7 @@ def freeTrial(request):
 
         url = request.POST['twitter-url']
 
-        prepareDF()
+        #prepareDF()
 
         twitterID = getuserid(url)
 
@@ -555,7 +555,7 @@ def analyse(request):
 
         url = request.POST["twitter-url"]
 
-        prepareDF()
+        #prepareDF()
 
         twitterID = getuserid(url)
 

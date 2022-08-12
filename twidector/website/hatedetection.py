@@ -106,6 +106,30 @@ def prepareDF():
     #number of hate, offensive and neutral
     return (accuracy_score(y_test, y_pred_svm) * 100)
 
+def make_vectorizer():
+    df = pd.read_csv('hateDetection.csv')
+
+    ## 1. Removal of punctuation and capitlization
+    ## 2. Tokenizing
+    ## 3. Removal of stopwords
+    ## 4. Stemming
+
+    #clean_Tweets = preprocess(df["tweet"])
+    clean_Tweets = df["tweet"]
+    df['clean_tweet'] = clean_Tweets
+    #split dataset into training and testing
+    y = df["class"].values
+    x = df["clean_tweet"].values
+    x_train, x_test, y_train, y_test = train_test_split(x, y, stratify = y, test_size=0.2)
+
+    # vectorize tweets for model building
+    vectorizer = CountVectorizer(ngram_range=(1, 4), max_features = 1000)
+
+    # learn a vocabulary dictionary of all tokens in the raw documents
+    vectorizer.fit(list(x_train) + list(x_test))
+
+    return vectorizer
+
 def graph_values():
    graph_val =  df["class"].value_counts()
    offensive_num = graph_val[1]
@@ -179,7 +203,7 @@ def retrain(dataframe):
     y = df["class"].values
     x = df["clean_tweet"].values
     
-    vectorizer = CountVectorizer(stop_words='english', ngram_range=(1, 1), max_features = 1000)
+    vectorizer = make_vectorizer()
     
     vectorizer.fit(list(x))
     
@@ -191,7 +215,6 @@ def retrain(dataframe):
     
     #save into file model
     save_model(clf)
-    
    
 def predictHate(tweet):
     
@@ -199,6 +222,7 @@ def predictHate(tweet):
     ct = preprocess(tempseries)
     #print(list(ct))
     # vectorizer.fit(list(ct) + list(x_train) + list(x_test))
+    vectorizer = make_vectorizer()
     m = vectorizer.transform(ct)
     #pred = SVM.predict(m)
     clf = load_model()

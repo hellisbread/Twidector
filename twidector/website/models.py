@@ -25,7 +25,7 @@ class TwitterUser(models.Model):
     class Meta:
         db_table = 'website_twitter_user'
 
-class LastRetrieved(models.Model):
+class SearchedUser(models.Model):
     twitter_id = models.CharField(max_length=255, primary_key=True)
     last_retrieved = models.DateTimeField(null = True)
 
@@ -34,25 +34,22 @@ class LastRetrieved(models.Model):
 
 class Tweet(models.Model):
     tweet_id = models.IntegerField(primary_key=True)
-    user_id = models.CharField(max_length=20, null=True)
+    screen_name = models.CharField(max_length=255)
     tweet_date = models.DateTimeField(null = True)
     tweet_text = models.TextField(null = True)
-    predicted_score = models.CharField(max_length=1)
-    flagged = models.CharField(max_length=1)
-    retweet = models.CharField(max_length=5)
-    predicted_fake_news_score = models.CharField(max_length=1, null = True)
+    predicted_hate_score = models.CharField(max_length=1, null=True)
+    predicted_fake_score = models.CharField(max_length=1, null=True)
+    flagged = models.CharField(max_length=1, default=0)
+    offensive_count = models.IntegerField(default=0)
+    hateful_count = models.IntegerField(default=0)
+    neutral_count = models.IntegerField(default=0)
+    fake_news_count = models.IntegerField(default=0)
+    admin_interjection = models.BooleanField(default = False)
+    admin_hate_result = models.CharField(max_length=1, null=True)
+    admin_news_result = models.CharField(max_length=1, null=True)
 
     class Meta:
         db_table = 'tweet'
-
-class ReportedTweet(models.Model):
-    reported_id = models.IntegerField(primary_key=True, unique=True)
-    reported_status = models.SmallIntegerField()
-    tweet_id = models.IntegerField(unique=True)
-    report_date = models.DateTimeField(null = True, default=now)
-
-    class Meta:
-        db_table = 'reported_tweet'
 
 class TwitterUserScore(models.Model):
     twitter_id = models.CharField(max_length=255, primary_key=True)
