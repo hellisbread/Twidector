@@ -26,20 +26,23 @@ def assess_replies(twitterHandle):
     accountIDs = []
 
     #retrieve 100 tweet results
-    tweets = api.user_timeline(user_id = twitterHandle, count = 100)
-    for tweet in tweets:
-        accountUser = tweet.in_reply_to_user_id
-        if(type(accountUser) == int):
-            accountIDs.append(accountUser)
+    try:
+        tweets = api.user_timeline(user_id = twitterHandle, count = 100)
+        for tweet in tweets:
+            accountUser = tweet.in_reply_to_user_id
+            if(type(accountUser) == int):
+                accountIDs.append(accountUser)
 
-        #top 5 users with the most number of replies
-    results = Counter(accountIDs).most_common(10)
+            #top 5 users with the most number of replies
+        results = Counter(accountIDs).most_common(10)
 
-        #return list of profiles that are close to user
-    list_of_users = []
-    for result in results:
-        list_of_users.append(result[0])
-    return list_of_users
+            #return list of profiles that are close to user
+        list_of_users = []
+        for result in results:
+            list_of_users.append(result[0])
+        return list_of_users
+    except:
+        return []
 
 def assess_other_replies(results):
     if(len(results) > 0):
@@ -48,32 +51,41 @@ def assess_other_replies(results):
 
 
 def assess_replies_score(UserID):
+
     potential_close_friends = []
 
     #retrieve top 5 users that the TwitterHandle replied
     result_list_of_users = assess_replies(UserID)
 
-    #retrieve their top 5 users that repliers replied to
-    assess_other_replies(result_list_of_users)
+    if not result_list_of_users:
+        return []
+    else:
+        #retrieve their top 5 users that repliers replied to
+        assess_other_replies(result_list_of_users)
 
-    count = 0
-    for user in result_list_of_users:
-        if (user in reply_list[count]):
-            potential_close_friends.append(user)
-        count += 1
+        count = 0
+        for user in result_list_of_users:
+            if (user in reply_list[count]):
+                potential_close_friends.append(user)
+            count += 1
 
-    if (UserID in potential_close_friends):
-        potential_close_friends.remove(UserID)
+        if (UserID in potential_close_friends):
+            potential_close_friends.remove(UserID)
 
-    return potential_close_friends
+        return potential_close_friends
 
 def assess_following(UserID):
 
     list_of_following = []
-    following = client.get_users_following(id = UserID, max_results=1000)
-    for user in following.data:
-        list_of_following.append(user.id)
-    
+    responses= client.get_users_following(id = UserID, max_results=1000)
+    count = 0
+    while count < len(responses):
+        try:
+            list_of_following.append(responses.data[count].id)
+        except:
+            count +=1
+            continue
+        count += 1
     return list_of_following
 
 def assess_mentions(UserID):

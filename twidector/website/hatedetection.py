@@ -294,6 +294,11 @@ def getuserid(twitterhandle):
     for user in users.data:
         return user.id
 
+def getuserUserHandle(twitter_id):
+    users = client.get_users(ids=[twitter_id]) 
+    for user in users.data:
+        return user.username
+
 def getuserIMG(twitterhandle):
     users = client.get_users(ids=[twitterhandle], user_fields=['profile_image_url'])
 

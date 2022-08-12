@@ -539,11 +539,25 @@ def dashboard(request):
             
         except:
             return render(request, 'dashboard.html', {'twitter-id-exist':False})
-    
-    print(twitter_id)
+
+    twitter_handle = getuserUserHandle(twitter_id)
+
+    relationship = assess_relationship(twitter_handle)
+
+    list = relationship.keys()
+    relationship_list = []
+    for userid in list:
+        user_list = []
+        Response  = client.get_user(id = userid, user_fields=['profile_image_url'])
+        user_list.append(Response.data.id)
+        user_list.append(Response.data.username)
+        user_list.append(relationship[Response.data.id])
+        user_list.append(Response.data.profile_image_url)
+        relationship_list.append(user_list)
+
+    context.update({'relationship_access':relationship_list})
 
     return render(request, 'dashboard.html', context)
-    #return render(request, 'dashboard.html')
 
 @login_required
 def analyse(request):
