@@ -94,11 +94,7 @@ ssh_tunnel = SSHTunnelForwarder(
 ssh_tunnel.start()
 
 DATABASES = {
-<<<<<<< HEAD
-    #development settings
-=======
      #development settings
->>>>>>> 6f220bbd1f3e5007686b4c855409ec2c7ae7de9e
     'default': {
         'ENGINE': os.getenv('DEV_SQL_ENGINE'),
         'NAME': os.getenv('DEV_SQL_NAME'),
