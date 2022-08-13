@@ -528,32 +528,33 @@ def dashboard(request):
 
     try: #Get from sync
         print("twitter id attempt")
-        twitter_obj = SyncTwitterAccount.objects.get(user = user_id)
-        twitter_id = twitter_obj.twitter_id
+        twitter_sync_obj = SyncTwitterAccount.objects.get(user = user_id)
+        twitter_id = twitter_sync_obj.twitter_id
+
+        twitter_user_obj = TwitterUser.objects.get(twitter_id = twitter_id)
+        access_token_info = TwitterUser.objects.select_related('twitter_oauth_token').get(id = twitter_user_obj.id)
+        
 
     except: #Get from twitter user
 
         try:
             twitter_obj = TwitterUser.objects.get(user = user_id)
             twitter_id = twitter_obj.twitter_id
-            
+
+            access_token_info = TwitterUser.objects.select_related('twitter_oauth_token').get(id = twitter_obj.id)
+
         except:
             return render(request, 'dashboard.html', {'twitter-id-exist':False})
+
+    updateAccess(access_token_info.twitter_oauth_token.oauth_token, access_token_info.twitter_oauth_token.oauth_token_secret)
 
     twitter_handle = getuserUserHandle(twitter_id)
 
     relationship = assess_relationship(twitter_handle)
 
-    list = relationship.keys()
-    relationship_list = []
-    for userid in list:
-        user_list = []
-        Response  = client.get_user(id = userid, user_fields=['profile_image_url'])
-        user_list.append(Response.data.id)
-        user_list.append(Response.data.username)
-        user_list.append(relationship[Response.data.id])
-        user_list.append(Response.data.profile_image_url)
-        relationship_list.append(user_list)
+    relationship_list = score_relationship(relationship)
+
+    print(relationship_list)
 
     context.update({'relationship_access':relationship_list})
 

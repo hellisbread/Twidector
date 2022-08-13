@@ -94,13 +94,24 @@ ssh_tunnel = SSHTunnelForwarder(
 ssh_tunnel.start()
 
 DATABASES = {
-    #production settings
+<<<<<<< HEAD
+    #development settings
+=======
+     #development settings
+>>>>>>> 6f220bbd1f3e5007686b4c855409ec2c7ae7de9e
     'default': {
-        'ENGINE': os.getenv('PROD_SQL_ENGINE'),
-        'NAME': os.getenv('PROD_SQL_NAME'),
-        'USER': os.getenv('PROD_SQL_USER'),
-        'PASSWORD': os.getenv('PROD_SQL_PASSWORD'),
-        'HOST': os.getenv('PROD_SQL_HOST'),
+        'ENGINE': os.getenv('DEV_SQL_ENGINE'),
+        'NAME': os.getenv('DEV_SQL_NAME'),
+        'USER': os.getenv('DEV_SQL_USER'),
+        'PASSWORD': os.getenv('DEV_SQL_PASSWORD'),
+        'HOST': os.getenv('DEV_SQL_HOST'),
+        'PORT': ssh_tunnel.local_bind_port,
+        'TEST': {
+          'NAME': "twidector$default",
+        },
+        'OPTIONS': {
+            'sql_mode': 'traditional',
+        }
     }
 }
 

@@ -25,12 +25,12 @@ class TwitterUser(models.Model):
     class Meta:
         db_table = 'website_twitter_user'
 
-class SearchedUser(models.Model):
-    twitter_id = models.CharField(max_length=255, primary_key=True)
-    last_retrieved = models.DateTimeField(null = True)
+# class SearchedUser(models.Model):
+#     twitter_id = models.CharField(max_length=255, primary_key=True)
+#     last_retrieved = models.DateTimeField(null = True)
 
-    class Meta:
-        db_table = 'last_retrieved'
+#     class Meta:
+#         db_table = 'last_retrieved'
 
 class Tweet(models.Model):
     tweet_id = models.IntegerField(primary_key=True)
@@ -39,6 +39,7 @@ class Tweet(models.Model):
     tweet_text = models.TextField(null = True)
     predicted_hate_score = models.CharField(max_length=1, null=True)
     predicted_fake_score = models.CharField(max_length=1, null=True)
+    retweet = models.CharField(max_length=5, null=True)
     flagged = models.CharField(max_length=1, default=0)
     offensive_count = models.IntegerField(default=0)
     hateful_count = models.IntegerField(default=0)
