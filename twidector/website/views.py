@@ -49,6 +49,7 @@ from website.graphs import *
 from website.twitter_api import TwitterAPI
 from website.authorization import create_update_user_from_twitter, check_token_still_valid
 
+
 import time
 
 @csrf_exempt
@@ -67,6 +68,7 @@ def update(request):
 
 # Create your views here.
 def index(request):
+    #prepareDF()
     return render(request,'index.html',{})
 
 def aboutUs(request):

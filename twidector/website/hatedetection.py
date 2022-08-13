@@ -55,11 +55,19 @@ vectorizer = CountVectorizer(ngram_range=(1, 4), max_features = 1000)
 
 model_filename = 'model.sav'
 
-def save_model(model):
-    pickle.dump(model, open('model.sav', 'wb'))
+def save_model(model, filename):
+    pickle.dump((model), open(filename, 'wb'))
 
-def load_model():
-    model = pickle.load(open('model.sav', 'rb'))
+def load_model(filename):
+    model = pickle.load(open(filename, 'rb'))
+    
+    return model
+    
+def save_vectorizer(vectorizer, filename):
+    pickle.dump((vectorizer), open(filename, 'wb'))
+
+def load_vectorizer(filename):
+    model = pickle.load(open(filename, 'rb'))
     
     return model
 
@@ -100,13 +108,14 @@ def prepareDF():
 
     y_pred_svm = SVM.predict(x_test_vec)
 
-    save_model(SVM)
+    save_model(SVM, 'hate_model.sav')
+    save_vectorizer(vectorizer, 'hate_vectorizer.sav')
     
     # print(accuracy_score(y_test, y_pred_svm) * 100)
     #number of hate, offensive and neutral
     return (accuracy_score(y_test, y_pred_svm) * 100)
 
-def make_vectorizer():
+#def make_vectorizer():
     df = pd.read_csv('hateDetection.csv')
 
     ## 1. Removal of punctuation and capitlization
@@ -127,6 +136,8 @@ def make_vectorizer():
 
     # learn a vocabulary dictionary of all tokens in the raw documents
     vectorizer.fit(list(x_train) + list(x_test))
+
+
 
     return vectorizer
 
@@ -203,7 +214,7 @@ def retrain(dataframe):
     y = df["class"].values
     x = df["clean_tweet"].values
     
-    vectorizer = make_vectorizer()
+    vectorizer = load_vectorizer('hate_vectorizer.sav')
     
     vectorizer.fit(list(x))
     
@@ -222,10 +233,10 @@ def predictHate(tweet):
     ct = preprocess(tempseries)
     #print(list(ct))
     # vectorizer.fit(list(ct) + list(x_train) + list(x_test))
-    vectorizer = make_vectorizer()
+    vectorizer = load_vectorizer('hate_vectorizer.sav')
     m = vectorizer.transform(ct)
     #pred = SVM.predict(m)
-    clf = load_model()
+    clf = load_model('hate_model.sav')
     pred = clf.predict(m)
     return(pred)
 
