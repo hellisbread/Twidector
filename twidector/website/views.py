@@ -533,12 +533,9 @@ def accessing_score(request):
     if 'request_id' in request.POST:
      #getting the id of each button which is the tweet id
        t_id = request.POST.get('request_id')
-       print(t_id)
-       print("halo")
      #getting the grading option ( 0 , 1 , 2)
        grading_option = request.POST.get('inlineRadioOptions')
-       print(grading_option)
-        #button 
+     #button 
        if 'grade' in request.POST:
          tweet_score(t_id , grading_option)
 

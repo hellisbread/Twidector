@@ -44,32 +44,32 @@
         </a>
       </li>
       <li class="nav-item">
-        <a href="{%url 'accuracy-score'%}" class="nav-link text-dark bg-light">
+        <a href="{%url 'model-testing'%}" class="nav-link text-dark bg-light">
           <i class="fa fa-area-chart" aria-hidden="true"></i>
-          Accuracy Score
+          Model Testing
         </a>
       </li>
       <li>
         <a class="nav-link px-3 sidebar-link text-dark bg-light" data-bs-toggle="collapse" href="#layouts">
           <i class="fa fa-file-text" aria-hidden="true"></i>
-          <span>Testing</span>
+          <span>Accuracy Score</span>
 
         </a>
         <div class="collapse" id="layouts">
           <ul class="navbar-nav ps-3">
             <li>
-              <a href="{%url 'model-testing'%}" class="nav-link px-3">
+              <a href="{%url 'accuracy-score'%}" class="nav-link px-3">
                 <span class="me-2"><i class="bi bi-speedometer2"></i> <i class="fa fa-align-left"
                     aria-hidden="true"></i></span>
-                <span>Model Testing</span>
+                <span>Hate Detection Model</span>
               </a>
             </li>
             <li>
-              <a href="#" class="nav-link px-3">
+              <a href="{%url 'ascore-fn'%}" class="nav-link px-3">
                 <span class="me-2"><i class="bi bi-speedometer2"></i> <i class="fa fa-pie-chart"
                     aria-hidden="true"></i></span>
 
-                <span>Future Testing</span>
+                <span>Fake News Model</span>
               </a>
             </li>
 
@@ -133,7 +133,7 @@
       <h1>Accuracy Score</h1>
       <h6>
         Twidector is a web-app that aids to have a safer and healthier environment in Twitter. The following concepts
-        will help you understand how the Twidector uses machine learning models to score the perceived impact a comment
+        will help users to understand how the Twidector uses machine learning models to score the perceived impact a comment
         might have on a conversation. </h6>
       <div class="card-body">
         <div class="row">
@@ -146,7 +146,7 @@
           <div class="col-md-4">
             <div
               class="toxicity__left glue-grid__col glue-grid__col--span-6 glue-grid__col--span-12-md glue-grid__col--span-12-sm">
-              <h1 style="margin-top: 110px;">The Accuracy Score of our dataset is <strong> {{fn_val}} </strong> </h1>
+              <h1 style="margin-top: 110px;"> Accuracy Score of our model <strong> {{fn_val}} </strong> </h1>
                <!-- <h2></h2>  -->
             </div>
           </div>
