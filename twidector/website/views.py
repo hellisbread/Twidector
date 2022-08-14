@@ -450,6 +450,11 @@ def accuracyScore(request):
     return render(request, 'accuracy-score.html', {'value': value , 'graph_interpretation': graph_interpretation})
 
 
+def ascore_fakenews(request):
+    fn_val = train_FN_Model()
+    g_fn = fn_graph()
+    return render(request, 'ascore-fn.html', {'fn_val' : fn_val , 'g_fn' : g_fn})
+
 def file_upload(request):
     if request.method == "POST":
     # do the reading inside here (the checking, the reading)

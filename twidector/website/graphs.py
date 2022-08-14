@@ -10,6 +10,7 @@ import pandas as pd
 from website.hatedetection import *
 from nltk.stem import WordNetLemmatizer
 import contractions
+import numpy as np
 
 def get_graph():
 
@@ -118,13 +119,11 @@ def cleanStatements(Statements):
             count_token += 1
     return tempArr
 
+clean_statements = cleanStatements(new_df["Statement"])
+new_df['Clean_Statements'] = clean_statements
+new_df["Label"].value_counts()
 
 def fakenews_graph():
-
-  clean_statements = cleanStatements(new_df["Statement"])
-  new_df['Clean_Statements'] = clean_statements
-  new_df["Label"].value_counts()
-
   #split the data into train and test set
   y = new_df['Label'].values
   x = new_df['Clean_Statements'].values
@@ -190,7 +189,49 @@ def fakenews_graph():
   buffer.close()
   return fn_img
 
+def retrieve_trainData():
+    open_connect()
+    try:
+        sql = "SELECT * FROM fake_news_score"
+        data = pd.read_sql(sql , connection)
+        close_connect()
+        return data
+    except:
+        close_connect()
+        return "Retreieve train data unsuccessful"
 
 
+def train_FN_Model():
 
+    clean_statements = cleanStatements(new_df["Statement"])
+    new_df['Clean_Statements'] = clean_statements
+    new_df["Label"].value_counts()
+
+    #split the data into train and test set
+    y = new_df['Label'].values
+    x = new_df['Clean_Statements'].values
+    x_train, x_test, y_train, y_test = train_test_split(x, y, stratify = y, test_size=0.2)
+
+    #fit and transform data into a matrix
+    vectorizer = TfidfVectorizer(ngram_range = (1 , 3), max_features = 1000)
+    vectorizer.fit(list(x_train) + list(x_test))
+    x = vectorizer.fit_transform(x)
+    x_train_vec = vectorizer.transform(x_train)
+    x_test_vec = vectorizer.transform(x_test)
+    vectorizer.get_feature_names_out()
+    
+    # Train the model and test the accuracy score
+    model = SVC(kernel="rbf", C = 0.8, gamma = 10)
+    model.fit(x_train_vec, y_train)
+    prediction = model.predict(x_test_vec)
+    return (accuracy_score(y_test, prediction) * 100)
+
+
+def fn_graph():
+  fk_news = new_df["Label"].value_counts()
+  print(fk_news)
+  false_news = fk_news[0]
+  true_news = fk_news[1]
+
+  return [false_news, true_news]
 
