@@ -39,7 +39,7 @@ from django.core.mail import send_mail, BadHeaderError
 from django.contrib.auth import get_user_model, update_session_auth_hash
 from django.contrib.auth.models import User
 user = get_user_model()
-from .models import TwitterAuthToken, TwitterUser, SyncTwitterAccount, Blocked, Favourited
+from .models import TwitterAuthToken, TwitterUser, SyncTwitterAccount, Blocked, Favourited , Tweet
 
 from website.functions import *
 from website.hatedetection import *
@@ -513,10 +513,31 @@ def delete_user(request,user_id):
 
 def modelTesting(request):
     display_graph = get_graph()
-    return render(request, 'model-testing.html', {'display_graph': display_graph})
+    fn_gr = fakenews_graph()
+    return render(request, 'model-testing.html', {'display_graph': display_graph ,'fn_gr' : fn_gr})
 
 def reportedTweets(request):
-    return render(request, 'reported-tweets.html', {})
+    #returning the reported tweets
+    tweet_t = Tweet.objects.filter(flagged = 1).values()
+ 
+    return render(request, 'reported-tweets.html', {'tweet_t': tweet_t})
+
+def accessing_score(request):
+    tweet_t = Tweet.objects.filter(flagged = 1).values()
+
+    if 'request_id' in request.POST:
+     #getting the id of each button which is the tweet id
+       t_id = request.POST.get('request_id')
+       print(t_id)
+       print("halo")
+     #getting the grading option ( 0 , 1 , 2)
+       grading_option = request.POST.get('inlineRadioOptions')
+       print(grading_option)
+        #button 
+       if 'grade' in request.POST:
+         tweet_score(t_id , grading_option)
+
+    return render(request, 'reported-tweets.html', {'tweet_t': tweet_t})
 
 #Dashboard Views
 @login_required

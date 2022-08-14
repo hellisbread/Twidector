@@ -306,3 +306,11 @@ def delete_account(username):
     close_connect()
 
 # Delete button -> Are you sure you want to delete -> Yes -> delete_account
+def tweet_score(tweet_id, admin_hate_result):
+    open_connect()
+
+    with connection.cursor() as cursor:
+        sqlcommand = "UPDATE `tweet` SET `admin_interjection`=1, `admin_hate_result`=%s WHERE `tweet_id`=%s"
+        cursor.execute(sqlcommand, (admin_hate_result, tweet_id))
+        connection.commit()
+        close_connect()

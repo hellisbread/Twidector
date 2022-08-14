@@ -7,15 +7,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Twidector - Login</title>
 
-   <!-- CSS -->
-   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <!-- CSS -->
+  <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-grid.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-utilities.css' %}" />
 
-   <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}" />
 
 
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
- 
-   <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+    integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous" />
@@ -128,6 +132,7 @@
   <!-- list of tweets  -->
 
   <form class="page-content p-3" id="content">
+    {% csrf_token %}
     <div class="container mb-8">
       <div class="row justify-content-md-center">
         <div class="card" style="box-shadow:5px 3px black;">
@@ -137,89 +142,34 @@
             </div>
           </div>
           <div class="card-body container">
+
+            {% for i in tweet_t %}
             <div class="row">
+
               <div class="col-md-2">
-                <img src="{% static 'img/emptyprofile.png' %}" alt=""
-                  width="100" height="100" class="mr-3 rounded-circle img-thumbnail shadow-sm">
+                <img src="{% static 'img/emptyprofile.png' %}" alt="" width="100" height="100"
+                  class="mr-3 rounded-circle img-thumbnail shadow-sm">
               </div>
               <div class="col-md-8">
-                <h6>@Steve Schoge <small>Jun 30 </small></h6>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+                <h6>{{i.screen_name}} <small> {{i.tweet_date}} </small></h6>
+                <!-- <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
                   et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                  aliquip ex ea commodo consequat.</p>
+                  aliquip ex ea commodo consequat.</p> -->
+                <!-- <p> {{i.tweet_text}}</p> -->
+                <p>{{i.tweet_text}}</p>
               </div>
-
+              <!-- {{i.tweet_id|json_script:'json_tweet_id'}} -->
               <!-- //button -->
               <div class="col-md-1 mt-4">
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
+                <button type="button" . class="btn btn-primary hidden" data-bs-toggle="modal" data-bs-target="#myModal"
+                  onclick="setId(id = '{{i.tweet_id}}')" name="adinda">
                   ...
                 </button>
 
               </div>
               <!-- //end of button -->
             </div>
-            <div class="row">
-              <div class="col-md-2">
-                <img src="{% static 'img/emptyprofile.png' %}" alt=""
-                  width="100" height="100" class="mr-3 rounded-circle img-thumbnail shadow-sm">
-              </div>
-              <div class="col-md-8">
-                <h6>@Steve Schoge <small>Jun 30 </small></h6>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-                  et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                  aliquip ex ea commodo consequat.</p>
-              </div>
-
-              <!-- //button -->
-              <div class="col-md-1">
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
-                  ...
-                </button>
-                <!-- //end of button -->
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-md-2">
-                <img src="{% static 'img/emptyprofile.png' %}" alt=""
-                  width="100" height="100" class="mr-3 rounded-circle img-thumbnail shadow-sm">
-              </div>
-              <div class="col-md-8">
-                <h6>@Steve Schoge <small>Jun 30 </small></h6>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-                  et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                  aliquip ex ea commodo consequat.</p>
-              </div>
-
-              <!-- //button -->
-              <div class="col-md-1">
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
-                  ...
-                </button>
-                <!-- //end of button -->
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-md-2">
-                <img src="{% static 'img/emptyprofile.png' %}" alt=""
-                  width="100" height="100" class="mr-3 rounded-circle img-thumbnail shadow-sm">
-              </div>
-              <div class="col-md-8">
-                <h6>@Steve Schoge <small>Jun 30 </small></h6>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-                  et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                  aliquip ex ea commodo consequat.</p>
-              </div>
-
-              <!-- //button -->
-              <div class="col-md-1">
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
-                  ...
-                </button>
-                <!-- //end of button -->
-              </div>
-            </div>
+            {% endfor %}
           </div>
         </div>
       </div>
@@ -233,35 +183,45 @@
           <h5 class="modal-title">Re-classifying Tweets</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
-        <div class="modal-body">
-          <form>
-            <div class="mb-3">
+        <form method="POST" action="/admin/accessing-score/">
+          <div class="modal-body">
+            {% csrf_token %}
+            <input type="hidden" id="form_tweet_id" value="" name="request_id">
+            <div class="mb-3" name="grading_option">
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio0"
-                  value="option0">
+                  value="0">
                 <label class="form-check-label" for="inlineRadio1">0. Hateful</label>
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1"
-                  value="option1">
+                  value="1">
                 <label class="form-check-label" for="inlineRadio2">1. Offensive </label>
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2"
-                  value="option2">
+                  value="2">
                 <label class="form-check-label" for="inlineRadio3">2. Neutral </label>
               </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-primary">Submit</button>
-          <button type="submit" class="btn btn-danger">Cancel</button>
-        </div>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary" name="grade">Submit</button>
+              <button type="submit" class="btn btn-danger">Cancel</button>
+            </div>
+        </form>
       </div>
     </div>
   </div>
 
   <!-- JavaScript(s) -->
+  {% block javascript %}
+  <script type="text/javascript">
+    function setId(id) {
+      console.log("kesini yoi")
+      document.getElementById("form_tweet_id").value = id
+    }
+  </script>
+  {% endblock %}
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
