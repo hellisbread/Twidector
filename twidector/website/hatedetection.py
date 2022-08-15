@@ -16,6 +16,7 @@ import nltk
 import math
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.feature_extraction.text import HashingVectorizer
 from sklearn.metrics import confusion_matrix
 from textstat.textstat import *
 from sklearn.linear_model import LogisticRegression
@@ -46,10 +47,11 @@ from website.config import *
 import pickle
 
 import nltk
-nltk.download('punkt')
-nltk.download('wordnet')
-nltk.download('omw-1.4')
-
+from nltk.stem import WordNetLemmatizer
+# nltk.download('punkt')
+# nltk.download('wordnet')
+# nltk.download('omw-1.4')
+import contractions
 from nltk.sentiment.vader import SentimentIntensityAnalyzer as VS
 
 stop_words = nltk.corpus.stopwords.words("english")
@@ -58,24 +60,17 @@ other_exclusions = ["#ff", "ff", "rt"]
 stop_words.extend(other_exclusions)
 stemmer = PorterStemmer()
 vectorizer = CountVectorizer(ngram_range=(1, 4), max_features = 1000)
+#vectorizer = HashingVectorizer(n_features=10000,norm=None,alternate_sign=False) 
 
-model_filename = 'model.sav'
+#model_filename = 'model.sav'
 
-def save_model(model, filename):
+def save_pickle(model, filename):
     pickle.dump((model), open(filename, 'wb'))
 
-def load_model(filename):
-    model = pickle.load(open(filename, 'rb'))
+def load_pickle(filename):
+    picklefied = pickle.load(open(filename, 'rb'))
     
-    return model
-    
-def save_vectorizer(vectorizer, filename):
-    pickle.dump((vectorizer), open(filename, 'wb'))
-
-def load_vectorizer(filename):
-    model = pickle.load(open(filename, 'rb'))
-    
-    return model
+    return picklefied
 
 def prepareDF():
     global df
@@ -99,7 +94,8 @@ def prepareDF():
     x_train, x_test, y_train, y_test = train_test_split(x, y, stratify = y, test_size=0.2)
 
     # vectorize tweets for model building
-    vectorizer = CountVectorizer(ngram_range=(1, 4), max_features = 1000)
+    #vectorizer = CountVectorizer(ngram_range=(1, 4), max_features = 1000)
+    #vectorizer = HashingVectorizer(ngram_range=(1, 4))
 
     # learn a vocabulary dictionary of all tokens in the raw documents
     vectorizer.fit(list(x_train) + list(x_test))
@@ -114,38 +110,12 @@ def prepareDF():
 
     y_pred_svm = SVM.predict(x_test_vec)
 
-    save_model(SVM, 'hate_model.sav')
-    save_vectorizer(vectorizer, 'hate_vectorizer.sav')
+    save_pickle(SVM, 'hate_model.sav')
+    save_pickle(vectorizer, 'hate_vectorizer.sav')
     
-    # print(accuracy_score(y_test, y_pred_svm) * 100)
+    print(accuracy_score(y_test, y_pred_svm) * 100)
     #number of hate, offensive and neutral
     return (accuracy_score(y_test, y_pred_svm) * 100)
-
-#def make_vectorizer():
-    df = pd.read_csv('hateDetection.csv')
-
-    ## 1. Removal of punctuation and capitlization
-    ## 2. Tokenizing
-    ## 3. Removal of stopwords
-    ## 4. Stemming
-
-    #clean_Tweets = preprocess(df["tweet"])
-    clean_Tweets = df["tweet"]
-    df['clean_tweet'] = clean_Tweets
-    #split dataset into training and testing
-    y = df["class"].values
-    x = df["clean_tweet"].values
-    x_train, x_test, y_train, y_test = train_test_split(x, y, stratify = y, test_size=0.2)
-
-    # vectorize tweets for model building
-    vectorizer = CountVectorizer(ngram_range=(1, 4), max_features = 1000)
-
-    # learn a vocabulary dictionary of all tokens in the raw documents
-    vectorizer.fit(list(x_train) + list(x_test))
-
-
-
-    return vectorizer
 
 def graph_values():
    graph_val =  df["class"].value_counts()
@@ -196,42 +166,59 @@ def preprocess(tweet):
 
     return tweets_p
 
-def sql_to_dataframe():
-    open_connect()
-    #still wondering which table to extract from#######################################################
-    sqlcommand = 'SELECT * FROM `reported_tweet`'
-    with connection.cursor() as cursor:
-        try:
-            cursor.execute(sqlcommand)
-            connection.commit()
-            close_connect()
-            return pd.df(cursor.fetchall())
-            
-        except:
-            close_connect()
-            return('Unexpected error has occurred.')
+def cleanStatements(Statements):
+    tempArr = []
+    #clean the data
+    #remove numbers, urls, additional whitespaces and puntuation
+    for statement in Statements:
+        new_statement = statement.lower()
+        new_statement = contractions.fix(new_statement)
+        new_statement = re.sub(r'[0-9]+', '', new_statement)
+        new_statement = re.sub(r'http\S+', '', new_statement)
+        new_statement = re.sub(r'[^\w\s]', '', new_statement)
+        new_statement = re.sub(r'\s+', ' ', new_statement)
 
-def retrain(dataframe):
-    #load from file saved model
-    clf = load_model()
+    #lemmatization and stopwords process
+        count_token = 0
+        seperator = " "
+        stringArr = []
+        lem = WordNetLemmatizer()
+        tokenization = nltk.word_tokenize(new_statement)
+        stop_words = set(stopwords.words('english'))
+        for w in tokenization:
+            clean_word = lem.lemmatize(w , pos="v")
+            if clean_word not in stop_words:
+                stringArr.append(clean_word)
+            if(count_token == len(tokenization) - 1):
+                str = seperator.join(stringArr)
+                tempArr.append(str)
+                stringArr = []
+            count_token += 1
+    return tempArr
     
-    cleaned_tweets = preprocess(dataframe)
-    df['clean_tweet'] = cleaned_tweets
-    y = df["class"].values
-    x = df["clean_tweet"].values
-    
-    vectorizer = load_vectorizer('hate_vectorizer.sav')
-    
-    vectorizer.fit(list(x))
-    
-    x_train_vec = vectorizer.transform(x_train)
 
-    clf = linear_model.SGDClassifier(max_iter=1000)
+
+# def retrain(dataframe):
+#     #load from file saved model
+#     clf = load_model()
     
-    clf.partial_fit(x_train_vec, y)
+#     cleaned_tweets = preprocess(dataframe)
+#     df['clean_tweet'] = cleaned_tweets
+#     y = df["class"].values
+#     x = df["clean_tweet"].values
     
-    #save into file model
-    save_model(clf)
+#     vectorizer = load_vectorizer('hate_vectorizer.sav')
+    
+#     vectorizer.fit(list(x))
+    
+#     x_train_vec = vectorizer.transform(x_train)
+
+#     clf = linear_model.SGDClassifier(max_iter=1000)
+    
+#     clf.partial_fit(x_train_vec, y)
+    
+#     #save into file model
+#     save_model(clf)
    
 def predictHate(tweet):
     
@@ -239,10 +226,10 @@ def predictHate(tweet):
     ct = preprocess(tempseries)
     #print(list(ct))
     # vectorizer.fit(list(ct) + list(x_train) + list(x_test))
-    vectorizer = load_vectorizer('hate_vectorizer.sav')
+    vectorizer = load_pickle('hate_vectorizer.sav')
     m = vectorizer.transform(ct)
     #pred = SVM.predict(m)
-    clf = load_model('hate_model.sav')
+    clf = load_pickle('hate_model.sav')
     pred = clf.predict(m)
     return(pred)
 

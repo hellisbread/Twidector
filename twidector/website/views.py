@@ -45,12 +45,14 @@ from website.functions import *
 from website.hatedetection import *
 from website.relationshipScore import *
 from website.graphs import *
-
+from website.maintenance import *
 from website.twitter_api import TwitterAPI
 from website.authorization import create_update_user_from_twitter, check_token_still_valid
 from django.db.models import Q
 
 import time
+
+
 
 @csrf_exempt
 
@@ -69,6 +71,11 @@ def update(request):
 # Create your views here.
 def index(request):
     #prepareDF()
+    #df = sql_to_dataframe_hate()
+    #new_hate_data()
+    #retrain()
+
+    #print(df)
     return render(request,'index.html',{})
 
 def aboutUs(request):

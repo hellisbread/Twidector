@@ -94,13 +94,20 @@ ssh_tunnel = SSHTunnelForwarder(
 ssh_tunnel.start()
 
 DATABASES = {
-    #production settings
+    #development settings
     'default': {
-        'ENGINE': os.getenv('PROD_SQL_ENGINE'),
-        'NAME': os.getenv('PROD_SQL_NAME'),
-        'USER': os.getenv('PROD_SQL_USER'),
-        'PASSWORD': os.getenv('PROD_SQL_PASSWORD'),
-        'HOST': os.getenv('PROD_SQL_HOST'),
+        'ENGINE': os.getenv('DEV_SQL_ENGINE'),
+        'NAME': os.getenv('DEV_SQL_NAME'),
+        'USER': os.getenv('DEV_SQL_USER'),
+        'PASSWORD': os.getenv('DEV_SQL_PASSWORD'),
+        'HOST': os.getenv('DEV_SQL_HOST'),
+        'PORT': ssh_tunnel.local_bind_port,
+        'TEST': {
+          'NAME': "twidector$default",
+        },
+        'OPTIONS': {
+            'sql_mode': 'traditional',
+        }
     }
 }
 
@@ -180,9 +187,9 @@ LOGOUT_REDIRECT_URL = 'login'
 LOGIN_REDIRECT_URL = 'dashboard'
 
 # disable for localhost testing
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+# SECURE_SSL_REDIRECT = True
+# SESSION_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 #EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
