@@ -4,7 +4,6 @@ import os
 import dotenv
 import sys
 
-
 def main():
     """Run administrative tasks."""
 

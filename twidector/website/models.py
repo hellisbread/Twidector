@@ -33,7 +33,7 @@ class TwitterUser(models.Model):
 #         db_table = 'last_retrieved'
 
 class Tweet(models.Model):
-    tweet_id = models.IntegerField(primary_key=True)
+    tweet_id = models.CharField(primary_key=True, max_length=255)
     screen_name = models.CharField(max_length=255)
     tweet_date = models.DateTimeField(null = True)
     tweet_text = models.TextField(null = True)
@@ -48,6 +48,8 @@ class Tweet(models.Model):
     admin_interjection = models.BooleanField(default = False)
     admin_hate_result = models.CharField(max_length=1, null=True)
     admin_news_result = models.CharField(max_length=1, null=True)
+    fitted_hate = models.BooleanField(default = False)
+    fitted_news = models.BooleanField(default = False)
 
     class Meta:
         db_table = 'tweet'

@@ -152,7 +152,8 @@ def register(request):
                 user = get_user_model()
                 user = form.save(commit=False)
                 user.is_active = False
-                user.is_staff = True
+                # user.is_staff = True #set to true for admin
+                # user.is_active = True #set to true for admin
                 user.save()  
                 current_site = get_current_site(request)
                 subject = "Twidector Account Activation"
@@ -369,24 +370,26 @@ def sync_twitter_callback(request):
     if 'denied' in request.GET:
         messages.error(request,'Error.')
         return redirect('index')
-    twitter_api = TwitterAPI()
-    oauth_verifier = request.GET.get('oauth_verifier')
-    oauth_token = request.GET.get('oauth_token')
-    twitter_auth_token = TwitterAuthToken.objects.filter(oauth_token=oauth_token).first()
-    if twitter_auth_token is not None:
-        access_token, access_token_secret = twitter_api.twitter_callback_sync(oauth_verifier, oauth_token, twitter_auth_token.oauth_token_secret)
-        if access_token is not None and access_token_secret is not None:
-            twitter_auth_token.oauth_token = access_token
-            twitter_auth_token.oauth_token_secret = access_token_secret
-            twitter_auth_token.save()
-            info = twitter_api.get_me(access_token, access_token_secret)
-            if info is not None:
-                sync_account = SyncTwitterAccount.objects.filter(twitter_id=info[0]['id']).first()
-                twitter_user_new = TwitterUser(twitter_id=info[0]['id'], screen_name=info[0]['username'])
-                twitter_user_new.twitter_oauth_token = twitter_auth_token
-                user, twitter_user_new = create_update_user_from_twitter(twitter_user_new)
 
-                if sync_account is None:
+    sync_account = SyncTwitterAccount.objects.filter(user_id=request.user.id).first()
+
+    if sync_account is None:
+        twitter_api = TwitterAPI()
+        oauth_verifier = request.GET.get('oauth_verifier')
+        oauth_token = request.GET.get('oauth_token')
+        twitter_auth_token = TwitterAuthToken.objects.filter(oauth_token=oauth_token).first()
+        if twitter_auth_token is not None:
+            access_token, access_token_secret = twitter_api.twitter_callback_sync(oauth_verifier, oauth_token, twitter_auth_token.oauth_token_secret)
+            if access_token is not None and access_token_secret is not None:
+                twitter_auth_token.oauth_token = access_token
+                twitter_auth_token.oauth_token_secret = access_token_secret
+                twitter_auth_token.save()
+                info = twitter_api.get_me(access_token, access_token_secret)
+                if info is not None:
+                    twitter_user_new = TwitterUser(twitter_id=info[0]['id'], screen_name=info[0]['username'])
+                    twitter_user_new.twitter_oauth_token = twitter_auth_token
+                    user, twitter_user_new = create_update_user_from_twitter(twitter_user_new)
+
                     sync_pair = SyncTwitterAccount(user_id=request.user.id, twitter_id=info[0]['id'])
                     sync_pair.save()
                     return redirect('settings')
@@ -401,8 +404,8 @@ def sync_twitter_callback(request):
             messages.error(request,'Error.')
             return redirect('index')
     else:
-        messages.error(request,'Error.')
-        return redirect('index')
+        messages.error(request,'Already synced.')
+        return redirect('settings')
 
 
 def deactivate_account(request):
