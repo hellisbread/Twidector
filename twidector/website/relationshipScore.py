@@ -208,3 +208,11 @@ def score_relationship(dict_score):
         result_list.append(user_list)
 
     return result_list
+
+def retrieve_top_users(dict_score , x):
+    results = Counter(dict_score).most_common(x)
+    results_list = list(sum(results, ()))
+    result_dict  = {results_list[i]: results_list[i+1] for i in range(0, len(results_list), 2)}
+    final_result = score_relationship(result_dict)
+
+    return final_result
