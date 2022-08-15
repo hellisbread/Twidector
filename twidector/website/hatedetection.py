@@ -32,7 +32,7 @@ from sklearn.svm import SVC
 from sklearn.multiclass import OneVsRestClassifier
 
 import numpy as np
-from nltk.sentiment.vader import SentimentIntensityAnalyzer as VS
+
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 import sshtunnel
@@ -45,6 +45,12 @@ from website.config import *
 
 import pickle
 
+import nltk
+nltk.download('punkt')
+nltk.download('wordnet')
+nltk.download('omw-1.4')
+
+from nltk.sentiment.vader import SentimentIntensityAnalyzer as VS
 
 stop_words = nltk.corpus.stopwords.words("english")
     #extending the stopwords to include other words used in twitter such as retweet(rt) etc.
