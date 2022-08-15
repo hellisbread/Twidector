@@ -152,8 +152,6 @@ def register(request):
                 user = get_user_model()
                 user = form.save(commit=False)
                 user.is_active = False
-                # user.is_staff = True #set to true for admin
-                # user.is_active = True #set to true for admin
                 user.save()  
                 current_site = get_current_site(request)
                 subject = "Twidector Account Activation"
