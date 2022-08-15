@@ -48,7 +48,7 @@ from website.graphs import *
 
 from website.twitter_api import TwitterAPI
 from website.authorization import create_update_user_from_twitter, check_token_still_valid
-
+from django.db.models import Q
 
 import time
 
@@ -388,8 +388,11 @@ def sync_twitter_callback(request):
                     twitter_user_new.twitter_oauth_token = twitter_auth_token
                     user, twitter_user_new = create_update_user_from_twitter(twitter_user_new)
 
+                    #sync_account = SyncTwitterAccount.objects.filter(twitter_id=info[0]['id']).first()
+
                     sync_pair = SyncTwitterAccount(user_id=request.user.id, twitter_id=info[0]['id'])
                     sync_pair.save()
+
                     return redirect('settings')
 
                 else:
@@ -402,7 +405,7 @@ def sync_twitter_callback(request):
             messages.error(request,'Error.')
             return redirect('index')
     else:
-        messages.error(request,'Already synced.')
+        sync_account.delete()
         return redirect('settings')
 
 
