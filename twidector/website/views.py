@@ -93,9 +93,12 @@ def freeTrial(request):
         url = request.POST['twitter-url']
 
         #prepareDF()
-
-        twitterID = getuserid(url)
-
+        try:
+            twitterID = getuserid(url)
+        except:
+            messages.error(request, 'Invalid Twitter User Handle. Please key in a valid twitter user.')
+            
+            return render(request, 'free-trial.html', context)
         twitterIMGURL = getuserIMG(twitterID)
 
         data = getalltweets(twitterID, 200)
