@@ -3,6 +3,7 @@ import numpy as np
 from collections import Counter
 
 from website.config import *
+from .models import Favourited, Blocked
 
 reply_list  = []
 like_list = []
@@ -194,12 +195,20 @@ def assess_relationship(TwitterHandle):
         
     return dict_score
 
-def score_relationship(dict_score):
+def score_relationship(dict_score, user_request):
+
+    blocked_objectlist = Blocked.objects.filter(user = user_request).filter(soft_delete=0).values_list('blocked_twitter_id', 'blocked_username')
+    favourited_objectlist = Favourited.objects.filter(user = user_request).filter(soft_delete=0).values_list('favourited_twitter_id', 'favourited_username')
+
+    print(blocked_objectlist)
+    print(favourited_objectlist)
+
     list = dict_score.keys()
     result_list = []
     for userid in list:
         user_list = []
         Response  = client.get_user(id = userid, user_fields=['profile_image_url'])
+
         imageUrl = Response.data.profile_image_url
         user_list.append(Response.data.id)
         user_list.append(Response.data.username)
@@ -209,10 +218,10 @@ def score_relationship(dict_score):
 
     return result_list
 
-def retrieve_top_users(dict_score , x):
+def retrieve_top_users(dict_score , x , user_request):
     results = Counter(dict_score).most_common(x)
     results_list = list(sum(results, ()))
     result_dict  = {results_list[i]: results_list[i+1] for i in range(0, len(results_list), 2)}
-    final_result = score_relationship(result_dict)
+    final_result = score_relationship(result_dict,user_request)
 
     return final_result

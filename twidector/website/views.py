@@ -614,7 +614,7 @@ def dashboard(request):
 
         relationship = assess_relationship(twitter_handle)
 
-        relationship_list = retrieve_top_users(relationship, 6)
+        relationship_list = retrieve_top_users(relationship, 6, request.user)
 
         print(relationship_list)
 
@@ -687,6 +687,7 @@ def analyse(request):
 
         return render(request, 'analyse.html', {})
 
+@login_required
 def reportTweets(request, tweet_id):
 
     context = request.session.get('current-search')
