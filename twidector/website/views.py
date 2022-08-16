@@ -97,7 +97,7 @@ def freeTrial(request):
             twitterID = getuserid(url)
         except:
             messages.error(request, 'Invalid Twitter User Handle. Please key in a valid twitter user.')
-            
+
             return render(request, 'free-trial.html', context)
         twitterIMGURL = getuserIMG(twitterID)
 
@@ -591,7 +591,7 @@ def dashboard(request):
 
     relationship = assess_relationship(twitter_handle)
 
-    relationship_list = score_relationship(relationship)
+    relationship_list = retrieve_top_users(relationship, 6)
 
     print(relationship_list)
 
@@ -716,6 +716,33 @@ def blocklist(request):
 def favouritelist(request):
 
     context = {}
+
+    if 'add-favourite' in request.POST:
+
+        twitter_handle = request.POST['favourite-user']
+
+        try:
+            twitter_id = getuserid(twitter_handle)
+        except:
+            messages.error(request, 'Invalid Twitter User')
+            return redirect('favourites')
+
+        new_favourite_user = Favourited(
+                            favourited_twitter_id = twitter_id,
+                            favourited_username = twitter_handle,
+                            user = request.user,
+                            soft_delete = 0
+                            )
+
+        new_favourite_user.save()
+
+        return redirect('favourites')
+
+    favourited_objectlist = Favourited.objects.filter(user = request.user).filter(soft_delete=0).values_list('favourited_twitter_id', 'favourited_username')
+
+    print(favourited_objectlist)
+
+    context = {'favourites_list': favourited_objectlist}
 
     return render(request, 'whitelist.html', context)
 

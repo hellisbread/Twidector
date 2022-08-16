@@ -48,13 +48,13 @@
       <li class="nav-item">
         <a href="{% url 'favourites'%}" class="nav-link text-dark bg-light">
           <i class="fa fa-check mr-3 text-primary fa-fw"></i>
-          Whitelist
+          Favourites
         </a>
       </li>
       <li class="nav-item">
         <a href="{% url 'block-list'%}" class="nav-link text-dark bg-light">
           <i class="fa fa-times mr-3 text-primary fa-fw"></i>
-          Blacklist
+          Block List
         </a>
       </li>
       <li class="nav-item">
@@ -154,6 +154,17 @@
           <h4 class="mb-4 text-center"> Suggested Analysis </h3>
             {% for relationship_user in relationship_access %}
           <div class="mb-5 text-center">
+            <div class="row" style="padding: 0 110px;">
+              <div class="col-sm-3">
+                <a href="#"><i class="fas fa-heart" style="color:red"></i></a>
+              </div>
+              <div class="col-sm-6">
+
+              </div>
+              <div class="col-sm-3">
+                <a href="#"><i class="fa-solid fa-ban" style="color:black;"></i></a>
+              </div>
+            </div>
             <img src="{{relationship_user.3}}" alt="" width="100"
               height="100" class="mr-3 rounded-circle img-thumbnail shadow-sm">
               <p class="mt-3 mb-1 text-center font-weight-bold">{{relationship_user.1}}</p>
