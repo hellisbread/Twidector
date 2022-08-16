@@ -55,6 +55,7 @@ urlpatterns = [
     path('admin/update-user/<str:user_id>/', views.updateUser, name='update-user'),
     path('admin/delete-user/<str:user_id>/', views.delete_user, name='delete-user'),
     path('admin/file-upload/', views.file_upload, name='file-upload'),
+    path('admin/drop-file/', views.drop_file, name='drop-file'),
     path('admin/', views.adminLogin, name='admin'),
     path('admin/ascore-fn/', views.ascore_fakenews, name='ascore-fn'),
     path('admin/model-testing', views.modelTesting, name='model-testing'),
