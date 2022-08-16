@@ -293,7 +293,6 @@ def change_email(username, email, password):
 #dont have to validate email here, dont let attackers know what usernames/emails exist
 
 def delete_account(username):
-
     open_connect()
 
     with connection.cursor() as cursor:

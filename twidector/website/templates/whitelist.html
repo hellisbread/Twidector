@@ -156,7 +156,7 @@
                               {% for list_item in favourites_list %}
                               <tr>
                                 <td>{{ list_item.1 }}</td>
-                                <td><a href="#"><i class="fa fa-x"></a></td>
+                                <td><a href="{% url 'delete-favourites' list_item.1 %}"><i class="fa fa-x"></a></td>
                               </tr>
                               {% endfor %}
                             

@@ -154,7 +154,7 @@
               {% for blocked_user in blocked_list %}
               <tr>
                 <td>{{ blocked_user.1 }}</td>
-                <td><a href="#"><i class="fa fa-x" style="color:red;"></a></td>
+                <td><a href="{% url 'delete-block-list' blocked_user.1 %}"><i class="fa fa-x" style="color:red;"></a></td>
               </tr>
               {% endfor %}
 

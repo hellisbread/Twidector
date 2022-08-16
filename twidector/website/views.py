@@ -511,7 +511,6 @@ def searchAccount(request):
 
 
 def updateUser(request,user_id):
-
     user = get_user_model()
     #getting the id for each user
     user = user.objects.get(pk = user_id)
@@ -746,6 +745,27 @@ def add_blocklist(request, user_id):
     return redirect('dashboard')
 
 @login_required
+def delete_blocklist(request, user_id):
+
+    twitter_handle = user_id
+
+    try:
+        twitter_id = getuserid(twitter_handle)
+    except:
+        messages.error(request, 'Invalid Twitter User')
+        return redirect('favourites')
+
+    update_block_user = Blocked.objects.get(blocked_twitter_id = twitter_id)
+
+    update_block_user.soft_delete = 1
+
+    update_block_user.save()
+
+    messages.success(request, "Successfully removed " + twitter_handle + " from the block list.")
+
+    return redirect('block-list')
+
+@login_required
 def favouritelist(request):
 
     context = {}
@@ -804,6 +824,27 @@ def add_favouritelist(request, user_id):
     messages.success(request, "Successfully added " + twitter_handle + " to favourites.")
 
     return redirect('dashboard')
+
+@login_required
+def delete_favouritelist(request, user_id):
+
+    twitter_handle = user_id
+
+    try:
+        twitter_id = getuserid(twitter_handle)
+    except:
+        messages.error(request, 'Invalid Twitter User')
+        return redirect('favourites')
+
+    update_favourite = Favourited.objects.get(favourited_twitter_id = twitter_id)
+
+    update_favourite.soft_delete = 1
+
+    update_favourite.save()
+
+    messages.success(request, "Successfully removed " + twitter_handle + " from favourites.")
+
+    return redirect('favourites')
 
 @login_required
 def settings(request):
