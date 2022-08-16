@@ -559,11 +559,9 @@ def accessing_score(request):
 @login_required
 #@twitter_login_required
 def dashboard(request):
-
     context = {'twitter_id_exist':True}
 
     user_id = request.user.id
-    print(user_id)
 
     try: #Get from sync
         print("twitter id attempt")
@@ -587,17 +585,27 @@ def dashboard(request):
 
     updateAccess(access_token_info.twitter_oauth_token.oauth_token, access_token_info.twitter_oauth_token.oauth_token_secret)
 
-    twitter_handle = getuserUserHandle(twitter_id)
+    if 'dashboard-info' in request.session:
+        context = request.session.get('dashboard-info')
+        del request.session['dashboard-info']
 
-    relationship = assess_relationship(twitter_handle)
+        return render(request, 'dashboard.html', context)
 
-    relationship_list = retrieve_top_users(relationship, 6)
+    else:
 
-    print(relationship_list)
+        twitter_handle = getuserUserHandle(twitter_id)
 
-    context.update({'relationship_access':relationship_list})
+        relationship = assess_relationship(twitter_handle)
 
-    return render(request, 'dashboard.html', context)
+        relationship_list = retrieve_top_users(relationship, 6)
+
+        print(relationship_list)
+
+        context.update({'relationship_access':relationship_list})
+
+        request.session['dashboard-info'] = context
+
+        return render(request, 'dashboard.html', context)
 
 @login_required
 def analyse(request):
@@ -702,6 +710,8 @@ def blocklist(request):
 
         new_block_user.save()
 
+        messages.success(request, "Successfully added " + twitter_handle + " to block list.")
+
         return redirect('block-list')
 
     blocked_objectlist = Blocked.objects.filter(user = request.user).filter(soft_delete=0).values_list('blocked_twitter_id', 'blocked_username')
@@ -711,6 +721,29 @@ def blocklist(request):
     context = {'blocked_list': blocked_objectlist}
 
     return render(request, 'blacklist.html', context)
+
+@login_required
+def add_blocklist(request, user_id):
+    twitter_handle = user_id
+
+    try:
+        twitter_id = getuserid(twitter_handle)
+    except:
+        messages.error(request, 'Invalid Twitter User')
+        return redirect('block-list')
+
+    new_block_user = Blocked(
+                        blocked_twitter_id = twitter_id,
+                        blocked_username = twitter_handle,
+                        user = request.user,
+                        soft_delete = 0
+                        )
+
+    new_block_user.save()
+
+    messages.success(request, "Successfully added " + twitter_handle + " to block list.")
+
+    return redirect('dashboard')
 
 @login_required
 def favouritelist(request):
@@ -736,6 +769,8 @@ def favouritelist(request):
 
         new_favourite_user.save()
 
+        messages.success(request, "Successfully added " + twitter_handle + " to favourites.")
+
         return redirect('favourites')
 
     favourited_objectlist = Favourited.objects.filter(user = request.user).filter(soft_delete=0).values_list('favourited_twitter_id', 'favourited_username')
@@ -745,6 +780,30 @@ def favouritelist(request):
     context = {'favourites_list': favourited_objectlist}
 
     return render(request, 'whitelist.html', context)
+
+@login_required
+def add_favouritelist(request, user_id):
+
+    twitter_handle = user_id
+
+    try:
+        twitter_id = getuserid(twitter_handle)
+    except:
+        messages.error(request, 'Invalid Twitter User')
+        return redirect('favourites')
+
+    new_favourite_user = Favourited(
+                        favourited_twitter_id = twitter_id,
+                        favourited_username = twitter_handle,
+                        user = request.user,
+                        soft_delete = 0
+                        )
+
+    new_favourite_user.save()
+
+    messages.success(request, "Successfully added " + twitter_handle + " to favourites.")
+
+    return redirect('dashboard')
 
 @login_required
 def settings(request):
