@@ -72,7 +72,7 @@ def update(request):
 def index(request):
     #prepareDF()
     #df = sql_to_dataframe_hate()
-    #new_hate_data()
+    new_hate_data()
     #retrain()
 
     #print(df)

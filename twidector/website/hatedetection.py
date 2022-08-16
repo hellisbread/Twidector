@@ -110,10 +110,10 @@ def prepareDF():
 
     y_pred_svm = SVM.predict(x_test_vec)
 
-    save_pickle(SVM, 'hate_model.sav')
-    save_pickle(vectorizer, 'hate_vectorizer.sav')
+    #save_pickle(SVM, 'hate_model.sav')
+    #save_pickle(vectorizer, 'hate_vectorizer.sav')
     
-    print(accuracy_score(y_test, y_pred_svm) * 100)
+    #print(accuracy_score(y_test, y_pred_svm) * 100)
     #number of hate, offensive and neutral
     return (accuracy_score(y_test, y_pred_svm) * 100)
 
