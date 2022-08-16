@@ -202,6 +202,9 @@ def score_relationship(dict_score, user_request , limit):
     limiter = 0
 
     for userid in list:
+
+        category = "Stranger"
+
         if(limiter < limit):
 
             if(Blocked.objects.filter(user = user_request).filter(soft_delete = 0).filter(blocked_twitter_id = userid).exists() 
@@ -211,11 +214,25 @@ def score_relationship(dict_score, user_request , limit):
                 user_list = []
                 Response  = client.get_user(id = userid, user_fields=['profile_image_url'])
 
+                #retrieve the score of the user
+                score = dict_score[Response.data.id]
+
+                #categorize the score into social groups
+                if score >= 1 and score < 3:
+                    category = "Acquaintance"
+                elif score >= 3 and score < 4:
+                    category = "Friend"
+                elif score >= 4 and score < 5:
+                    category = "Close Friend"
+                elif score > 5:
+                    category = "Bestie"
+
                 imageUrl = Response.data.profile_image_url
                 user_list.append(Response.data.id)
                 user_list.append(Response.data.username)
                 user_list.append(dict_score[Response.data.id])
                 user_list.append(imageUrl.replace("_normal", ""))
+                user_list.append(category)
                 result_list.append(user_list)
 
             limiter += 1
