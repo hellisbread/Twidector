@@ -591,7 +591,7 @@ def dashboard(request):
 
     relationship = assess_relationship(twitter_handle)
 
-    relationship_list = score_relationship(relationship)
+    relationship_list = retrieve_top_users(relationship, 6)
 
     print(relationship_list)
 
@@ -744,7 +744,7 @@ def favouritelist(request):
 
     context = {'favourites_list': favourited_objectlist}
 
-    return render(request, 'blacklist.html', context)
+    return render(request, 'whitelist.html', context)
 
 @login_required
 def settings(request):
