@@ -45,13 +45,13 @@
       <li class="nav-item side-active">
         <a href="{% url 'favourites'%}" class="nav-link text-dark bg-light">
           <i class="fa fa-check mr-3 text-primary fa-fw"></i>
-          Whitelist
+          Favourites
         </a>
       </li>
       <li class="nav-item">
         <a href="{% url 'block-list'%}" class="nav-link text-dark bg-light">
           <i class="fa fa-times mr-3 text-primary fa-fw"></i>
-          Blacklist
+          Block List
         </a>
       </li>
       <li class="nav-item">
@@ -107,10 +107,10 @@
     <form class="page-content p-3 mt-5" id="content" action="/whitelist/" method="POST" >
       {% csrf_token %}
         <div class="container">
-            <h3>Whitelist</h3>
+            <h3>Favourite List</h3>
             <hr>
             <div class="row">
-                <h4>Add new whitelisted user</h4>
+                <h4>Favourite a user</h4>
 
                  <!--Error Messages-->
                   {% if messages %}
@@ -127,35 +127,35 @@
                         <div class="input-group-prepend">
                             <div class="input-group-text">@</div>
                         </div>
-                        <input type="text" class="form-control" id="Whitelist-User" name="whitelist-user" placeholder="Twitter Username">
+                        <input type="text" class="form-control" id="Whitelist-User" name="favourite-user" placeholder="Twitter Username">
                     </div>
                 </div>
             </div>
             <div class="row mb-4">
                 <div class="col-md-4">
-                    <input type="submit" class="btn btn-block btn-info" value="Add to Whitelist"/>
+                    <input type="submit" class="btn btn-block btn-info" value="Favourite User" name="add-favourite"/>
                 </div>
             </div>
             <hr>
             <div class="row mt-4">
                 <div class="col-md-8">
-                    <h4 class="mb-4">All Whitelisted User(s)</h4>
-                    {% if not list_of_whitelisted_users %}
-                      <h5 class="mb-3 mt-3"> No whitelisted users found. </h5>
+                    <h4 class="mb-4">All Favourited User(s)</h4>
+                    {% if not favourites_list %}
+                      <h5 class="mb-3 mt-3"> No user have been favourited yet. </h5>
                             {% else %}
                     <table class="table table-bordered table-striped table-responsive text-center feature-table">
                         <thead>
                             <tr>
                               <!--<th scope="col">ID</th>-->
-                              <th scope="col">Whitelisted Username</th>
+                              <th scope="col">Twitter Username</th>
                               <th scope="col">Remove</th>
                             </tr>
                           </thead>
                           <tbody>
                             
-                              {% for list_item in list_of_whitelisted_users %}
+                              {% for list_item in favourites_list %}
                               <tr>
-                                <td>{{ list_item.whitelisted }}</td>
+                                <td>{{ list_item.1 }}</td>
                                 <td><a href="#"><i class="fa fa-x"></a></td>
                               </tr>
                               {% endfor %}
