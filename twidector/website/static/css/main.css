@@ -212,6 +212,9 @@ This contains css that we added ourselves
 }
 
 .alert-error {
+  color: #842029;
+  background-color: #f8d7da;
+  border-color: #f5c2c7;
   --bs-alert-color: #842029;
   --bs-alert-bg: #f8d7da;
   --bs-alert-border-color: #f5c2c7;
