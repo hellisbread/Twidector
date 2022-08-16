@@ -1,4 +1,5 @@
 from socket import has_dualstack_ipv6
+from tkinter import E
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import validation_curve
 import matplotlib.pyplot as plt
@@ -7,11 +8,11 @@ from io import StringIO
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.svm import LinearSVC
 import pandas as pd
+from website.fakenews import *
 from website.hatedetection import *
 from nltk.stem import WordNetLemmatizer
 import contractions
 import numpy as np
-
 
 def get_graph():
 
@@ -85,9 +86,9 @@ def get_graph():
   buffer.close()
   return image_png
 
-df = pd.read_csv("fakeNewsDetection.csv")
+#fakenews graph + accuracy score 
+df = pd.read_csv("fakenewscleaned.csv")
 df = df.dropna()
-new_df = df[(df["Label"] == "TRUE") | (df["Label"] == "FALSE")]
 count = 0
 
 def cleanStatements(Statements):
@@ -119,28 +120,43 @@ def cleanStatements(Statements):
                 stringArr = []
             count_token += 1
     return tempArr
+    
+clean_statements = cleanStatements(df["Statement"])
+df['Clean_Statements'] = clean_statements
+df["Label"].value_counts()
 
-clean_statements = cleanStatements(new_df["Statement"])
-new_df['Clean_Statements'] = clean_statements
-new_df["Label"].value_counts()
+
+#split the data into train and test set
+y = df['Label'].values
+x = df['Clean_Statements'].values
+x_train, x_test, y_train, y_test = train_test_split(x, y, stratify = y, test_size=0.2)
+
+#fit and transform data into a matrix
+vectorizer = TfidfVectorizer(ngram_range = (1 , 3), max_features = 1000)
+vectorizer.fit(list(x_train) + list(x_test))
+x = vectorizer.fit_transform(x)
+x_train_vec = vectorizer.fit_transform(x_train)
+x_test_vec = vectorizer.fit_transform(x_test)
+vectorizer.get_feature_names_out()
+
+#Test and predict the data
+def predictStatement(statements):
+    model = LinearSVC(C = 0.05)
+    model.fit(x_train_vec, y_train)
+    cleanSentence = cleanStatements(statements)
+    sentence_vec = vectorizer.transform(cleanSentence)
+    pred = model.predict(sentence_vec)
+    return (pred)
 
 def fakenews_graph():
-  #split the data into train and test set
-  y = new_df['Label'].values
-  x = new_df['Clean_Statements'].values
-  x_train, x_test, y_train, y_test = train_test_split(x, y, stratify = y, test_size=0.2)
-
   #fit and transform data into a matrix
   vectorizer = TfidfVectorizer(ngram_range = (1 , 3), max_features = 1000)
   vectorizer.fit(list(x_train) + list(x_test))
-  x = vectorizer.fit_transform(x)
-  x_train_vec = vectorizer.transform(x_train)
-  x_test_vec = vectorizer.transform(x_test)
   vectorizer.get_feature_names_out() 
   #validation curve to assess overfit and underfit
   param_range = np.arange(0 , 10)
-  model_for_validation = SVC(kernel="rbf", C = 0.8)
-  train_scores, test_scores = validation_curve(model_for_validation, x, y, param_name="gamma", param_range = param_range, cv = 5 , scoring = "accuracy")
+  model_for_validation = LinearSVC(C=0.05)
+  train_scores, test_scores = validation_curve(model_for_validation, x, y, param_name="C", param_range = param_range, cv = 5 , scoring = "accuracy")
 
   train_scores_mean = np.mean(train_scores, axis=1)
   train_scores_std = np.std(train_scores, axis=1)
@@ -185,54 +201,65 @@ def fakenews_graph():
   plt.savefig(buffer, format="svg")
   buffer.seek(0)
   fn_img = buffer.getvalue()
-  # graph = base64.b64encode(image_png)
-  # graph = graph.decode('utf-8') 
   buffer.close()
   return fn_img
 
-def retrieve_trainData():
-    open_connect()
-    try:
-        sql = "SELECT * FROM fake_news_score"
-        data = pd.read_sql(sql , connection)
-        close_connect()
-        return data
-    except:
-        close_connect()
-        return "Retreieve train data unsuccessful"
 
 
 def train_FN_Model():
-
-    clean_statements = cleanStatements(new_df["Statement"])
-    new_df['Clean_Statements'] = clean_statements
-    new_df["Label"].value_counts()
-
-    #split the data into train and test set
-    y = new_df['Label'].values
-    x = new_df['Clean_Statements'].values
-    x_train, x_test, y_train, y_test = train_test_split(x, y, stratify = y, test_size=0.2)
-
-    #fit and transform data into a matrix
-    vectorizer = TfidfVectorizer(ngram_range = (1 , 3), max_features = 1000)
-    vectorizer.fit(list(x_train) + list(x_test))
-    x = vectorizer.fit_transform(x)
-    x_train_vec = vectorizer.transform(x_train)
-    x_test_vec = vectorizer.transform(x_test)
-    vectorizer.get_feature_names_out()
     
-    # Train the model and test the accuracy score
-    model = SVC(kernel="rbf", C = 0.8, gamma = 10)
-    model.fit(x_train_vec, y_train)
-    prediction = model.predict(x_test_vec)
-    return (accuracy_score(y_test, prediction) * 100)
+    global FN_vectorizer
+    global linear_model
+    
+    y = df['Label'].values
+    x = df['Clean_Statements'].values
+    x_train, x_test, y_train, y_test = train_test_split(x, y, stratify = y, test_size=0.2)
+    
+    #fit into bag of words and transform data into a matrix
+    FN_vectorizer = TfidfVectorizer(ngram_range = (1 , 3), max_features = 2000)
+    FN_vectorizer.fit(list(x_train) + list(x_test))
+    
+    x_train_vec = FN_vectorizer.transform(x_train)
+    x_test_vec = FN_vectorizer.transform(x_test)
+    
+    #fit the matrix data into the SVC model
+    linear_model = LinearSVC(C = 0.05)
+    linear_model.fit(x_train_vec, y_train)
+    prediction = linear_model.predict(x_test_vec)
+    score = accuracy_score(y_test, prediction) * 100
+    return score
 
 
+
+#fake news graph
 def fn_graph():
-  fk_news = new_df["Label"].value_counts()
+  fk_news = df["Label"].value_counts()
   print(fk_news)
   false_news = fk_news[0]
   true_news = fk_news[1]
 
   return [false_news, true_news]
+
+def scores(filename):
+    
+    df = pd.read_csv(filename)
+    df = df.dropna()
+    y = df['Label'].values
+    x = df['text'].values
+    print("y:")
+    print(y)
+
+    expected_value = predictStatement(x)
+    print("expected_value")
+    print(expected_value)
+    
+    return(accuracy_score(expected_value,y)*100)
+
+
+
+    
+
+
+
+
 

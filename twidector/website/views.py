@@ -469,6 +469,20 @@ def ascore_fakenews(request):
     g_fn = fn_graph()
     return render(request, 'ascore-fn.html', {'fn_val' : fn_val , 'g_fn' : g_fn})
 
+def drop_file(request):
+    if request.method == "POST":
+    # do the reading inside here (the checking, the reading)
+
+        csv_file = request.FILES['file']
+        if not csv_file.name.endswith('.csv'):
+            messages.error(request, 'This is not a csv file!')
+            return redirect('ascore-fn')
+        v = scores(csv_file)
+        fn_val = train_FN_Model()
+        g_fn = fn_graph()
+
+        return render(request, 'ascore-fn.html',{'fn_val' : fn_val , 'g_fn' : g_fn ,'v' : v} )
+
 def file_upload(request):
     if request.method == "POST":
     # do the reading inside here (the checking, the reading)
@@ -551,6 +565,10 @@ def accessing_score(request):
      #button 
        if 'grade' in request.POST:
          tweet_score(t_id , grading_option)
+
+    context = {'tweet_t' : tweet_t}
+
+    context.update()
 
     return render(request, 'reported-tweets.html', {'tweet_t': tweet_t})
 
@@ -847,7 +865,7 @@ def delete_favouritelist(request, user_id):
 
     return redirect('favourites')
 
-@login_required
+# @login_required
 def settings(request):
     
     if 'change-password' in request.POST:
