@@ -141,6 +141,23 @@ def cleanStatements(Statements):
 
 #Test and predict the data
 def predictStatement(statements):
+    df = pd.read_csv("fakenewscleaned.csv", encoding = "ISO-8859-1")
+    df = df.dropna()
+  
+    #split the data into train and test set
+    y = df['fake_news_score'].values
+    x = df["fake_news_text"].values
+
+    x_train, x_test, y_train, y_test = train_test_split(x, y, stratify = y, test_size=0.2)
+
+    # #fit and transform data into a matrix
+    vectorizer = TfidfVectorizer(ngram_range = (1 , 3), max_features = 1000)
+    vectorizer.fit(list(x_train) + list(x_test))
+    x = vectorizer.fit_transform(x)
+    x_train_vec = vectorizer.fit_transform(x_train)
+    x_test_vec = vectorizer.fit_transform(x_test)
+    vectorizer.get_feature_names_out()
+
     model = LinearSVC(C = 0.05)
     model.fit(x_train_vec, y_train)
     cleanSentence = cleanStatements(statements)
@@ -149,10 +166,21 @@ def predictStatement(statements):
     return (pred)
 
 def fakenews_graph():
+  #fakenews graph + accuracy score 
+  df = pd.read_csv("fakenewscleaned.csv", encoding = "ISO-8859-1")
+  df = df.dropna()
+
+  # #split the data into train and test set
+  y = df["fake_news_score"].values
+  x = df["fake_news_text"].values
+  x_train, x_test, y_train, y_test = train_test_split(x, y, stratify = y, test_size=0.2)
+
+
   #fit and transform data into a matrix
   vectorizer = TfidfVectorizer(ngram_range = (1 , 3), max_features = 1000)
   vectorizer.fit(list(x_train) + list(x_test))
   vectorizer.get_feature_names_out() 
+  x = vectorizer.fit_transform(x)
   #validation curve to assess overfit and underfit
   param_range = np.arange(0 , 10)
   model_for_validation = LinearSVC(C=0.05)
@@ -210,9 +238,17 @@ def train_FN_Model():
     
     global FN_vectorizer
     global linear_model
+
+    df = pd.read_csv("fakenewscleaned.csv", encoding = "ISO-8859-1")
+    df = df.dropna()
+    count = 0
+
+    # clean_statements = cleanStatements(df["fake_news_text"])
+    # df['Clean_Statements'] = clean_statements
+    df['fake_news_score'].value_counts()
     
-    y = df['Label'].values
-    x = df['Clean_Statements'].values
+    y = df['fake_news_score'].values
+    x = df["fake_news_text"].values
     x_train, x_test, y_train, y_test = train_test_split(x, y, stratify = y, test_size=0.2)
     
     #fit into bag of words and transform data into a matrix
@@ -233,8 +269,11 @@ def train_FN_Model():
 
 #fake news graph
 def fn_graph():
-  fk_news = df["Label"].value_counts()
-  print(fk_news)
+  df = pd.read_csv("fakenewscleaned.csv", encoding = "ISO-8859-1")
+  df = df.dropna()
+ 
+  fk_news = df["fake_news_score"].value_counts()
+
   false_news = fk_news[0]
   true_news = fk_news[1]
 
@@ -246,12 +285,9 @@ def scores(filename):
     df = df.dropna()
     y = df['Label'].values
     x = df['text'].values
-    print("y:")
-    print(y)
 
     expected_value = predictStatement(x)
-    print("expected_value")
-    print(expected_value)
+
     
     return(accuracy_score(expected_value,y)*100)
 
