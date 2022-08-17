@@ -1,4 +1,3 @@
-fakenews.py
 import pandas as pd
 import sshtunnel
 import logging
@@ -18,12 +17,13 @@ from nltk.corpus import stopwords
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.svm import SVC
 from sklearn.svm import LinearSVC
 from sklearn.metrics import accuracy_score
 import tweepy
 from nltk.stem.porter import *
 import numpy as np
+from datetime import date
+from dateutil.relativedelta import relativedelta
 
 #establish connection to database
 
@@ -149,12 +149,6 @@ def webscrape_data():
     
     return data
 
-#reading the fakenewsDetection.csv
-df = pd.read_csv("fakeNewsDetection.csv")
-df = df.dropna()
-new_df = df[(df["Label"] == "TRUE") | (df["Label"] == "FALSE")]
-count = 0
-
 def cleanStatements(tweet):
     
     stopwords = nltk.corpus.stopwords.words("english")
@@ -276,13 +270,12 @@ def train_FN_Model():
     linear_model.fit(x_train_vec, y_train)
     prediction = linear_model.predict(x_test_vec)
     score = accuracy_score(y_test, prediction) * 100
-    return score
 
-
-    #retrieve tweets from database
+#retrieve tweets from database
 def retrieveTweet_DB(userID):
     
     open_connect()
+    
     sql = "SELECT * FROM tweet WHERE screen_name = %s"
     
     with connection.cursor() as cursor:
@@ -290,7 +283,7 @@ def retrieveTweet_DB(userID):
         result = cursor.fetchall()
         close_connect()  
         return result
-
+    
 #insert tweet into DB
 def insert_into_DB_FN(df):
     
@@ -316,7 +309,7 @@ def insert_into_DB_FN(df):
 
 #retrieve the tweets from Twitter   
 def retrieveTweets_Twitter(userID):
-    
+
     list_of_tweet_info = []
     results = api.user_timeline(screen_name = userID, count=100)
     
@@ -336,6 +329,45 @@ def retrieveTweets_Twitter(userID):
         info.append(result.created_at)
         info.append(retweet)
         list_of_tweet_info.append(info)
+    
+    data = pd.DataFrame(list_of_tweet_info, columns=['Tweet_ID', 'Screen_Name', 'Tweets', 'Date_Time', 'Retweet'])
+    
+    return data
+
+def retrieveTweets_With_Date(userID, TwitterHandle):
+    
+    open_connect()
+    
+    sql = "SELECT last_retrieved FROM twitter_user_score WHERE twitter_id = %s"
+    
+    with connection.cursor() as cursor:
+        cursor.execute(sql, userID)
+        result = cursor.fetchall()
+        close_connect()  
+    
+    list_of_tweet_info = []
+    
+    tweets = api.user_timeline(screen_name = TwitterHandle, count=100)
+    
+    for tweet in tweets:
+
+        info = []
+        tweet_time = tweet.created_at
+        tweet_time = tweet_time.replace(tzinfo = None)
+        if tweet_time > result[0]['last_retrieved']:
+            x = re.search("^RT", result.text)
+            if x:
+                retweet = 'true'
+            else:
+                retweet = 'false'
+
+            info.append(tweet.id)
+            info.append(userID)
+            info.append(tweet.text)
+            info.append(tweet.created_at)
+            info.append(retweet)
+            list_of_tweet_info.append(info)
+            
     
     data = pd.DataFrame(list_of_tweet_info, columns=['Tweet_ID', 'Screen_Name', 'Tweets', 'Date_Time', 'Retweet'])
     
@@ -363,21 +395,124 @@ def predictFN(df):
         df['FN_Prediction'] = prediction
         
     return df
-
-def score_the_user(TwitterHandle):
     
-    score  = 0
-    #checks if the user is verified
-    user = client.get_user(username = TwitterHandle, user_fields = 'verified')
+#retrieve the tweet 3 months before today
+def retrieveTweetID(TwitterHandle):
+    
+    three_months_ago = date.today() + relativedelta(months =-3) 
+    
+    open_connect()
+    
+    sql = "SELECT tweet_id FROM `tweet` WHERE `tweet_date` > %s AND `screen_name` = %s LIMIT 100"
+    
+    data = [three_months_ago, TwitterHandle]
+    
+    with connection.cursor() as cursor:
+        cursor.execute(sql, tuple(data))
+        result = cursor.fetchall()
+        close_connect()  
+        return result
+
+#score the user to determine if they are fake news spreader
+def score_the_user(TwitterHandle , df):
+    
+    credibility_score  = 0
+    ratio = 0
+    total_ratio = 0
+    average_count = 0
+    
+    #checks if the user is verified & the follower - following ratio
+    user = client.get_user(username = TwitterHandle, user_fields = ['verified' , 'public_metrics'])
+    verified = user.data.verified
+    public_metrics = user.data.public_metrics
+    followers_count = public_metrics['followers_count']
+    following_count = public_metrics['following_count']
+    
+    percent_follow = (followers_count / following_count) * 100
+    
+    #checks if user has a high like to reply ratio in their tweets
+    retrieve_tweetID = retrieveTweetID(TwitterHandle)
+    list_of_ID = [tweetID['tweet_id'] for tweetID in retrieve_tweetID]
+    tweets = client.get_tweets(ids = list_of_ID, tweet_fields = 'public_metrics')
+    
+    for tweet in tweets.data:       
+        public_metrics = tweet.public_metrics
+        reply_count = public_metrics['reply_count']
+        like_count = public_metrics['like_count']
+        
+        if reply_count == 0:
+            reply_count = 1
+            
+        ratio = like_count/reply_count
+        total_ratio += ratio
+        average_count += 1
+    
+    mean_like_reply_ratio = total_ratio / average_count
+    
+    #check if most of the tweets are fake
+    data_count = df['FN_Prediction'].value_counts()
+    list = data_count.keys()
+    percentage_fake_tweet = 0
+    for key in list:
+        
+        if key == 0 or key == 1:
+            trueData = data_count[0]
+            falseData = data_count[1]
+            totalData = trueData + falseData
+            percentage_fake_tweet = (falseData / totalData) * 100 
+            
+        elif key == 2:
+            precentage_fake_tweet = 100
+    
+        
+    if percentage_fake_tweet < 50:
+        credibility_score += 1
+        
     if user.data.verified == True:
-        score += 1
-    return score
+        credibility_score += 2
+        
+    if percent_follow > 30:
+        credibility_score += 2
+    
+    if mean_like_reply_ratio > 0:
+        credibility_score += 3
+    
+    return credibility_score
 
+#insert the user's score into twitter_user_score table
+def insert_user_score(userID , score):
+    
+    date_today = date.today()
+    
+    open_connect()
+    
+    sql = "INSERT INTO `twitter_user_score`(`twitter_id`, `hate_score`, `fake_news_score`, `last_retrieved`) VALUES (%s,%s,%s,%s)"
+    with connection.cursor() as cursor:
+        insert_list = [userID, 1, score, date_today]
+        cursor.execute(sql, tuple(insert_list))
+        connection.commit()
+            
+    close_connect()
 
-# #display tweets of a user
+def retrieve_Tweets(TwitterHandle):
+    open_connect()
+    try:
+        sql = "SELECT * FROM tweet WHERE screen_name = %s"
+        data = pd.read_sql(sql , connection, params = [TwitterHandle])
+        close_connect()
+        return data
+    except:
+        close_connect()
+        return "Retreieve train data unsuccessful"
+    
+#display tweets of a user
 def display_tweets(TwitterHandle):
+    
     try:
         result = retrieveTweet_DB(TwitterHandle)
+        user = client.get_user(username = TwitterHandle)
+        userID = user.data.id
+        
     except:
         return "There is no such user registered with Twitter"
     
@@ -395,20 +530,28 @@ def display_tweets(TwitterHandle):
         
         #insert the tweets into db
         insert_into_DB_FN(df)
-    
-    #user has been searched before
+        
+        #score the user
+        score = score_the_user(TwitterHandle, df)
+        
+        #insert into user score info into db
+        insert_user_score(userID , score)
+        
     else:
-
-#insert the webscrape data
-insert_webScrape_Data()
-
-#retrieve the data from db and train the model
-train_FN_Model()
-
-#query and display the tweets
-display_tweets('CNN')
-
-#score the user profile
-score_the_user("CNN")
+        
+        df = retrieveTweets_With_Date(userID, TwitterHandle)
+        
+        if df.empty:
+            result = retrieve_Tweets(TwitterHandle)
+            return result
+        else:
+            clean_tweets = cleanStatements(df["Tweets"])
+            df['Clean_Tweets'] = clean_tweets
+            df = predictFN(df)
+            insert_into_DB_FN(df)
+            score = score_the_user(TwitterHandle, df)
+            insert_user_score(userID , score)
+    
+    return retrieve_Tweets(TwitterHandle)
 
 
