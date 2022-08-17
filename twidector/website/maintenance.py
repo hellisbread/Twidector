@@ -143,7 +143,7 @@ def new_hate_data():
                 cur_tweet.update(fitted_hate = 1)
                 writer.writerow({'tweet_text':item['tweet_text'], 'hate_score':item['admin_hate_result']})
 
-new_hate_data()
+#new_hate_data()
 
 def new_fake_data():
     result = FakeNews.objects.filter().values('fake_news_text', 'fake_news_score', 'date_time')
@@ -157,7 +157,7 @@ def new_fake_data():
             writer.writerow({'fake_news_text':item['fake_news_text'], 'fake_news_score':item['fake_news_score'], 'date_time':item['date_time']})
             print(item)
 
-new_fake_data()
+#new_fake_data()
 
 def retrain():
     df = pd.read_csv('hatedetectioncleaned.csv')
@@ -186,4 +186,4 @@ def retrain():
 
     save_pickle(vectorizer,'hate_vectorizer.sav')
 
-retrain()
+#retrain()

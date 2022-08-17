@@ -565,7 +565,7 @@ def accessing_score(request):
        grading_option = request.POST.get('inlineRadioOptions')
      #button 
        if 'grade' in request.POST:
-         tweet_score(t_id , grading_option)
+            tweet_score(t_id , grading_option)
 
     context = {'tweet_t' : tweet_t}
 

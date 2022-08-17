@@ -309,7 +309,7 @@ def tweet_score(tweet_id, admin_hate_result):
     open_connect()
 
     with connection.cursor() as cursor:
-        sqlcommand = "UPDATE `tweet` SET `admin_interjection`=1, `admin_hate_result`=%s WHERE `tweet_id`=%s"
+        sqlcommand = "UPDATE `tweet` SET `admin_interjection`=1, `admin_hate_result`=%s,`fitted_hate`=0 WHERE `tweet_id`=%s"
         cursor.execute(sqlcommand, (admin_hate_result, tweet_id))
         connection.commit()
         close_connect()
