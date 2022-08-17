@@ -145,8 +145,8 @@ def predictStatement(statements):
     df = df.dropna()
   
     #split the data into train and test set
-    y = df['fake_news_score'].values
-    x = df["fake_news_text"].values
+    y = df['Label'].values
+    x = df["Statement"].values
 
     x_train, x_test, y_train, y_test = train_test_split(x, y, stratify = y, test_size=0.2)
 
@@ -171,8 +171,8 @@ def fakenews_graph():
   df = df.dropna()
 
   # #split the data into train and test set
-  y = df["fake_news_score"].values
-  x = df["fake_news_text"].values
+  y = df["Label"].values
+  x = df["Statement"].values
   x_train, x_test, y_train, y_test = train_test_split(x, y, stratify = y, test_size=0.2)
 
 
@@ -237,7 +237,7 @@ def fn_graph():
   df = pd.read_csv("fakenewscleaned.csv", encoding = "ISO-8859-1")
   df = df.dropna()
  
-  fk_news = df["fake_news_score"].value_counts()
+  fk_news = df["Label"].value_counts()
 
   false_news = fk_news[0]
   true_news = fk_news[1]
@@ -248,8 +248,8 @@ def scores(filename):
     
     df = pd.read_csv(filename)
     df = df.dropna()
-    y = df['fake_news_score'].values
-    x = df['fake_news_text'].values
+    y = df['Label'].values
+    x = df['Statement'].values
 
     expected_value = predictStatement(x)
 
