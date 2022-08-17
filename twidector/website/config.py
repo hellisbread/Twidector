@@ -1,26 +1,28 @@
-server_ssh_host= "ssh.pythonanywhere.com"
-server_ssh_user= "twidector"
-server_ssh_password= "SIMfypTopic18"
+import os
 
-server_host= "twidector.mysql.pythonanywhere-services.com"
+server_ssh_host= os.getenv('SERVER_SSH_HOST')
+server_ssh_user= os.getenv('SERVER_SSH_USER')
+server_ssh_password= os.getenv('SERVER_SSH_PASSWORD')
+
+server_host= os.getenv('PROD_SQL_HOST')
 server_port= 3306
-server_user= "twidector"
-server_password= "FYP22S205"
-server_db= "twidector$default"
+server_user= os.getenv('PROD_SQL_USER')
+server_password= os.getenv('PROD_SQL_PASSWORD')
+server_db= os.getenv('PROD_SQL_NAME')
 
 email_port = 465
-email_smtp_server = "smtp.gmail.com"
-email_email = "twidector@gmail.com"
-email_password = "hvxxdoxsxrtsinbu"
+email_smtp_server = os.getenv('EMAIL_HOST')
+email_email = os.getenv('EMAIL_HOST_USER')
+email_password = os.getenv('EMAIL_HOST_PASSWORD')
 
-serverhost='db-mysql-sgp1-59801-do-user-11772463-0.b.db.ondigitalocean.com'
-serverport=25060
-serveruser='doadmin'
-serverpassword='AVNS_8sOuFo_0JsSYDZDq3bL'
-serverdb='defaultdb'
+# serverhost='db-mysql-sgp1-59801-do-user-11772463-0.b.db.ondigitalocean.com'
+# serverport=25060
+# serveruser='doadmin'
+# serverpassword='AVNS_8sOuFo_0JsSYDZDq3bL'
+# serverdb='defaultdb'
 
-twitter_key = "WkC302nPjoYVv1Jqo0iqylYuC"
-twitter_key_secret = "DVl2UrqBPAo3MORzt97ijYY3xkpDjjh4wNTZ4exRPJL5edLlrz"
-twitter_access = "1538432651266121728-jhXmfUQ0B4Fr5PAxHBtPTYKkznVLJQ"
-twitter_access_secret = "Tt3995pRdxAFD1zOh9AIziL687tdqarU2139MbxjhWzVK"
-twitter_bearer_token = "AAAAAAAAAAAAAAAAAAAAAGe0dwEAAAAAmy8oW7Nxwgg41b9ss1DPSPdJmIY%3DNWjl9LF6yvvbCDBHBFYeFmYk3FUI3MlSHXFsGWST6RHyHyzBD0"
+twitter_key = os.getenv('TWITTER_API_KEY')
+twitter_key_secret = os.getenv('TWITTER_API_SECRET')
+twitter_access = os.getenv('TWITTER_ACCESS_TOKEN')
+twitter_access_secret = os.getenv('TWITTER_ACCESS_TOKEN_SECRET')
+twitter_bearer_token = os.getenv('TWITTER_BEARER_TOKEN')

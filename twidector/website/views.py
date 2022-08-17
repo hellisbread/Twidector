@@ -73,6 +73,7 @@ def index(request):
     #prepareDF()
     #df = sql_to_dataframe_hate()
     #new_hate_data()
+    #new_fake_data()
     #retrain()
 
     #print(df)
