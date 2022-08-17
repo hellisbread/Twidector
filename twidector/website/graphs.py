@@ -283,8 +283,8 @@ def scores(filename):
     
     df = pd.read_csv(filename)
     df = df.dropna()
-    y = df['Label'].values
-    x = df['text'].values
+    y = df['fake_news_score'].values
+    x = df['fake_news_text'].values
 
     expected_value = predictStatement(x)
 
