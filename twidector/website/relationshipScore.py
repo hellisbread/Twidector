@@ -195,33 +195,56 @@ def assess_relationship(TwitterHandle):
         
     return dict_score
 
-def score_relationship(dict_score, user_request):
-
-    blocked_objectlist = Blocked.objects.filter(user = user_request).filter(soft_delete=0).values_list('blocked_twitter_id', 'blocked_username')
-    favourited_objectlist = Favourited.objects.filter(user = user_request).filter(soft_delete=0).values_list('favourited_twitter_id', 'favourited_username')
-
-    print(blocked_objectlist)
-    print(favourited_objectlist)
-
+def score_relationship(dict_score, user_request , limit):
     list = dict_score.keys()
     result_list = []
-    for userid in list:
-        user_list = []
-        Response  = client.get_user(id = userid, user_fields=['profile_image_url'])
 
-        imageUrl = Response.data.profile_image_url
-        user_list.append(Response.data.id)
-        user_list.append(Response.data.username)
-        user_list.append(dict_score[Response.data.id])
-        user_list.append(imageUrl.replace("_normal", ""))
-        result_list.append(user_list)
+    limiter = 0
+
+    for userid in list:
+
+        category = "Stranger"
+
+        if(limiter < limit):
+
+            if(Blocked.objects.filter(user = user_request).filter(soft_delete = 0).filter(blocked_twitter_id = userid).exists() 
+            or Favourited.objects.filter(user = user_request).filter(soft_delete = 0).filter(favourited_twitter_id = userid).exists()):
+                continue
+            else:
+                user_list = []
+                Response  = client.get_user(id = userid, user_fields=['profile_image_url'])
+
+                #retrieve the score of the user
+                score = dict_score[Response.data.id]
+
+                #categorize the score into social groups
+                if score >= 1 and score < 3:
+                    category = "Acquaintance"
+                elif score >= 3 and score < 4:
+                    category = "Friend"
+                elif score >= 4 and score < 5:
+                    category = "Close Friend"
+                elif score > 5:
+                    category = "Bestie"
+
+                imageUrl = Response.data.profile_image_url
+                user_list.append(Response.data.id)
+                user_list.append(Response.data.username)
+                user_list.append(dict_score[Response.data.id])
+                user_list.append(imageUrl.replace("_normal", ""))
+                user_list.append(category)
+                result_list.append(user_list)
+
+            limiter += 1
+        else:
+            break
 
     return result_list
 
 def retrieve_top_users(dict_score , x , user_request):
-    results = Counter(dict_score).most_common(x)
+    results = Counter(dict_score).most_common(20)
     results_list = list(sum(results, ()))
     result_dict  = {results_list[i]: results_list[i+1] for i in range(0, len(results_list), 2)}
-    final_result = score_relationship(result_dict,user_request)
+    final_result = score_relationship(result_dict, user_request, x)
 
     return final_result
