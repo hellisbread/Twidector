@@ -122,6 +122,7 @@ This contains css that we added ourselves
   position: fixed;
   background-color: black;
   transition: 0.4s;
+  z-index:999;
 }
 
 .nav-link:active,

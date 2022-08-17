@@ -24,84 +24,72 @@
 
 <body>
   <!--Navigation-->
-  <!-- Vertical navbar -->
-  <div class="vertical-nav bg-white" id="sidebar">
-    </br></br></br>
-    <p class="text-gray font-weight-bold text-uppercase px-3 small pb-4 mb-0">
-      Dashboard
-    </p>
+ <!-- the header bar -->
 
-    <ul class="nav flex-column bg-white mb-0">
-      <li class="nav-item">
-        <a href="{% url 'dashboard'%}" class="nav-link text-dark bg-light">
-          <i class="fa fa-th-large mr-3 text-primary fa-fw"></i>
-          Home
-        </a>
-      </li>
-      <li class="nav-item side-active">
-        <a href="{% url 'analyse'%}" class="nav-link text-dark bg-light">
-          <i class="fa fa-calculator mr-3 text-primary fa-fw"></i>
-          Analyse User
-        </a>
-      </li>
-      <li class="nav-item">
-        <a href="{% url 'favourites'%}" class="nav-link text-dark bg-light">
-          <i class="fa fa-check mr-3 text-primary fa-fw"></i>
-          Favourites
-        </a>
-      </li>
-      <li class="nav-item">
-        <a href="{% url 'block-list'%}" class="nav-link text-dark bg-light">
-          <i class="fa fa-times mr-3 text-primary fa-fw"></i>
-          Block List
-        </a>
-      </li>
-      <li class="nav-item">
-        <a href="{% url 'settings'%}" class="nav-link text-dark bg-light">
-          <i class="fa fa-cog mr-3 text-primary fa-fw"></i>
-          Settings
-        </a>
-      </li>
-    </ul>
-  </div>
-  <!-- End vertical navbar -->
-
-  <!-- the header bar -->
-
-  <nav class="navbar navbar-custom navbar-expand-md navbar-dark
-      bg-dark
-      shadow-sm
-    ">
-    <div class="container-fluid">
-      <div class="
-          navbar-collapse
-          collapse
-          w-100
-          order-1 order-md-0
-          dual-collapse2
-        ">
-        <!-- Toggle button -->
-        <button id="sidebarCollapse" type="button" class="px-1 mb-3">
-          <i class="fa-solid fa-bars" style="padding: 0 3px;"></i>
-        </button>
-        <button id="sidebarCollapse" type="button" class="btn btn-light bg-white shadow-sm px-1 mb-3 dashboard-btn">
-          <small class="text-uppercase font-weight-bold">Twidector</small>
-        </button>
-      </div>
-
-      <!-- twidector title -->
-      <!-- <div class="mx-auto w-100 order-2" id="title_">Twidector</div> -->
-
-      <!-- logout -->
-      <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'logout'%}">Logout</a>
-          </li>
-        </ul>
-      </div>
+ <nav class="navbar navbar-expand navbar-dark bg-dark navbar-custom">
+  <div class="container-fluid">
+    <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+      <!-- Toggle button -->
+      <button id="sidebarCollapse" type="button" class="px-1 mb-3" onclick="openNav()">
+        <i class="fa-solid fa-bars" style="padding: 0 3px;"></i>
+      </button>
+      <button id="sidebarCollapse" type="button" class="btn btn-light bg-white shadow-sm px-1 mb-3 dashboard-btn">
+        <small class="text-uppercase font-weight-bold">Twidector</small>
+      </button>
     </div>
-  </nav>
+
+    <!-- logout -->
+    <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'logout'%}">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Vertical navbar -->
+<div class="bg-white" id="sidebar">
+  </br>
+  <p class="text-gray font-weight-bold text-uppercase px-3 small pb-4 mb-0">
+    Dashboard
+  </p>
+
+  <ul class="nav flex-column bg-white mb-0">
+    <li class="nav-item">
+      <a href="{% url 'dashboard'%}" class="nav-link text-dark bg-light">
+        <i class="fa fa-th-large mr-3 text-primary fa-fw"></i>
+        Home
+      </a>
+    </li>
+    <li class="nav-item side-active">
+      <a href="{% url 'analyse'%}" class="nav-link text-dark bg-light">
+        <i class="fa fa-calculator mr-3 text-primary fa-fw"></i>
+        Analyse User
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="{% url 'favourites'%}" class="nav-link text-dark bg-light">
+        <i class="fa fa-check mr-3 text-primary fa-fw"></i>
+        Favourites
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="{% url 'block-list'%}" class="nav-link text-dark bg-light">
+        <i class="fa fa-times mr-3 text-primary fa-fw"></i>
+        Block List
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="{% url 'settings'%}" class="nav-link text-dark bg-light">
+        <i class="fa fa-cog mr-3 text-primary fa-fw"></i>
+        Settings
+      </a>
+    </li>
+  </ul>
+</div>
+<!-- End vertical navbar -->
 
 
   <!-- CONTENT -->

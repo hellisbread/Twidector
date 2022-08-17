@@ -602,27 +602,41 @@ def dashboard(request):
 
     updateAccess(access_token_info.twitter_oauth_token.oauth_token, access_token_info.twitter_oauth_token.oauth_token_secret)
 
-    if 'dashboard-info' in request.session:
-        context = request.session.get('dashboard-info')
-        del request.session['dashboard-info']
+    # if 'dashboard-info' in request.session:
+    #     context = request.session.get('dashboard-info')
 
-        return render(request, 'dashboard.html', context)
+    #     relationship_list = context.get('relationship_access')
 
-    else:
+    #     del request.session['dashboard-info']
 
-        twitter_handle = getuserUserHandle(twitter_id)
+    # else:
 
-        relationship = assess_relationship(twitter_handle)
+    twitter_handle = getuserUserHandle(twitter_id)
 
-        relationship_list = retrieve_top_users(relationship, 6, request.user)
+    relationship = assess_relationship(twitter_handle)
 
-        print(relationship_list)
+    relationship_list = retrieve_top_users(relationship, 6, request.user)
 
-        context.update({'relationship_access':relationship_list})
+    #request.session['dashboard-info'] = context
 
-        request.session['dashboard-info'] = context
+    favourited_objectlist = Favourited.objects.filter(user = request.user).filter(soft_delete=0).values('favourited_twitter_id', 'favourited_username')
 
-        return render(request, 'dashboard.html', context)
+    tweet_list = []
+
+    for favourite in favourited_objectlist:
+
+        data = getalltweets(favourite["favourited_twitter_id"], 4)
+
+        predicted_score = predictHate(data['tweet'])
+        data['predicted_score'] = predicted_score  
+        data['twitter_name'] = favourite["favourited_username"]
+        data['twitter_img'] = getuserIMG(favourite["favourited_twitter_id"])
+
+        tweet_list.append(data)
+
+    context = {'twitter_id_exist':True , 'relationship_access':relationship_list, 'dataframe': tweet_list}
+
+    return render(request, 'dashboard.html', context)
 
 @login_required
 def analyse(request):
