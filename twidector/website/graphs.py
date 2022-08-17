@@ -87,7 +87,7 @@ def get_graph():
   return image_png
 
 #fakenews graph + accuracy score 
-df = pd.read_csv("fakenewscleaned.csv")
+df = pd.read_csv("fakenewscleaned.csv", encoding = "ISO-8859-1")
 df = df.dropna()
 count = 0
 

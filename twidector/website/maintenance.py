@@ -155,7 +155,7 @@ def new_fake_data():
             writer.writerow({'fake_news_text':item['fake_news_text'], 'fake_news_score':item['fake_news_score'], 'date_time':item['date_time']})
             print(item)
 
-new_fake_data()
+#new_fake_data()
 
 def retrain():
     df = pd.read_csv('hatedetectioncleaned.csv')
