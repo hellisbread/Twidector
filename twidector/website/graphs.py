@@ -232,41 +232,6 @@ def fakenews_graph():
   buffer.close()
   return fn_img
 
-
-
-def train_FN_Model():
-    
-    global FN_vectorizer
-    global linear_model
-
-    df = pd.read_csv("fakenewscleaned.csv", encoding = "ISO-8859-1")
-    df = df.dropna()
-    count = 0
-
-    # clean_statements = cleanStatements(df["fake_news_text"])
-    # df['Clean_Statements'] = clean_statements
-    df['fake_news_score'].value_counts()
-    
-    y = df['fake_news_score'].values
-    x = df["fake_news_text"].values
-    x_train, x_test, y_train, y_test = train_test_split(x, y, stratify = y, test_size=0.2)
-    
-    #fit into bag of words and transform data into a matrix
-    FN_vectorizer = TfidfVectorizer(ngram_range = (1 , 3), max_features = 2000)
-    FN_vectorizer.fit(list(x_train) + list(x_test))
-    
-    x_train_vec = FN_vectorizer.transform(x_train)
-    x_test_vec = FN_vectorizer.transform(x_test)
-    
-    #fit the matrix data into the SVC model
-    linear_model = LinearSVC(C = 0.05)
-    linear_model.fit(x_train_vec, y_train)
-    prediction = linear_model.predict(x_test_vec)
-    score = accuracy_score(y_test, prediction) * 100
-    return score
-
-
-
 #fake news graph
 def fn_graph():
   df = pd.read_csv("fakenewscleaned.csv", encoding = "ISO-8859-1")

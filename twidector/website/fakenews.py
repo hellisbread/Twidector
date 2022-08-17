@@ -1,3 +1,4 @@
+from json import load
 import pandas as pd
 import sshtunnel
 import logging
@@ -25,6 +26,7 @@ import numpy as np
 from datetime import date
 from dateutil.relativedelta import relativedelta
 
+from maintenance import *
 #establish connection to database
 
 server_ssh_host= "ssh.pythonanywhere.com"
@@ -234,15 +236,9 @@ def insert_webScrape_Data():
 
 #retrieve the trainData
 def retrieve_trainData():
-    open_connect()
-    try:
-        sql = "SELECT * FROM fake_news_score"
-        data = pd.read_sql(sql , connection)
-        close_connect()
-        return data
-    except:
-        close_connect()
-        return "Retreieve train data unsuccessful"
+    data = pd.read_csv('fakenewscleaned.csv', encoding="ISO-8859-1")
+
+    return data
 
 #train the fake news prediction model
 def train_FN_Model():
@@ -270,6 +266,9 @@ def train_FN_Model():
     linear_model.fit(x_train_vec, y_train)
     prediction = linear_model.predict(x_test_vec)
     score = accuracy_score(y_test, prediction) * 100
+
+    save_pickle(linear_model, 'fake_news_model.sav')
+    save_pickle(FN_vectorizer, 'fake_news_vectorizer.sav')
 
 #retrieve tweets from database
 def retrieveTweet_DB(userID):
@@ -376,7 +375,8 @@ def retrieveTweets_With_Date(userID, TwitterHandle):
 
 #predict tweet if its fake news
 def predictFN(df):
-    
+    FN_vectorizer = load_pickle('fake_news_vectorizer.sav')
+    linear_model = load_pickle('fake_news_model.sav')
     screen_name_list = ["cnnbrk", "CNN", "nytimes", "BBCBreaking", "BBCWorld", "TheEconomist", "Reuters",
                        "WSJ", "washingtonpost", "TIME", "ABC", "ndtv", "AP", "ChannelNewsAsia"]
     

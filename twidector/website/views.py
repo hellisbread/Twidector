@@ -43,9 +43,11 @@ from .models import TwitterAuthToken, TwitterUser, SyncTwitterAccount, Blocked, 
 
 from website.functions import *
 from website.hatedetection import *
+from website.fakenews import *
 from website.relationshipScore import *
 from website.graphs import *
 from website.maintenance import *
+
 from website.twitter_api import TwitterAPI
 from website.authorization import create_update_user_from_twitter, check_token_still_valid
 from django.db.models import Q

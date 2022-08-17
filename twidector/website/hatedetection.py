@@ -31,7 +31,7 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn import svm, linear_model
 from sklearn.svm import SVC
 from sklearn.multiclass import OneVsRestClassifier
-
+from maintenance import *
 import numpy as np
 
 import warnings
@@ -64,13 +64,7 @@ vectorizer = CountVectorizer(ngram_range=(1, 4), max_features = 1000)
 
 #model_filename = 'model.sav'
 
-def save_pickle(model, filename):
-    pickle.dump((model), open(filename, 'wb'))
 
-def load_pickle(filename):
-    picklefied = pickle.load(open(filename, 'rb'))
-    
-    return picklefied
 
 def prepareDF():
     global df

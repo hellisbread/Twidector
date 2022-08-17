@@ -8,10 +8,19 @@ from bs4 import BeautifulSoup
 import urllib.request,sys,time
 import requests
 from dateutil.parser import parse
+import pickle
+
+def save_pickle(model, filename):
+    pickle.dump((model), open(filename, 'wb'))
+
+def load_pickle(filename):
+    picklefied = pickle.load(open(filename, 'rb'))
+    
+    return picklefied
 
 #retrieve the latest date in fakenewscleaned table
 def LatestDate():
-    data = pd.read_csv('fakenewscleaned.csv', encoding='latin-1')
+    data = pd.read_csv('fakenewscleaned.csv', encoding="ISO-8859-1")
     data['Date'] = pd.to_datetime(data['Date'])
     latest_date = data['Date'].max()
     return latest_date
