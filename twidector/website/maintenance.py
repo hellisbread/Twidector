@@ -149,13 +149,15 @@ def new_fake_data():
     result = FakeNews.objects.filter().values('fake_news_text', 'fake_news_score', 'date_time')
     with open(r'fakenewscleaned.csv', 'w', newline='') as csvfile:
         fieldnames = ['fake_news_text','fake_news_score', 'date_time']
+        writer = csv.writer(csvfile)
+        writer.writerow(fieldnames)
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
         for item in result.iterator():
             writer.writerow({'fake_news_text':item['fake_news_text'], 'fake_news_score':item['fake_news_score'], 'date_time':item['date_time']})
             print(item)
 
-#new_fake_data()
+new_fake_data()
 
 def retrain():
     df = pd.read_csv('hatedetectioncleaned.csv')

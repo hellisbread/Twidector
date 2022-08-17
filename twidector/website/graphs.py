@@ -87,9 +87,9 @@ def get_graph():
   return image_png
 
 #fakenews graph + accuracy score 
-df = pd.read_csv("fakenewscleaned.csv", encoding = "ISO-8859-1")
-df = df.dropna()
-count = 0
+# df = pd.read_csv("fakenewscleaned.csv", encoding = "ISO-8859-1")
+# df = df.dropna()
+# count = 0
 
 def cleanStatements(Statements):
     tempArr = []
@@ -121,23 +121,23 @@ def cleanStatements(Statements):
             count_token += 1
     return tempArr
     
-clean_statements = cleanStatements(df["Statement"])
-df['Clean_Statements'] = clean_statements
-df["Label"].value_counts()
+# clean_statements = cleanStatements(df["Statement"])
+# df['Clean_Statements'] = clean_statements
+# df["Label"].value_counts()
 
 
-#split the data into train and test set
-y = df['Label'].values
-x = df['Clean_Statements'].values
-x_train, x_test, y_train, y_test = train_test_split(x, y, stratify = y, test_size=0.2)
+# #split the data into train and test set
+# y = df['Label'].values
+# x = df['Clean_Statements'].values
+# x_train, x_test, y_train, y_test = train_test_split(x, y, stratify = y, test_size=0.2)
 
-#fit and transform data into a matrix
-vectorizer = TfidfVectorizer(ngram_range = (1 , 3), max_features = 1000)
-vectorizer.fit(list(x_train) + list(x_test))
-x = vectorizer.fit_transform(x)
-x_train_vec = vectorizer.fit_transform(x_train)
-x_test_vec = vectorizer.fit_transform(x_test)
-vectorizer.get_feature_names_out()
+# #fit and transform data into a matrix
+# vectorizer = TfidfVectorizer(ngram_range = (1 , 3), max_features = 1000)
+# vectorizer.fit(list(x_train) + list(x_test))
+# x = vectorizer.fit_transform(x)
+# x_train_vec = vectorizer.fit_transform(x_train)
+# x_test_vec = vectorizer.fit_transform(x_test)
+# vectorizer.get_feature_names_out()
 
 #Test and predict the data
 def predictStatement(statements):
