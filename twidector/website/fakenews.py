@@ -26,7 +26,8 @@ import numpy as np
 from datetime import date
 from dateutil.relativedelta import relativedelta
 
-from maintenance import *
+from website.maintenance import *
+
 #establish connection to database
 
 server_ssh_host= "ssh.pythonanywhere.com"

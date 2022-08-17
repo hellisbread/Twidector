@@ -31,7 +31,7 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn import svm, linear_model
 from sklearn.svm import SVC
 from sklearn.multiclass import OneVsRestClassifier
-from maintenance import *
+from .maintenance import *
 import numpy as np
 
 import warnings
