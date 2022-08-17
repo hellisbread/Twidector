@@ -28,6 +28,7 @@ from dateutil.relativedelta import relativedelta
 
 from website.maintenance import *
 
+
 #establish connection to database
 
 server_ssh_host= "ssh.pythonanywhere.com"
@@ -268,8 +269,7 @@ def train_FN_Model():
     prediction = linear_model.predict(x_test_vec)
     score = accuracy_score(y_test, prediction) * 100
 
-    save_pickle(linear_model, 'fake_news_model.sav')
-    save_pickle(FN_vectorizer, 'fake_news_vectorizer.sav')
+    return score
 
 #retrieve tweets from database
 def retrieveTweet_DB(userID):
