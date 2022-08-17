@@ -677,7 +677,7 @@ def analyse(request):
 
         elif(start_date == "" and end_date == ""):
             data = getalltweets(twitterID, 1000)
-            
+
         elif(start_date == "" or end_date ==""):
             messages.error(request, 'Invalid Date Format. Please ensure there is a start and end date.')
 
@@ -685,7 +685,15 @@ def analyse(request):
         
 
         predicted_score = predictHate(data['tweet'])
-        data['predicted_score'] = predicted_score  
+
+        print(predicted_score)
+
+        data['predicted_hate_score'] = predicted_score
+
+        predicted_fake_score = predictFake(data['tweet'], url)
+
+        data['predicted_fake_score'] = predicted_fake_score
+
         data['userID'] = twitterID
 
         typeCount = getTweetTypeCount(data)

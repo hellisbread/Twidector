@@ -38,11 +38,13 @@ import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 import sshtunnel
 import logging
+
+from datetime import datetime as dt
+
 from sshtunnel import SSHTunnelForwarder
 
-from datetime import datetime
-
 from website.config import *
+from website.maintenance import *
 
 import nltk
 from nltk.stem import WordNetLemmatizer
@@ -322,7 +324,7 @@ def getalltweets(userid, limiter):
         tweetcount.append(count)
 
         dtime = tweet['created_at']
-        new_datetime = datetime.strftime(dtime, '%d-%m-%Y')
+        new_datetime = dt.strftime(dtime, '%d-%m-%Y')
 
         tweetdates.append(new_datetime)
         count = count + 1
@@ -341,8 +343,8 @@ def retrievetweetsviaDatetime(twitter_id,startdate,enddate):
     formatted_start_date = startdate[8:11] + '/' + startdate[5:7] + '/' + startdate[:4]
     formatted_end_date = enddate[8:11] + '/' + enddate[5:7] + '/' + enddate[:4]
 
-    formatted_start_date = datetime.strptime(formatted_start_date, '%d/%m/%Y')
-    formatted_end_date = datetime.strptime(formatted_end_date, '%d/%m/%Y')
+    formatted_start_date = dt.strptime(formatted_start_date, '%d/%m/%Y')
+    formatted_end_date = dt.strptime(formatted_end_date, '%d/%m/%Y')
 
     tweets = tweepy.Paginator(client.get_users_tweets,id=twitter_id,max_results=100,limit=5,
                                   tweet_fields = ["created_at"]
@@ -352,8 +354,8 @@ def retrievetweetsviaDatetime(twitter_id,startdate,enddate):
     for tweet in tweets.flatten(limit = 200):
         dtime = tweet['created_at']
 
-        new_datetime_str = datetime.strftime(dtime, '%d-%m-%Y')
-        new_datetime = datetime.strptime(new_datetime_str, '%d-%m-%Y')
+        new_datetime_str = dt.strftime(dtime, '%d-%m-%Y')
+        new_datetime = dt.strptime(new_datetime_str, '%d-%m-%Y')
         
         if(formatted_start_date <= new_datetime <= formatted_end_date): 
             tweetarray.append(tweet.text)
@@ -370,7 +372,6 @@ def retrievetweetsviaDatetime(twitter_id,startdate,enddate):
 
 #should be a global variable, stores the time zone of sg for use later.
 TZ_sg = pytz.timezone('Singapore')
-
 
 #retrieves the tweets from a twitter hangle
 def retrieveAndScoreTweets(twitterhandle):
@@ -393,7 +394,7 @@ def retrieveAndScoreTweets(twitterhandle):
     if checkifuserexists(userID) == 'user exists!':
         print('user already exists in database, checking if they have new tweets!')
         
-        now = datetime.now(TZ_sg)
+        now = dt.now(TZ_sg)
         print('connecting to database, checking to see when user was last searched')
         
         #get the date and time of when the last time tweets were retrieved for this user
@@ -403,8 +404,8 @@ def retrieveAndScoreTweets(twitterhandle):
         with connection.cursor() as cursor:
             cursor.execute(sqlcommand, (userID))
             last_retrieved_date = cursor.fetchone()
-            date_string = datetime.strftime(last_retrieved_date['lastretrieved'],"%Y-%m-%d")
-            newretrievaldate = datetime.strptime(date_string,"%Y-%m-%d")
+            date_string = dt.strftime(last_retrieved_date['lastretrieved'],"%Y-%m-%d")
+            newretrievaldate = dt.strptime(date_string,"%Y-%m-%d")
             
             
         print('user was last updated on: ', date_string)
@@ -510,7 +511,7 @@ def storetweets(df):
         TweetID = df['tweetid'].iloc[i]
         userID = df['userID'].iloc[i]
         Tweettext = df['tweet'].iloc[i]
-        predictedscore = df['predicted_score'].iloc[i] 
+        predictedscore = df['predicted_hate_score'].iloc[i] 
         with connection.cursor() as cursor:
             try:
                 cursor.execute(sqlcommand, (TweetID,userID,Tweettext,predictedscore))
@@ -560,7 +561,7 @@ def retrieveTweets(twitterhandle):
         print('retrieving Users tweet timeline for the first time, this may take a while!')
         temp_df = getalltweets(userID)
         predicted_score = predictHate(temp_df['tweet'])
-        temp_df['predicted_score'] = predicted_score  
+        temp_df['predicted_hate_score'] = predicted_score  
         temp_df['userID'] = userID
         
     return(temp_df)
@@ -569,24 +570,24 @@ def returnScoredtweets(df):
     listofdicttweets = []
     for i in df.index:
         tweet = df['tweet'].iloc[i]
-        score = df['predicted_score'].iloc[i]
+        score = df['predicted_hate_score'].iloc[i]
         dictoftweet = {'tweet' : tweet, 'score': score}
         listofdicttweets.append(dictoftweet)
     
     return listofdicttweets
 
 def analyzeTwitterUser(df):
-    hatedf = df[df['predicted_score'] != 2]
+    hatedf = df[df['predicted_hate_score'] != 2]
     # calculate total number of 0(hateful) + 1(offensive)/total number * 10 = hateful score
     score = round((len(hatedf.index)/len(df.index) * 10),2)
     print('user has a hateful score of: ' + str(score))
 
 def returnhatefultweets(df):
     listofdictofhatefultweets = []
-    hatedf = df[df['predicted_score'] != 2]
+    hatedf = df[df['predicted_hate_score'] != 2]
     for i in df.index:
         tweet = df['tweet'].iloc[i]
-        score = df['predicted_score'].iloc[i]
+        score = df['predicted_hate_score'].iloc[i]
         dictoftweet = {'tweet' : tweet, 'score': score}
         listofdictofhatefultweets.append(dictoftweet)
     return listofdictofhatefultweets
@@ -598,7 +599,7 @@ def getTweetTypeCount(df):
     neutral = 0
 
     for i in df.index:
-        score = df['predicted_score'].iloc[i]
+        score = df['predicted_hate_score'].iloc[i]
         
         if (score == 0):
             offensive +=1

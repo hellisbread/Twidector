@@ -396,6 +396,26 @@ def predictFN(df):
         df['FN_Prediction'] = prediction
         
     return df
+
+def predictFake(tweets, twitter_handle):
+    screen_name_list = ["cnnbrk", "CNN", "nytimes", "BBCBreaking", "BBCWorld", "TheEconomist", "Reuters",
+                       "WSJ", "washingtonpost", "TIME", "ABC", "ndtv", "AP", "ChannelNewsAsia"]
+    tempseries = pd.Series(tweets)
+    ct = cleanStatements(tempseries)
+
+    if twitter_handle in screen_name_list:
+        vectorizer = load_pickle('fake_news_vectorizer.sav')
+        m = vectorizer.transform(ct)
+
+        clf = load_pickle('fake_news_model.sav')
+        pred = clf.predict(m)
+    else:
+        pred = []
+        for row in tempseries:
+            pred.append(2)
+
+    return(pred)
+
     
 #retrieve the tweet 3 months before today
 def retrieveTweetID(TwitterHandle):
