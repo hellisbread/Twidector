@@ -253,8 +253,8 @@ def train_FN_Model():
     data = retrieve_trainData()
     
     #train test and split the data
-    x = data['fake_news_text']
-    y = data['fake_news_score']
+    x = data['Statement']
+    y = data['Label']
     
     x_train, x_test, y_train, y_test = train_test_split(x, y, stratify = y, test_size=0.2)
     

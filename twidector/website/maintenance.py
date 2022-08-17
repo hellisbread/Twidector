@@ -9,31 +9,27 @@ import urllib.request,sys,time
 import requests
 from dateutil.parser import parse
 
-#retrieve the latest date in fake_news_score table
-def DB_LatestDate():
-    open_connect()
-    sql = "SELECT date_time FROM fake_news_score ORDER BY date_time DESC"
-    with connection.cursor() as cursor:
-        cursor.execute(sql)
-        date = cursor.fetchmany(size=1)
-        for a_date in date:
-            fetch_date = a_date['date_time']
-        close_connect()
-        return fetch_date
+#retrieve the latest date in fakenewscleaned table
+def LatestDate():
+    data = pd.read_csv('fakenewscleaned.csv', encoding='latin-1')
+    data['Date'] = pd.to_datetime(data['Date'])
+    latest_date = data['Date'].max()
+    return latest_date
 
 #retrieve latest news    
 def webscrape_data():
     
     list_of_date = []
     frame = []
-    #fetch the latest date in stored db
-    fetch_date = DB_LatestDate()
     
+    #fetch the latest date in stored db
+    fetch_date = LatestDate()
+    
+    #fetch_date = strptime
     url = "https://www.politifact.com/factchecks/list/?page=" + str(1)
     response = requests.get(url)
     soup = BeautifulSoup(response.text, 'html.parser')
     links = soup.find_all('li',attrs={'class':'o-listicle__item'})
-    
     for j in links:
         
         Date = j.find('div',attrs={'class':'m-statement__body'}).find('footer').text
@@ -42,13 +38,23 @@ def webscrape_data():
         
         #retrieve updated news and only if news that are either TRUE or FALSE
         if (Date > fetch_date and (label == 'true' or label == 'false')):
+            if label == 'true':
+                label = 'TRUE'
+            elif label == 'false':
+                label = 'FALSE'
             Statement = j.find("div", attrs = {'class' : 'm-statement__quote'}).text.strip()
             frame.append((Statement, label, Date))
     
     data = pd.DataFrame(frame, columns=['Statement', 'Label', 'Date'])
     
-    return data
+    if not data.empty:
+        #clean the statements
+        clean_statements = cleanStatements(data["Statement"])
+        data['Statement'] = clean_statements
 
+        data.to_csv("fakenewscleaned.csv", header = False, index = False, mode = 'a')
+
+webscrape_data()
 def cleanStatements(tweet):
     
     stopwords = nltk.corpus.stopwords.words("english")
@@ -95,41 +101,7 @@ def cleanStatements(tweet):
         tokenized_tweet[i] = ' '.join(tokenized_tweet[i])
         #cleaned_tweet = tokenized_tweet
 
-    return tokenized_tweet
-
-# insert updated data into our model
-def insert_webScrape_Data():
-    
-    #retrieve dataframe after webscraping
-    data = webscrape_data()
-    
-    #insert the data into fake_news_score database table 
-    if not data.empty:
-        
-        #clean the statements
-        clean_statements = cleanStatements(data["Statement"])
-        data['Clean_Statements'] = clean_statements
-
-        open_connect()
-        
-        for i, d in data.iterrows():
-            
-            score = 0
-            if (d['label'] == "false"):
-                score = 1
-            elif (d['label'] == "true"):
-                score = 0
-                
-            statement = d['Clean_Statements']
-            date = d['Date']
-            
-            sql = "INSERT INTO `fake_news_score`(`fake_news_text`, `fake_news_score`, `date_time`) VALUES(%s, %s, %s)"
-            with connection.cursor() as cursor:
-                insert_list = [statement, int(score) , date]
-                cursor.execute(sql, tuple(insert_list))
-                connection.commit()
-
-        close_connect()
+    return tokenized_tweet        
 
 def new_hate_data():
     result = Tweet.objects.filter(admin_interjection=True, predicted_hate_score__isnull=False).values('tweet_id', 'tweet_text', 'admin_hate_result', 'fitted_hate')
@@ -159,7 +131,7 @@ def new_hate_data():
 
 #new_fake_data()
 
-def retrain():
+def retrain_hate():
     df = pd.read_csv('hatedetectioncleaned.csv')
     #load from file saved model
     #clf = load_pickle('hate_model.sav')
@@ -186,4 +158,3 @@ def retrain():
 
     save_pickle(vectorizer,'hate_vectorizer.sav')
 
-#retrain()
