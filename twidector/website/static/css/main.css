@@ -149,10 +149,6 @@ This contains css that we added ourselves
 }
 
 @media (max-width: 768px) {
-  #sidebar {
-    margin-left: -17rem;
-  }
-
   #sidebar.active {
     margin-left: 0;
   }
@@ -161,11 +157,11 @@ This contains css that we added ourselves
     width: 100%;
     margin: 0;
   }
-
+  /* 
   #content.active {
     margin-left: 17rem;
     width: calc(100% - 17rem);
-  }
+  } */
 }
 
 #sidebar.active {
@@ -178,7 +174,7 @@ This contains css that we added ourselves
 }
 
 .navbar-custom {
-  padding-left:0.5rem;
+  padding-left: 0.5rem;
   height: 50px;
 }
 
@@ -193,22 +189,22 @@ This contains css that we added ourselves
   transition: all 0.4s;
 }
 
-.side-active a{
-  background-color:#dae0e5!important;
-  font-weight:500;
+.side-active a {
+  background-color: #dae0e5 !important;
+  font-weight: 500;
 }
 
-.dashboard-btn{
-  margin-left:20px;
+.dashboard-btn {
+  margin-left: 20px;
 }
 
-.dashboard-btn:hover{
-  color:black;
+.dashboard-btn:hover {
+  color: black;
 }
 
-.twitter-icon{
-  font-size:20px!important;
-  padding-right:2px;
+.twitter-icon {
+  font-size: 20px !important;
+  padding-right: 2px;
 }
 
 .alert-error {
