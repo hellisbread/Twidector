@@ -330,6 +330,43 @@ def getalltweets(userid, limiter):
     temp_df = pd.DataFrame(zip(tweetidarray,tweetarray,tweetcount,tweetdates),columns=['tweetid','tweet','index','date'])
     return(temp_df)
 
+def retrievetweetsviaDatetime(twitter_id,startdate,enddate):
+    tweetarray = []                     #tweet text
+    tweetidarray = []                   #tweet id
+    tweetdate = []                      #tweet creation date
+    tweetcount = []
+
+    count = 1
+
+    formatted_start_date = startdate[8:11] + '/' + startdate[5:7] + '/' + startdate[:4]
+    formatted_end_date = enddate[8:11] + '/' + enddate[5:7] + '/' + enddate[:4]
+
+    formatted_start_date = datetime.strptime(formatted_start_date, '%d/%m/%Y')
+    formatted_end_date = datetime.strptime(formatted_end_date, '%d/%m/%Y')
+
+    tweets = tweepy.Paginator(client.get_users_tweets,id=twitter_id,max_results=100,limit=5,
+                                  tweet_fields = ["created_at"]
+                                  #start_time = formatted_start_date,
+                                  #end_time = formatted_end_date #veryimpt
+                                  )
+    for tweet in tweets.flatten(limit = 200):
+        dtime = tweet['created_at']
+
+        new_datetime_str = datetime.strftime(dtime, '%d-%m-%Y')
+        new_datetime = datetime.strptime(new_datetime_str, '%d-%m-%Y')
+        
+        if(formatted_start_date <= new_datetime <= formatted_end_date): 
+            tweetarray.append(tweet.text)
+            tweetidarray.append(tweet.id)
+            tweetcount.append(count)
+            tweetdate.append(new_datetime_str)
+
+            count = count + 1
+
+    temp_df = pd.DataFrame(zip(tweetidarray,tweetarray,tweetcount,tweetdate),
+                                       columns=['tweetid','tweet','index','date'])
+    return temp_df
+
 
 #should be a global variable, stores the time zone of sg for use later.
 TZ_sg = pytz.timezone('Singapore')

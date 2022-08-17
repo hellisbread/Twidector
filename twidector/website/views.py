@@ -39,7 +39,7 @@ from django.core.mail import send_mail, BadHeaderError
 from django.contrib.auth import get_user_model, update_session_auth_hash
 from django.contrib.auth.models import User
 user = get_user_model()
-from .models import TwitterAuthToken, TwitterUser, SyncTwitterAccount, Blocked, Favourited , Tweet
+from .models import TwitterAuthToken, TwitterUser, SyncTwitterAccount, Blocked, Favourited , Tweet, TwitterUserScore
 
 from website.functions import *
 from website.hatedetection import *
@@ -651,15 +651,38 @@ def analyse(request):
 
         url = request.POST["twitter-url"]
 
-        #prepareDF()
+        start_date = request.POST["start-date"]
+        end_date = request.POST["end-date"]
 
-        twitterID = getuserid(url)
+        try:
+            twitterID = getuserid(url)
+        except:
+            messages.error(request, 'Invalid Twitter User Handle. Please key in a valid twitter user.')
+
+            return render(request, 'analyse.html', {})
+
+        if(TwitterUserScore.objects.filter(twitter_id = twitterID).exists() == False):
+            new_twitter_user = TwitterUserScore(
+                                                twitter_id = twitterID,
+                                                hate_score = 0,
+                                                fake_news_score = 0
+                                                )
+
+            new_twitter_user.save()
 
         twitterIMGURL = getuserIMG(twitterID)
 
-        data = getalltweets(twitterID, 1000)
+        if(start_date != "" and end_date !=""):
+            data = retrievetweetsviaDatetime(twitterID, start_date, end_date)
 
-        print(data)
+        elif(start_date == "" and end_date == ""):
+            data = getalltweets(twitterID, 1000)
+            
+        elif(start_date == "" or end_date ==""):
+            messages.error(request, 'Invalid Date Format. Please ensure there is a start and end date.')
+
+            return render(request, 'analyse.html', {})
+        
 
         predicted_score = predictHate(data['tweet'])
         data['predicted_score'] = predicted_score  
