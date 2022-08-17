@@ -44,8 +44,6 @@ from datetime import datetime
 
 from website.config import *
 
-import pickle
-
 import nltk
 from nltk.stem import WordNetLemmatizer
 # nltk.download('punkt')
