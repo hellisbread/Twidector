@@ -31,8 +31,37 @@
 <body>
   <!--Navigation-->
   <!-- Vertical navbar -->
-<div class="vertical-nav bg-white" id="sidebar">
-    </br></br></br>
+  <!--Navigation-->
+  <!-- the header bar -->
+
+  <nav class="navbar navbar-expand navbar-dark bg-dark navbar-custom">
+    <div class="container-fluid">
+      <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+        <!-- Toggle button -->
+        <button id="sidebarCollapse" type="button" class="px-1 mb-3">
+          <i class="fa-solid fa-bars" style="padding: 0 3px;"></i>
+        </button>
+        <button id="sidebarCollapse" type="button" class="btn btn-light bg-white shadow-sm px-1 mb-3 dashboard-btn">
+          <small class="text-uppercase font-weight-bold">Twidector</small>
+        </button>
+      </div>
+
+      <!-- twidector title -->
+      <!-- <div class="mx-auto w-100 order-2" id="title_">Twidector</div> -->
+
+      <!-- logout -->
+      <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- Vertical navbar -->
+  <div class="vertical-nav bg-white" id="sidebar">
+    </br>
     <p class="text-gray font-weight-bold text-uppercase px-3 small pb-4 mb-0">
       Admin Dashboard
     </p>
@@ -87,43 +116,9 @@
     </ul>
 
   </div>
+
   <!-- End vertical navbar -->
 
-  <!-- the header bar -->
-
-  <nav class="navbar navbar-custom navbar-expand-md navbar-dark
-        bg-dark
-        shadow-sm
-      ">
-    <div class="container-fluid">
-      <div class="
-            navbar-collapse
-            collapse
-            w-100
-            order-1 order-md-0
-            dual-collapse2
-          ">
-        <!-- Toggle button -->
-        <button id="sidebarCollapse" type="button" class="px-1 mb-3">
-          <i class="fa-solid fa-bars" style="padding: 0 3px;"></i>
-        </button>
-        <button id="sidebarCollapse" type="button" class="btn btn-light bg-white shadow-sm px-1 mb-3 dashboard-btn">
-          <small class="text-uppercase font-weight-bold">Twidector</small>
-        </button>
-      </div>
-
-      <!-- twidector title -->
-      <!-- <div class="mx-auto w-100 order-2" id="title_">Twidector</div> -->
-
-      <!-- logout -->
-      <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="index.html">Logout</a>
-          </li>
-        </ul>
-      </div>
-    </div>
   </nav>
 
   <!-- buttons + the result for the first button -->
