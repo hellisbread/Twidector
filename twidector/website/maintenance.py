@@ -147,7 +147,7 @@ new_hate_data()
 
 def new_fake_data():
     result = FakeNews.objects.filter().values('fake_news_text', 'fake_news_score', 'date_time')
-    with open(r'fakenewscleaned.csv', 'w', newline='') as csvfile:
+    with open(r'fakenewscleaned.csv', 'w', newline='', encoding = 'utf-8') as csvfile:
         fieldnames = ['fake_news_text','fake_news_score', 'date_time']
         writer = csv.writer(csvfile)
         writer.writerow(fieldnames)
