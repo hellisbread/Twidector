@@ -626,8 +626,6 @@ def dashboard(request):
 
     tweet_list = []
 
-    print(favourited_objectlist)
-
     for favourite in favourited_objectlist:
 
         data = getalltweets(favourite["favourited_twitter_id"], 3)
@@ -645,10 +643,15 @@ def dashboard(request):
 
     context = {'twitter_id_exist':True , 'relationship_access':relationship_list, 'dataframe': tweet_list}
 
+    request.session['report-origin'] = "dashboard.html"
+
     return render(request, 'dashboard.html', context)
 
 @login_required
 def analyse(request):
+
+    request.session['report-origin'] = "analyse.html"
+
     if 'search-url' in request.POST:
 
         if 'current-search' in request.session:
@@ -775,6 +778,7 @@ def AnalyzeUser(request, user_handle):
         data['predicted_hate_score'] = predicted_score
     except:
         messages.error(request, 'This user has privated their messages. We are unable to analyze.')
+
         return render(request,'analyse.html',{})
 
     predicted_fake_score = predictFake(data['tweet'], url)
@@ -793,31 +797,43 @@ def AnalyzeUser(request, user_handle):
 
     request.session['current-search'] = transfer
 
+    request.session['report-origin'] = "analyse.html"
+
     return render(request, 'analyse.html', context)
 
 @login_required
 def reportTweets(request):
 
-    context = request.session.get('current-search')
+    report_origin = request.session.get('report-origin')
 
-    data = {'dataframe': pd.read_json(context.get('dataframe'))}
-    context.update(data)
-
-    #check whether the tweet existed inside the database
-    if 'req_id' in request.POST:
-
+    if(report_origin == "dashboard.html"):
+        if 'req_id' in request.POST:
         #getting the id of the tweet
-        twitter_id = request.POST.get('req_id')
+            twitter_id = request.POST.get('req_id')
 
         #checking whether the tweet id existed in the Tweet table
-        if 'grade' in request.POST:
-            tweet_info = getTweetDetails(twitter_id)
+            if 'grade' in request.POST:
+                tweet_info = getTweetDetails(twitter_id)
 
-            Tweet()
+        messages.success(request, "Successfully Reported Tweet.")
+        return redirect(dashboard)
+    elif(report_origin == "analyse.html"):
 
-            print("lelah")
+        context = request.session.get('current-search')
 
-    return render(request, 'analyse.html', context) 
+        data = {'dataframe': pd.read_json(context.get('dataframe'))}
+        context.update(data)
+
+        if 'req_id' in request.POST:
+        #getting the id of the tweet
+            twitter_id = request.POST.get('req_id')
+
+        #checking whether the tweet id existed in the Tweet table
+            if 'grade' in request.POST:
+                tweet_info = getTweetDetails(twitter_id)
+
+        messages.success(request, "Successfully Reported Tweet.")
+        return render(request, 'analyse.html', context) 
 
 @login_required
 def viewTweet(request):
@@ -852,8 +868,6 @@ def blocklist(request):
         return redirect('block-list')
 
     blocked_objectlist = Blocked.objects.filter(user = request.user).filter(soft_delete=0).values_list('blocked_twitter_id', 'blocked_username')
-
-    print(blocked_objectlist)
 
     context = {'blocked_list': blocked_objectlist}
 
@@ -893,7 +907,7 @@ def delete_blocklist(request, user_id):
         messages.error(request, 'Invalid Twitter User')
         return redirect('favourites')
 
-    update_block_user = Blocked.objects.get(blocked_twitter_id = twitter_id)
+    update_block_user = Blocked.objects.get(blocked_twitter_id = twitter_id, soft_delete = 0)
 
     update_block_user.soft_delete = 1
 
@@ -932,8 +946,6 @@ def favouritelist(request):
         return redirect('favourites')
 
     favourited_objectlist = Favourited.objects.filter(user = request.user).filter(soft_delete=0).values_list('favourited_twitter_id', 'favourited_username')
-
-    print(favourited_objectlist)
 
     context = {'favourites_list': favourited_objectlist}
 
@@ -974,7 +986,7 @@ def delete_favouritelist(request, user_id):
         messages.error(request, 'Invalid Twitter User')
         return redirect('favourites')
 
-    update_favourite = Favourited.objects.get(favourited_twitter_id = twitter_id)
+    update_favourite = Favourited.objects.get(favourited_twitter_id = twitter_id, soft_delete = 0)
 
     update_favourite.soft_delete = 1
 

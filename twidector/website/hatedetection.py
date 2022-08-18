@@ -617,9 +617,7 @@ def getTweetTypeCount(df):
 
 def getTweetDetails(tweet_id):
     
-    tweet = api.get_statuses(tweet_id)
-
-    print(tweet)
+    tweet = api.get_status(tweet_id)
 
     return tweet
         
