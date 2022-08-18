@@ -50,7 +50,7 @@ from website.maintenance import *
 
 from website.twitter_api import TwitterAPI
 from website.authorization import create_update_user_from_twitter, check_token_still_valid
-from django.db.models import Q
+from django.db.models import Q, F
 
 import time
 
@@ -829,6 +829,52 @@ def reportTweets(request):
             if 'grade' in request.POST:
                 tweet_info = getTweetDetails(twitter_id)
 
+                option_selected = request.POST.get('inlineRadioOptions')
+
+                if(Tweet.objects.filter(tweet_id = twitter_id).exists()==False):
+
+                    if(option_selected == '0'):
+                        new_tweet_object = Tweet(tweet_id = twitter_id,
+                                            screen_name = tweet_info.user.screen_name,
+                                            tweet_date = tweet_info.created_at,
+                                            tweet_text = tweet_info.text,
+                                            hateful_count = 1,
+                                            flagged = 1
+                                        )
+
+                        new_tweet_object.save()
+
+                    elif(option_selected == '1'):
+                        new_tweet_object = Tweet(tweet_id = twitter_id,
+                                            screen_name = tweet_info.user.screen_name,
+                                            tweet_date = tweet_info.created_at,
+                                            tweet_text = tweet_info.text,
+                                            offensive_count = 1,
+                                            flagged = 1
+                                        )
+                                        
+                        new_tweet_object.save()
+
+                    elif(option_selected == '2'):
+                        new_tweet_object = Tweet(tweet_id = twitter_id,
+                                            screen_name = tweet_info.user.screen_name,
+                                            tweet_date = tweet_info.created_at,
+                                            tweet_text = tweet_info.text,
+                                            neutral_count = 1,
+                                            flagged = 1
+                                        )
+
+                        new_tweet_object.save()
+                    
+                    
+                else:
+                    if(option_selected == '0'):
+                        Tweet.objects.filter(tweet_id = twitter_id).update(hateful_count=F('hateful_count')+1)
+                    elif(option_selected == '1'):
+                        Tweet.objects.filter(tweet_id = twitter_id).update(offensive_count=F('offensive_count')+1)
+                    elif(option_selected == '2'):
+                        Tweet.objects.filter(tweet_id = twitter_id).update(neutral_count=F('neutral_count')+1)
+
         messages.success(request, "Successfully Reported Tweet.")
         return redirect(dashboard)
     elif(report_origin == "analyse.html"):
@@ -845,6 +891,52 @@ def reportTweets(request):
         #checking whether the tweet id existed in the Tweet table
             if 'grade' in request.POST:
                 tweet_info = getTweetDetails(twitter_id)
+
+                option_selected = request.POST.get('inlineRadioOptions')
+
+                if(Tweet.objects.filter(tweet_id = twitter_id).exists()==False):
+
+                    if(option_selected == '0'):
+                        new_tweet_object = Tweet(tweet_id = twitter_id,
+                                            screen_name = tweet_info.user.screen_name,
+                                            tweet_date = tweet_info.created_at,
+                                            tweet_text = tweet_info.text,
+                                            hateful_count = 1,
+                                            flagged = 1
+                                        )
+
+                        new_tweet_object.save()
+
+                    elif(option_selected == '1'):
+                        new_tweet_object = Tweet(tweet_id = twitter_id,
+                                            screen_name = tweet_info.user.screen_name,
+                                            tweet_date = tweet_info.created_at,
+                                            tweet_text = tweet_info.text,
+                                            offensive_count = 1,
+                                            flagged = 1
+                                        )
+
+                        new_tweet_object.save()
+
+                    elif(option_selected == '2'):
+                        new_tweet_object = Tweet(tweet_id = twitter_id,
+                                            screen_name = tweet_info.user.screen_name,
+                                            tweet_date = tweet_info.created_at,
+                                            tweet_text = tweet_info.text,
+                                            neutral_count = 1,
+                                            flagged = 1
+                                        )
+
+                        new_tweet_object.save()
+                    
+                    
+                else:
+                    if(option_selected == '0'):
+                        Tweet.objects.filter(tweet_id = twitter_id).update(hateful_count=F('hateful_count')+1)
+                    elif(option_selected == '1'):
+                        Tweet.objects.filter(tweet_id = twitter_id).update(offensive_count=F('offensive_count')+1)
+                    elif(option_selected == '2'):
+                        Tweet.objects.filter(tweet_id = twitter_id).update(neutral_count=F('neutral_count')+1)
 
         messages.success(request, "Successfully Reported Tweet.")
         return render(request, 'analyse.html', context) 
