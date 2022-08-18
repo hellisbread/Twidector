@@ -736,16 +736,36 @@ def analyse(request):
         return render(request, 'analyse.html', {})
 
 @login_required
-def reportTweets(request, tweet_id):
+def reportTweets(request):
 
     context = request.session.get('current-search')
 
-    data = {'dataframe': pd.read_json(context.get('dataframe'))}
+    data =  pd.read_json(context.get('dataframe'))
 
     context.update(data)
+    
+    print(context)
+    print(context['user'])
+    print("tweets")
+    print(data.tweet)
 
-    print(tweet_id)
 
+    # #check whether the tweet existed inside the database
+    # if 'req_id' in request.POST:
+    #     print("bandung")
+    #     #getting the id of the tweet
+    #     x_id = request.POST.get('req_id')
+    #     #checking whether the tweet id existed in the Tweet table
+    #     if 'grade' in request.POST:
+    #         print("helo")
+    #         if(Tweet.objects.filter(tweet_id__contains = x_id).exists() == False):
+    #             new_tweet_object = Tweet(tweet_id = x_id,
+    #             screen_name = context['user'],
+    #             tweet_text = data.tweet,
+    #             flagged = 1
+    #             )
+    #             new_tweet_object.save()
+    #     print("lelah") 
     return render(request, 'analyse.html', context) 
 
 @login_required
