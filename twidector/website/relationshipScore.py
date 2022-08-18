@@ -21,14 +21,17 @@ auth.set_access_token(access_token,access_token_secret)
 
 api = tweepy.API(auth)
 
-#establish connection and set bearer token
-client = tweepy.Client(bearer_token=twitter_bearer_token)
-
 def updateAccess(user_access_token, user_secret):
+
+    global client
     try:
         auth.set_access_token(user_access_token, user_secret)
+        #establish connection and set bearer token
+        client = tweepy.Client(bearer_token=twitter_bearer_token, access_token= user_access_token, access_token_secret = user_secret)
         return True
     except:
+        #establish connection and set bearer token
+        client = tweepy.Client(bearer_token=twitter_bearer_token)
         return False
 
 def assess_replies(twitterHandle):
@@ -95,7 +98,7 @@ def assess_following(UserID):
             try:
                 for tweet in tweets:
                     list_of_following.append(tweet['id'])
-            except TypeError:
+            except:
                 break
     return list_of_following
 
@@ -103,13 +106,15 @@ def assess_followers(UserID):
     list_of_followers = []
     responses = client.get_users_followers(id = UserID, max_results = 1000)
     for tweets in responses:
+        print(tweets)
         if tweets is None:
             continue
         else:
             try:
                 for tweet in tweets:
+                    print(tweet)
                     list_of_followers.append(tweet['id'])
-            except TypeError:
+            except:
                 break
     return list_of_followers
 
@@ -126,7 +131,7 @@ def assess_mentions(UserID):
             try:
                 for tweet in tweets:
                     authorID_list.append(tweet['author_id'])
-            except TypeError:
+            except:
                 break
     
     #top 5 authors that mention the user the most

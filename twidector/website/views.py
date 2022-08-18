@@ -628,7 +628,7 @@ def dashboard(request):
 
     for favourite in favourited_objectlist:
 
-        data = getalltweets(favourite["favourited_twitter_id"], 4)
+        data = getalltweets(favourite["favourited_twitter_id"], 3)
 
         predicted_score = predictHate(data['tweet'])
         data['predicted_score'] = predicted_score  
