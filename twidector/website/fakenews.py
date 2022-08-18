@@ -26,9 +26,19 @@ import numpy as np
 from datetime import date
 from dateutil.relativedelta import relativedelta
 
-from website.maintenance import *
+from sklearn.svm import SVC
+#from website.maintenance import load_pickle
+#from website.maintenance import *
 from sklearn.utils import resample
+import pickle
 
+def save_pickle(model, filename):
+    pickle.dump((model), open(filename, 'wb'))
+
+def load_pickle(filename):
+    picklefied = pickle.load(open(filename, 'rb'))
+    
+    return picklefied
 
 #establish connection to database
 

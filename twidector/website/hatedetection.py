@@ -481,7 +481,7 @@ def retrieveAndScoreTweets(twitterhandle):
             tweetauthorarr.append(tweet.author_id)
             tweetdate.append(tweet.created_at)
         #record when this user is searched
-        newdatetime = datetime.now(TZ_sg)
+        newdatetime = dt.now(TZ_sg)
         open_connect()
         sqlcommand = "INSERT INTO lastRetrieved(`Userid`,`lastretrieved`) VALUES(%s, %s)"
         with connection.cursor() as cursor:
