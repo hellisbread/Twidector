@@ -734,12 +734,66 @@ def analyse(request):
 
         context.update(filtered_data)
        
-        return render(request, 'analyse.html', context) 
+        return render(request, 'analyse.html', context)
+
     else:
         if 'current-search' in request.session:
             del request.session['current-search']
 
         return render(request, 'analyse.html', {})
+
+@login_required
+def AnalyzeUser(request, user_handle):
+    if 'current-search' in request.session:
+            del request.session['current-search']
+
+    url = user_handle
+
+    try:
+        twitterID = getuserid(url)
+    except:
+        messages.error(request, 'Invalid Twitter User Handle. Please key in a valid twitter user.')
+
+        return render(request, 'analyse.html', {})
+
+    if(TwitterUserScore.objects.filter(twitter_id = twitterID).exists() == False):
+        new_twitter_user = TwitterUserScore(
+                                            twitter_id = twitterID,
+                                            hate_score = 0,
+                                            fake_news_score = 0
+                                            )
+
+        new_twitter_user.save()
+
+    twitterIMGURL = getuserIMG(twitterID)
+
+    data = getalltweets(twitterID, 1000)
+    
+    try:
+        predicted_score = predictHate(data['tweet'])
+
+        data['predicted_hate_score'] = predicted_score
+    except:
+        messages.error(request, 'This user has privated their messages. We are unable to analyze.')
+        return render(request,'analyse.html',{})
+
+    predicted_fake_score = predictFake(data['tweet'], url)
+
+    data['predicted_fake_score'] = predicted_fake_score
+
+    data['userID'] = twitterID
+
+    typeCount = getTweetTypeCount(data)
+
+    dataSize = data.shape[0]
+
+    context = {'dataframe': data ,'dataSize': dataSize, 'user' : url, 'img' : twitterIMGURL, 'TypeCount' : typeCount}
+
+    transfer = {'dataframe': data.to_json() ,'dataSize':int(dataSize), 'user' : url, 'img' : twitterIMGURL, 'TypeCount' : typeCount}
+
+    request.session['current-search'] = transfer
+
+    return render(request, 'analyse.html', context)
 
 @login_required
 def reportTweets(request):

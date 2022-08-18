@@ -39,6 +39,7 @@ urlpatterns = [
     #path('reset-password/', views.resetPassword, name='reset-password'),
     path('dashboard/', views.dashboard, name='dashboard'),
     path('analyse/', views.analyse, name='analyse'),
+    path('analyse/<str:user_handle>/', views.AnalyzeUser, name='analyzeUser'),
     path('report-tweet/', views.reportTweets, name='report-tweet'),
     path('view-tweet/', views.viewTweet, name='view-tweet'),
     path('block-list/', views.blocklist, name='block-list'),
