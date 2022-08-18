@@ -169,9 +169,9 @@
                             <div class="col-md-1"></div>
                             <div class="col-md-4">
                                 <h6>Tweet Classification</h6>
-                                {% if tweet_item.predicted_score == 0 %}
+                                {% if tweet_item.predicted_hate_score == 0 %}
                                 <p>This is an <strong>Offensive</strong> Tweet. <br /> Tweet contains vulgar words.</p>
-                                {% elif tweet_item.predicted_score == 1 %}
+                                {% elif tweet_item.predicted_hate_score == 1 %}
                                 <p>This is an <strong>Hateful</strong> Tweet.</p>
                                 {% else %}
                                 <p>This is an <strong>Neutral</strong> Tweet.</p>
