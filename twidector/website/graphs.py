@@ -170,21 +170,31 @@ def fakenews_graph():
   df = pd.read_csv("fakenewscleaned.csv", encoding = "ISO-8859-1")
   df = df.dropna()
 
+  df['Label'].replace(["TRUE" , "FALSE"] , [0 , 1])
+
   # #split the data into train and test set
   y = df["Label"].values
   x = df["Statement"].values
   x_train, x_test, y_train, y_test = train_test_split(x, y, stratify = y, test_size=0.2)
 
-
+  #upsample
+  #downsample
+  df_majority = df[df.Label.eq(False)]
+  df_minority = df[df.Label.eq(True)]
+  df_majority_upsampled = resample(df_minority, replace = True, n_samples= len(df_majority), random_state = 123)
+  df_upsampled = pd.concat([df_majority_upsampled, df_majority])
+  x = df_upsampled['Statement']
+  y = df_upsampled['Label']
+  
   #fit and transform data into a matrix
   vectorizer = TfidfVectorizer(ngram_range = (1 , 3), max_features = 1000)
   vectorizer.fit(list(x_train) + list(x_test))
   vectorizer.get_feature_names_out() 
-  x = vectorizer.fit_transform(x)
+  x = vectorizer.transform(x)
   #validation curve to assess overfit and underfit
-  param_range = np.arange(0 , 10)
-  model_for_validation = LinearSVC(C=0.05)
-  train_scores, test_scores = validation_curve(model_for_validation, x, y, param_name="C", param_range = param_range, cv = 5 , scoring = "accuracy")
+  param_range = [0, 0.05, 0.5]
+  model_for_validation = SVC(C=0.05, kernel="rbf")
+  train_scores, test_scores = validation_curve(model_for_validation, x, y, param_name="gamma", param_range = param_range, cv = 5 , scoring = "accuracy")
 
   train_scores_mean = np.mean(train_scores, axis=1)
   train_scores_std = np.std(train_scores, axis=1)

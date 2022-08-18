@@ -27,6 +27,7 @@ from datetime import date
 from dateutil.relativedelta import relativedelta
 
 from website.maintenance import *
+from sklearn.utils import resample
 
 
 #establish connection to database
@@ -249,6 +250,9 @@ def train_FN_Model():
     global linear_model
     
     data = retrieve_trainData()
+
+    #upsampling 
+    data['Label'].replace(["TRUE" , "FALSE"] , [0 , 1])
     
     #train test and split the data
     x = data['Statement']
@@ -262,10 +266,20 @@ def train_FN_Model():
     
     x_train_vec = FN_vectorizer.transform(x_train)
     x_test_vec = FN_vectorizer.transform(x_test)
+
+    #upsample
+    #downsample
+    df_majority = data[data.Label.eq(False)]
+    df_minority = data[data.Label.eq(True)]
+    df_majority_upsampled = resample(df_minority, replace = True, n_samples= len(df_majority), random_state = 123)
+    df_upsampled = pd.concat([df_majority_upsampled, df_majority])
+    x = df_upsampled['Statement']
+    y = df_upsampled['Label']
+    x_vec = FN_vectorizer.transform(x)    
     
     #fit the matrix data into the SVC model
-    linear_model = LinearSVC(C = 0.05)
-    linear_model.fit(x_train_vec, y_train)
+    linear_model = SVC(C = 0.05 , gamma = 1 , kernel='rbf')
+    linear_model.fit(x_vec, y)
     prediction = linear_model.predict(x_test_vec)
     score = accuracy_score(y_test, prediction) * 100
 
