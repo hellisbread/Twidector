@@ -611,6 +611,14 @@ def getTweetTypeCount(df):
     counts = {'offensive': offensive, 'hateful': hateful ,'total_negative': offensive + hateful, 'neutral': neutral}
 
     return counts
+
+def getTweetDetails(tweet_id):
+    
+    tweet = api.get_statuses(tweet_id)
+
+    print(tweet)
+
+    return tweet
         
 def uploadScoring(filename):
     global df
