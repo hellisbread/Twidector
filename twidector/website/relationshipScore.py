@@ -36,27 +36,20 @@ def assess_replies(twitterHandle):
     #retrieve 100 tweet results
     try:
         tweets = api.user_timeline(user_id = twitterHandle, count = 100)
-        for tweet in tweets:
-            accountUser = tweet.in_reply_to_user_id
-            if(type(accountUser) == int):
-                accountIDs.append(accountUser)
-
+        accountIDs = [tweet.in_reply_to_user_id for tweet in tweets if type(tweet.in_reply_to_user_id) == int]
         #top 10 users with the most number of replies
         results = Counter(accountIDs).most_common(10)
 
-            #return list of profiles that are close to user
-        list_of_users = []
-        for result in results:
-            list_of_users.append(result[0])
+        #return list of profiles that are close to user
+        list_of_users = [result[0] for result in results]
         return list_of_users
     except:
         return []
 
 def assess_other_replies(results):
+    global reply_list
     if(len(results) > 0):
-        for result in results:
-            reply_list.append(assess_replies(result))
-
+        reply_list = [assess_replies(result) for result in results ]
 
 def assess_replies_score(UserID):
 
@@ -76,7 +69,6 @@ def assess_replies_score(UserID):
             if (user in reply_list[count]):
                 potential_close_friends.append(user)
             count += 1
-
         if (UserID in potential_close_friends):
             potential_close_friends.remove(UserID)
 
@@ -86,7 +78,7 @@ def assess_following(UserID):
 
     list_of_following = []
     responses= client.get_users_following(id = UserID, max_results=1000)
-    count = 0
+
     for tweets in responses:
         if tweets is None:
             continue
@@ -112,33 +104,30 @@ def assess_followers(UserID):
                 break
     return list_of_followers
 
+
 def assess_mentions(UserID):
     authorID_list = []
-    topFive_authors = []
 
     responses = client.get_users_mentions(id = UserID, max_results = 100, expansions = 'author_id')
-    count = 0
     for tweets in responses:
         if tweets is None:
             continue
         else:
             try:
-                for tweet in tweets:
-                    authorID_list.append(tweet['author_id'])
+                authorID_list = [tweet['author_id'] for tweet in tweets]
             except:
                 break
     
     #top 5 authors that mention the user the most
     results = Counter(authorID_list).most_common(10)
+    topFive_authors = [result[0] for result in results]
 
-    for result in results:
-        topFive_authors.append(result[0])
-    
     return topFive_authors
     
 def assess_other_mentions(results):
-    for result in results:
-            mention_list.append(assess_mentions(result))
+    global mention_list
+    mention_list = [assess_mentions(result) for result in results]
+    
 
 def assess_mention_score(UserID):
     potential_close_friends = []
@@ -171,10 +160,8 @@ def assess_relationship(TwitterHandle):
     
     #1st:(following each other + mentions), 2nd:(following each other + reply), 3rd: following each other, 4th: mentions only, 5th: reply only  
     #evaluate if users are following each other
-    for user in following_list:
-        if user in follower_list:
-            following_each_other.append(user)
-    
+    following_each_other = [user for user in following_list if user in follower_list]
+
     total_list = following_each_other + reply_score + mention_score
     total_list = np.array(total_list)
     total_list = np.unique(total_list)  
@@ -191,7 +178,7 @@ def assess_relationship(TwitterHandle):
              dict_score[user] = dict_score[user] + 2
          if user in reply_score:
              dict_score[user] = dict_score[user] + 1
-        
+
     return dict_score
 
 def score_relationship(dict_score, user_request , limit):
