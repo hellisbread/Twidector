@@ -21,17 +21,13 @@ auth.set_access_token(access_token,access_token_secret)
 
 api = tweepy.API(auth)
 
-def updateAccess(user_access_token, user_secret):
+client = tweepy.Client(bearer_token=twitter_bearer_token)
 
-    global client
+def updateAccess(user_access_token, user_secret):
     try:
         auth.set_access_token(user_access_token, user_secret)
-        #establish connection and set bearer token
-        client = tweepy.Client(bearer_token=twitter_bearer_token, access_token= user_access_token, access_token_secret = user_secret)
         return True
     except:
-        #establish connection and set bearer token
-        client = tweepy.Client(bearer_token=twitter_bearer_token)
         return False
 
 def assess_replies(twitterHandle):
@@ -40,9 +36,7 @@ def assess_replies(twitterHandle):
     #retrieve 100 tweet results
     try:
         tweets = api.user_timeline(user_id = twitterHandle, count = 100)
-        print(tweets)
         for tweet in tweets:
-            print(tweet)
             accountUser = tweet.in_reply_to_user_id
             if(type(accountUser) == int):
                 accountIDs.append(accountUser)

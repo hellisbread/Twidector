@@ -626,12 +626,15 @@ def dashboard(request):
 
     tweet_list = []
 
+    print(favourited_objectlist)
+
     for favourite in favourited_objectlist:
 
         data = getalltweets(favourite["favourited_twitter_id"], 3)
 
         predicted_score = predictHate(data['tweet'])
-        data['predicted_score'] = predicted_score  
+
+        data['predicted_hate_score'] = predicted_score 
         data['twitter_name'] = favourite["favourited_username"]
         data['twitter_img'] = getuserIMG(favourite["favourited_twitter_id"])
 
@@ -685,9 +688,7 @@ def analyse(request):
         
 
         predicted_score = predictHate(data['tweet'])
-
-        print(predicted_score)
-
+        
         data['predicted_hate_score'] = predicted_score
 
         predicted_fake_score = predictFake(data['tweet'], url)
@@ -724,7 +725,7 @@ def analyse(request):
 
         data = pd.read_json(context.get('dataframe'))
 
-        filtered_data = {'dataframe': data[data['predicted_score']==int(filterOption)]}
+        filtered_data = {'dataframe': data[data['predicted_hate_score']==int(filterOption)]}
 
         context.update(filtered_data)
        

@@ -31,10 +31,12 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn import svm, linear_model
 from sklearn.svm import SVC
 from sklearn.multiclass import OneVsRestClassifier
-from .maintenance import *
+#from .maintenance import *
 import numpy as np
 
 import warnings
+
+from website.maintenance import load_pickle
 warnings.simplefilter(action='ignore', category=FutureWarning)
 import sshtunnel
 import logging
@@ -218,6 +220,7 @@ def predictHate(tweet):
     
     tempseries = pd.Series(tweet)
     ct = preprocess(tempseries)
+    #ct = preprocess(tempseries)
     #print(list(ct))
     # vectorizer.fit(list(ct) + list(x_train) + list(x_test))
     vectorizer = load_pickle('hate_vectorizer.sav')

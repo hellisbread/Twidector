@@ -157,10 +157,10 @@
                 </div>
                 <div class="mb-4">
                   <h6>@{{tweet_item.twitter_name}} <small>{{tweet_item.date}}</small> 
-                    {% if tweet_item.predicted_score == 0 %}
+                    {% if tweet_item.predicted_hate_score == 0 %}
                       
                       <span style="float:right; color:red;"><strong>Offensive</strong></span></h6>
-                      {% elif tweet_item.predicted_score == 1 %}
+                      {% elif tweet_item.predicted_hate_score == 1 %}
                       <span style="float:right; color:red;"><strong>Hateful</strong></span></h6>
                       {% else %}
                       <span style="float:right; color:lightskyblue;"><strong>Neutral</strong></span></h6>

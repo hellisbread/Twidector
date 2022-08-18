@@ -11,6 +11,9 @@ import requests
 from dateutil.parser import parse
 import pickle
 
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn import linear_model
+
 def save_pickle(model, filename):
     pickle.dump((model), open(filename, 'wb'))
 
