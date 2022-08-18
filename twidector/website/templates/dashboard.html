@@ -150,7 +150,7 @@
                         Actions
                       </button>
                       <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="#">Report Inaccuracy</a></li>
+                        <li><a class="dropdown-item"  data-bs-toggle="modal" data-bs-target="#myModal" href="#" onclick="setId(id = '{{tweet_item.tweetid}}')">Report Inaccuracy</a></li>
                       </ul>
                     </div>
                   </div>
@@ -207,7 +207,68 @@
   </form>
   <!-- </div> -->
 
+  <!-- //universal format for the button to show the pop up -->
+  <div class="modal" id="myModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Report Tweet</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <form method="POST" action="/report-tweet/">
+          <div class="modal-body">
+            {% csrf_token %}
+            <input type="hidden" id="form_tweet_id" value="" name="req_id">
+            <div class="mb-3" name="grading_option">
+              Hate Inaccuracy
+              <br>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio0" value="0">
+                <label class="form-check-label" for="inlineRadio1">0. Hateful</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="1">
+                <label class="form-check-label" for="inlineRadio2">1. Offensive </label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="2">
+                <label class="form-check-label" for="inlineRadio3">2. Neutral </label>
+              </div>
+            </div>
+            <div class="mb-3" name="grading_option">
+              Fake News
+              <br>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio0" value="0">
+                <label class="form-check-label" for="inlineRadio1">3. True</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="1">
+                <label class="form-check-label" for="inlineRadio2">4. Fake</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="2">
+                <label class="form-check-label" for="inlineRadio3">5. Neither </label>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary" name="grade">Submit</button>
+              <button type="submit" class="btn btn-danger">Cancel</button>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
 
+    <!-- JavaScript(s) -->
+  {% block javascript %}
+  <script type="text/javascript">
+    function setId(id) {
+      console.log("kesini yoi")
+      document.getElementById("form_tweet_id").value = id
+    }
+  </script>
+  {% endblock %}
 
   <!-- JavaScript(s) -->
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
