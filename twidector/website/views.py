@@ -719,7 +719,7 @@ def analyse(request):
 
     elif 'filter' in request.POST:
 
-        context = request.session.get('current-search')
+        context = request.session['current-search']
 
         filterOption = request.POST['filter-by']
 
@@ -727,7 +727,14 @@ def analyse(request):
 
             data = {'dataframe': pd.read_json(context.get('dataframe'))}
 
+            transfer = {'dataframe': context.get('dataframe'), 'dataSize': context.get('dataSize'), 'user' : context.get('user'), 'img' : context.get('img'), 'TypeCount' : context.get('TypeCount')}
+
             context.update(data)
+
+            if 'current-search' in request.session:
+                del request.session['current-search']
+
+                request.session['current-search'] = transfer
 
             return render(request, 'analyse.html', context) 
 
@@ -736,6 +743,13 @@ def analyse(request):
         filtered_data = {'dataframe': data[data['predicted_hate_score']==int(filterOption)]}
 
         context.update(filtered_data)
+
+        transfer = {'dataframe': data.to_json(), 'dataSize': context.get('dataSize'), 'user' : context.get('user'), 'img' : context.get('img'), 'TypeCount' : context.get('TypeCount')}
+
+        if 'current-search' in request.session:
+            del request.session['current-search']
+
+            request.session['current-search'] = transfer
        
         return render(request, 'analyse.html', context)
 
