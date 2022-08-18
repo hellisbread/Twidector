@@ -632,13 +632,16 @@ def dashboard(request):
 
         data = getalltweets(favourite["favourited_twitter_id"], 3)
 
-        predicted_score = predictHate(data['tweet'])
+        try:
+            predicted_score = predictHate(data['tweet'])
 
-        data['predicted_hate_score'] = predicted_score 
-        data['twitter_name'] = favourite["favourited_username"]
-        data['twitter_img'] = getuserIMG(favourite["favourited_twitter_id"])
+            data['predicted_hate_score'] = predicted_score 
+            data['twitter_name'] = favourite["favourited_username"]
+            data['twitter_img'] = getuserIMG(favourite["favourited_twitter_id"])
 
-        tweet_list.append(data)
+            tweet_list.append(data)
+        except:
+            continue
 
     context = {'twitter_id_exist':True , 'relationship_access':relationship_list, 'dataframe': tweet_list}
 
@@ -646,7 +649,6 @@ def dashboard(request):
 
 @login_required
 def analyse(request):
-
     if 'search-url' in request.POST:
 
         if 'current-search' in request.session:
@@ -686,10 +688,13 @@ def analyse(request):
 
             return render(request, 'analyse.html', {})
         
+        try:
+            predicted_score = predictHate(data['tweet'])
 
-        predicted_score = predictHate(data['tweet'])
-        
-        data['predicted_hate_score'] = predicted_score
+            data['predicted_hate_score'] = predicted_score
+        except:
+            messages.error(request, 'This user has privated their messages. We are unable to analyze.')
+            return render(request,'analyse.html',{})
 
         predicted_fake_score = predictFake(data['tweet'], url)
 
