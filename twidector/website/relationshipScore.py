@@ -40,7 +40,9 @@ def assess_replies(twitterHandle):
     #retrieve 100 tweet results
     try:
         tweets = api.user_timeline(user_id = twitterHandle, count = 100)
+        print(tweets)
         for tweet in tweets:
+            print(tweet)
             accountUser = tweet.in_reply_to_user_id
             if(type(accountUser) == int):
                 accountIDs.append(accountUser)
@@ -106,13 +108,11 @@ def assess_followers(UserID):
     list_of_followers = []
     responses = client.get_users_followers(id = UserID, max_results = 1000)
     for tweets in responses:
-        print(tweets)
         if tweets is None:
             continue
         else:
             try:
                 for tweet in tweets:
-                    print(tweet)
                     list_of_followers.append(tweet['id'])
             except:
                 break
