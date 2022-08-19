@@ -570,6 +570,7 @@ def accessing_score(request):
      #button 
        if 'grade' in request.POST:
             tweet_score(t_id , grading_option)
+            messages.success(request, 'Successfully Adjusting the score!')
 
     context = {'tweet_t' : tweet_t}
 
