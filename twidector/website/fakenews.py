@@ -468,23 +468,25 @@ def score_the_user(TwitterHandle , df):
     
     #checks if user has a high like to reply ratio in their tweets
     retrieve_tweetID = retrieveTweetID(TwitterHandle)
-    #list_of_ID = [tweetID['tweet_id'] for tweetID in retrieve_tweetID]
-    tweets = client.get_tweets(ids = retrieve_tweetID, tweet_fields = 'public_metrics')
+    if len(retrieve_tweetID)> 0:
+        tweets = client.get_tweets(ids = retrieve_tweetID, tweet_fields = 'public_metrics')
     
-    for tweet in tweets.data:       
-        public_metrics = tweet.public_metrics
-        reply_count = public_metrics['reply_count']
-        like_count = public_metrics['like_count']
-        
-        if reply_count == 0:
-            reply_count = 1
+        for tweet in tweets.data:       
+            public_metrics = tweet.public_metrics
+            reply_count = public_metrics['reply_count']
+            like_count = public_metrics['like_count']
             
-        ratio = like_count/reply_count
-        total_ratio += ratio
-        average_count += 1
-    
-    mean_like_reply_ratio = total_ratio / average_count
-    
+            if reply_count == 0:
+                reply_count = 1
+                
+            ratio = like_count/reply_count
+            total_ratio += ratio
+            average_count += 1
+        
+        mean_like_reply_ratio = total_ratio / average_count
+    else:
+        mean_like_reply_ratio = 0
+        
     #check if most of the tweets are fake
     data_count = df['predicted_fake_score'].value_counts()
     list = data_count.keys()
@@ -502,16 +504,16 @@ def score_the_user(TwitterHandle , df):
     
         
     if percentage_fake_tweet < 50:
-        credibility_score += 1
+        credibility_score += 2
         
     if user.data.verified == True:
-        credibility_score += 2
+        credibility_score += 3
         
     if percent_follow > 30:
-        credibility_score += 2
+        credibility_score += 3
     
     if mean_like_reply_ratio > 0:
-        credibility_score += 3
+        credibility_score += 2
     
     return credibility_score
 
