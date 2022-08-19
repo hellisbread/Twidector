@@ -444,19 +444,10 @@ def predictFake(tweets, twitter_handle):
 #retrieve the tweet 3 months before today
 def retrieveTweetID(TwitterHandle):
     
-    three_months_ago = date.today() + relativedelta(months =-3) 
-    
-    open_connect()
-    
-    sql = "SELECT tweet_id FROM `tweet` WHERE `tweet_date` > %s AND `screen_name` = %s LIMIT 100"
-    
-    data = [three_months_ago, TwitterHandle]
-    
-    with connection.cursor() as cursor:
-        cursor.execute(sql, tuple(data))
-        result = cursor.fetchall()
-        close_connect()  
-        return result
+    three_months_ago = date.today() + relativedelta(months =-3)     
+    statuses = api.user_timeline(screen_name = TwitterHandle, count = 100)
+    result = [status.id for status in statuses if type(status.id) == int and datetime.date(status.created_at) > three_months_ago]
+    return result
 
 #score the user to determine if they are fake news spreader
 def score_the_user(TwitterHandle , df):
@@ -477,8 +468,8 @@ def score_the_user(TwitterHandle , df):
     
     #checks if user has a high like to reply ratio in their tweets
     retrieve_tweetID = retrieveTweetID(TwitterHandle)
-    list_of_ID = [tweetID['tweet_id'] for tweetID in retrieve_tweetID]
-    tweets = client.get_tweets(ids = list_of_ID, tweet_fields = 'public_metrics')
+    #list_of_ID = [tweetID['tweet_id'] for tweetID in retrieve_tweetID]
+    tweets = client.get_tweets(ids = retrieve_tweetID, tweet_fields = 'public_metrics')
     
     for tweet in tweets.data:       
         public_metrics = tweet.public_metrics
