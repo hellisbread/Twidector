@@ -351,6 +351,7 @@ def login_twitter_callback(request):
                 twitter_user_new.twitter_oauth_token = twitter_auth_token
                 user, twitter_user_new = create_update_user_from_twitter(twitter_user_new)
                 if user is not None:
+                    user.is_active = True
                     auth_login(request, user)
                     return redirect('dashboard')
             else:
