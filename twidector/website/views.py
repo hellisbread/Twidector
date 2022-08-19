@@ -801,7 +801,7 @@ def AnalyzeUser(request, user_handle):
         new_twitter_user = TwitterUserScore(
                                             twitter_id = twitterID,
                                             hate_score = int(hateScore),
-                                            fake_news_score = int(FakeScore)
+                                            fake_news_score = int(fakeScore)
                                             )
 
         new_twitter_user.save()
