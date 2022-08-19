@@ -21,6 +21,7 @@ def create_update_user_from_twitter(twitter_user_new):
         twitter_user.twitter_oauth_token = twitter_user_new.twitter_oauth_token
         twitter_user.save()
         user = twitter_user.user
+        user.is_active = True
         if user is not None:
             return user, twitter_user
         else:
