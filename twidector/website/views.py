@@ -112,7 +112,9 @@ def freeTrial(request):
 
         typeCount = getTweetTypeCount(data)
 
-        context = {'dataframe': data , 'user' : url, 'img' : twitterIMGURL, 'TypeCount' : typeCount}
+        hateScore = analyzeTwitterUser(data)
+
+        context = {'dataframe': data , 'user' : url, 'img' : twitterIMGURL, 'TypeCount' : typeCount, 'hateScore':hateScore}
 
         print(context)
 
@@ -658,15 +660,6 @@ def analyse(request):
 
             return render(request, 'analyse.html', {})
 
-        if(TwitterUserScore.objects.filter(twitter_id = twitterID).exists() == False):
-            new_twitter_user = TwitterUserScore(
-                                                twitter_id = twitterID,
-                                                hate_score = 0,
-                                                fake_news_score = 0
-                                                )
-
-            new_twitter_user.save()
-
         twitterIMGURL = getuserIMG(twitterID)
 
         if(start_date != "" and end_date !=""):
@@ -698,9 +691,22 @@ def analyse(request):
 
         dataSize = data.shape[0]
 
-        context = {'dataframe': data ,'dataSize': dataSize, 'user' : url, 'img' : twitterIMGURL, 'TypeCount' : typeCount}
+        hateScore = analyzeTwitterUser(data)
 
-        transfer = {'dataframe': data.to_json() ,'dataSize':int(dataSize), 'user' : url, 'img' : twitterIMGURL, 'TypeCount' : typeCount}
+        fakeScore = score_the_user(url, data)
+
+        if(TwitterUserScore.objects.filter(twitter_id = twitterID).exists() == False):
+            new_twitter_user = TwitterUserScore(
+                                                twitter_id = twitterID,
+                                                hate_score = int(hateScore),
+                                                fake_news_score = int(fakeScore)
+                                                )
+
+            new_twitter_user.save()
+
+        context = {'dataframe': data ,'dataSize': dataSize, 'user' : url, 'img' : twitterIMGURL, 'TypeCount' : typeCount, 'hateScore' : hateScore, 'fakeScore': fakeScore}
+
+        transfer = {'dataframe': data.to_json() ,'dataSize':int(dataSize), 'user' : url, 'img' : twitterIMGURL, 'TypeCount' : typeCount, 'hateScore' : hateScore, 'fakeScore': fakeScore}
 
         request.session['current-search'] = transfer
 
@@ -733,7 +739,7 @@ def analyse(request):
 
         context.update(filtered_data)
 
-        transfer = {'dataframe': data.to_json(), 'dataSize': context.get('dataSize'), 'user' : context.get('user'), 'img' : context.get('img'), 'TypeCount' : context.get('TypeCount')}
+        transfer = {'dataframe': data.to_json(), 'dataSize': context.get('dataSize'), 'user' : context.get('user'), 'img' : context.get('img'), 'TypeCount' : context.get('TypeCount'),'hateScore' : context.get('hateScore'), 'fakeScore': context.get('fakeScore')}
 
         if 'current-search' in request.session:
             del request.session['current-search']
@@ -762,14 +768,7 @@ def AnalyzeUser(request, user_handle):
 
         return render(request, 'analyse.html', {})
 
-    if(TwitterUserScore.objects.filter(twitter_id = twitterID).exists() == False):
-        new_twitter_user = TwitterUserScore(
-                                            twitter_id = twitterID,
-                                            hate_score = 0,
-                                            fake_news_score = 0
-                                            )
-
-        new_twitter_user.save()
+    
 
     twitterIMGURL = getuserIMG(twitterID)
 
@@ -794,9 +793,22 @@ def AnalyzeUser(request, user_handle):
 
     dataSize = data.shape[0]
 
-    context = {'dataframe': data ,'dataSize': dataSize, 'user' : url, 'img' : twitterIMGURL, 'TypeCount' : typeCount}
+    hateScore = analyzeTwitterUser(data)
 
-    transfer = {'dataframe': data.to_json() ,'dataSize':int(dataSize), 'user' : url, 'img' : twitterIMGURL, 'TypeCount' : typeCount}
+    fakeScore = score_the_user(url, data)
+
+    if(TwitterUserScore.objects.filter(twitter_id = twitterID).exists() == False):
+        new_twitter_user = TwitterUserScore(
+                                            twitter_id = twitterID,
+                                            hate_score = int(hateScore),
+                                            fake_news_score = int(FakeScore)
+                                            )
+
+        new_twitter_user.save()
+
+    context = {'dataframe': data ,'dataSize': dataSize, 'user' : url, 'img' : twitterIMGURL, 'TypeCount' : typeCount, 'hateScore' : hateScore, 'fakeScore': fakeScore}
+
+    transfer = {'dataframe': data.to_json() ,'dataSize':int(dataSize), 'user' : url, 'img' : twitterIMGURL, 'TypeCount' : typeCount, 'hateScore' : hateScore, 'fakeScore': fakeScore}
 
     request.session['current-search'] = transfer
 

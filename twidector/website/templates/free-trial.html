@@ -145,8 +145,18 @@
                             <div class="col-md-4">
                                 <h5 class="card-title">Twitter user: {{user}}</h5>
                                 <h6 class="card-subtitle mb-5"><a href="http://www.twitter.com/{{user}}">http://www.twitter.com/{{user}}</a></h6>
-                                <p class="card-text"> Summary: <br /> This user is a <strong>negative</strong> twitter
+
+                                {% if hateScore <= 2%}
+                                <p class="card-text"> Summary: <br /> This user is a <strong>Positive</strong> twitter
                                     user.</p>
+                                {%elif hateScore <= 3%}
+                                <p class="card-text"> Summary: <br /> This user is a <strong>Likely Negative</strong> twitter
+                                    user.</p>
+                                {%else%}
+                                <p class="card-text"> Summary: <br /> This user is a <strong>Negative</strong> twitter
+                                    user.</p>
+
+                                {%endif%}    
                             </div>
                             <div class="col-md-5">
                                 <h5 class="card-title">Scan Result:</h5>

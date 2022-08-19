@@ -495,7 +495,7 @@ def score_the_user(TwitterHandle , df):
     mean_like_reply_ratio = total_ratio / average_count
     
     #check if most of the tweets are fake
-    data_count = df['FN_Prediction'].value_counts()
+    data_count = df['predicted_fake_score'].value_counts()
     list = data_count.keys()
     percentage_fake_tweet = 0
     for key in list:

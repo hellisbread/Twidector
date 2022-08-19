@@ -583,7 +583,8 @@ def analyzeTwitterUser(df):
     hatedf = df[df['predicted_hate_score'] != 2]
     # calculate total number of 0(hateful) + 1(offensive)/total number * 10 = hateful score
     score = round((len(hatedf.index)/len(df.index) * 10),2)
-    print('user has a hateful score of: ' + str(score))
+
+    return score
 
 def returnhatefultweets(df):
     listofdictofhatefultweets = []
