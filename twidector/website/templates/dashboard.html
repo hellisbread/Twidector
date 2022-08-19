@@ -180,6 +180,13 @@
         {% if twitter_id_exist%}
         <div class="col-md-4 mt-3">
           <h4 class="mb-4 text-center"> Suggested Analysis </h3>
+
+
+            {%if relationship_access|length == 0 %}
+            <div class="mb-5 text-center">
+              <p> No friends found.</p>
+            </div>
+            {% else %}
             {% for relationship_user in relationship_access %}
           <div class="mb-5 text-center">
             <div class="row" style="padding: 0 110px;">
@@ -200,6 +207,7 @@
               <a type="button" href="{% url 'analyzeUser' relationship_user.1%}" class="btn btn-block btn-black-outline-secondary text-center bg-dark text-white"> View Analysis </a>
           </div>
           {% endfor %}
+          {% endif %}
         </div>
         {% endif %}
       </div>
