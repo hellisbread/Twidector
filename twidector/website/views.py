@@ -352,6 +352,7 @@ def login_twitter_callback(request):
                 user, twitter_user_new = create_update_user_from_twitter(twitter_user_new)
                 if user is not None:
                     user.is_active = True
+                    user.save()
                     auth_login(request, user)
                     return redirect('dashboard')
             else:
