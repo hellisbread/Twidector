@@ -605,22 +605,11 @@ def dashboard(request):
 
     updateAccess(access_token_info.twitter_oauth_token.oauth_token, access_token_info.twitter_oauth_token.oauth_token_secret)
 
-    # if 'dashboard-info' in request.session:
-    #     context = request.session.get('dashboard-info')
-
-    #     relationship_list = context.get('relationship_access')
-
-    #     del request.session['dashboard-info']
-
-    # else:
-
     twitter_handle = getuserUserHandle(twitter_id)
 
     relationship = assess_relationship(twitter_handle)
 
     relationship_list = retrieve_top_users(relationship, 6, request.user)
-
-    #request.session['dashboard-info'] = context
 
     favourited_objectlist = Favourited.objects.filter(user = request.user).filter(soft_delete=0).values('favourited_twitter_id', 'favourited_username')
 

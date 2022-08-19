@@ -402,8 +402,8 @@ def retrieveTweets_With_Date(userID, TwitterHandle):
 def predictFN(df):
     FN_vectorizer = load_pickle('fake_news_vectorizer.sav')
     linear_model = load_pickle('fake_news_model.sav')
-    screen_name_list = ["cnnbrk", "CNN", "nytimes", "BBCBreaking", "BBCWorld", "TheEconomist", "Reuters",
-                       "WSJ", "washingtonpost", "TIME", "ABC", "ndtv", "AP", "ChannelNewsAsia"]
+    screen_name_list = ["cnnbrk", "cnn", "nytimes", "bbcbreaking", "bbcworld", "theeconomist", "reuters",
+                       "wsj", "washingtonpost", "time", "abc", "ndtv", "ap", "channelnewsasia"]
     
     clean_tweets = df['Clean_Tweets']
     screen_name = df['Screen_Name']
@@ -422,12 +422,12 @@ def predictFN(df):
     return df
 
 def predictFake(tweets, twitter_handle):
-    screen_name_list = ["cnnbrk", "CNN", "nytimes", "BBCBreaking", "BBCWorld", "TheEconomist", "Reuters",
-                       "WSJ", "washingtonpost", "TIME", "ABC", "ndtv", "AP", "ChannelNewsAsia"]
+    screen_name_list = ["cnnbrk", "cnn", "nytimes", "bbcbreaking", "bbcworld", "theeconomist", "reuters",
+                       "wsj", "washingtonpost", "time", "abc", "ndtv", "ap", "channelnewsasia"]
     tempseries = pd.Series(tweets)
     ct = cleanStatements(tempseries)
 
-    if twitter_handle in screen_name_list:
+    if twitter_handle.lower() in screen_name_list:
         vectorizer = load_pickle('fake_news_vectorizer.sav')
         m = vectorizer.transform(ct)
 
