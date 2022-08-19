@@ -10,6 +10,7 @@ import urllib.request,sys,time
 import requests
 from dateutil.parser import parse
 import pickle
+from sklearn.utils import resample
 
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn import linear_model
@@ -123,3 +124,48 @@ def retrain_hate():
 
     save_pickle(vectorizer,'hate_vectorizer.sav')
 
+#train the fake news prediction model
+def retrain_fakenews():
+    
+    data = pd.read_csv('fakenewscleaned.csv', encoding="ISO-8859-1")
+
+    #upsampling 
+    data['Label'].replace(["TRUE" , "FALSE"] , [0 , 1])
+    
+    #train test and split the data
+    x = data['Statement']
+    y = data['Label']
+    
+    x_train, x_test, y_train, y_test = train_test_split(x, y, stratify = y, test_size=0.2)
+    
+    #fit into bag of words and transform data into a matrix
+    FN_vectorizer = TfidfVectorizer(ngram_range = (1 , 3), max_features = 2000)
+    FN_vectorizer.fit(list(x_train) + list(x_test))
+    
+    x_train_vec = FN_vectorizer.transform(x_train)
+    x_test_vec = FN_vectorizer.transform(x_test)
+
+    #upsample
+    #downsample
+    df_majority = data[data.Label.eq(False)]
+    df_minority = data[data.Label.eq(True)]
+    df_majority_upsampled = resample(df_minority, replace = True, n_samples= len(df_majority), random_state = 123)
+    df_upsampled = pd.concat([df_majority_upsampled, df_majority])
+    x = df_upsampled['Statement']
+    y = df_upsampled['Label']
+    x_vec = FN_vectorizer.transform(x)    
+    
+    #fit the matrix data into the SVC model
+    linear_model = SVC(C = 0.05 , gamma = 1 , kernel='rbf')
+    linear_model.fit(x_vec, y)
+    #prediction = linear_model.predict(x_test_vec)
+    #score = accuracy_score(y_test, prediction) * 100
+
+    save_pickle(linear_model,'fake_news_model.sav')
+
+    save_pickle(FN_vectorizer,'fake_news_vectorizer.sav')
+
+webscrape_data()
+new_hate_data()
+retrain_hate()
+retrain_fakenews()
