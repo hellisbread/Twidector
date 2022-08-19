@@ -455,7 +455,7 @@ def adminLogin(request):
                 
             else:
                 messages.error(request, 'Invalid Username or Password')
-                return redirect('adminLogin')
+                return redirect('admin')
 
         else:
             return render(request,'admin-login.html', {})
