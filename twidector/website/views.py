@@ -704,9 +704,14 @@ def analyse(request):
 
             new_twitter_user.save()
 
-        context = {'dataframe': data ,'dataSize': dataSize, 'user' : url, 'img' : twitterIMGURL, 'TypeCount' : typeCount, 'hateScore' : hateScore, 'fakeScore': fakeScore}
+        relationship = assess_relationship(url)
 
-        transfer = {'dataframe': data.to_json() ,'dataSize':int(dataSize), 'user' : url, 'img' : twitterIMGURL, 'TypeCount' : typeCount, 'hateScore' : hateScore, 'fakeScore': fakeScore}
+        relationship_list = retrieve_top_users(relationship, 6, request.user)
+
+
+        context = {'dataframe': data ,'relationship_access':relationship_list,'dataSize': dataSize, 'user' : url, 'img' : twitterIMGURL, 'TypeCount' : typeCount, 'hateScore' : hateScore, 'fakeScore': fakeScore}
+
+        transfer = {'dataframe': data.to_json() ,'relationship_access':relationship_list,'dataSize':int(dataSize), 'user' : url, 'img' : twitterIMGURL, 'TypeCount' : typeCount, 'hateScore' : hateScore, 'fakeScore': fakeScore}
 
         request.session['current-search'] = transfer
 
@@ -739,7 +744,7 @@ def analyse(request):
 
         context.update(filtered_data)
 
-        transfer = {'dataframe': data.to_json(), 'dataSize': context.get('dataSize'), 'user' : context.get('user'), 'img' : context.get('img'), 'TypeCount' : context.get('TypeCount'),'hateScore' : context.get('hateScore'), 'fakeScore': context.get('fakeScore')}
+        transfer = {'dataframe': data.to_json(),'relationship_access':context.get('relationship_access'), 'dataSize': context.get('dataSize'), 'user' : context.get('user'), 'img' : context.get('img'), 'TypeCount' : context.get('TypeCount'),'hateScore' : context.get('hateScore'), 'fakeScore': context.get('fakeScore')}
 
         if 'current-search' in request.session:
             del request.session['current-search']
@@ -806,9 +811,13 @@ def AnalyzeUser(request, user_handle):
 
         new_twitter_user.save()
 
-    context = {'dataframe': data ,'dataSize': dataSize, 'user' : url, 'img' : twitterIMGURL, 'TypeCount' : typeCount, 'hateScore' : hateScore, 'fakeScore': fakeScore}
+    relationship = assess_relationship(url)
 
-    transfer = {'dataframe': data.to_json() ,'dataSize':int(dataSize), 'user' : url, 'img' : twitterIMGURL, 'TypeCount' : typeCount, 'hateScore' : hateScore, 'fakeScore': fakeScore}
+    relationship_list = retrieve_top_users(relationship, 6, request.user)
+
+    context = {'dataframe': data ,'relationship_access':relationship_list,'dataSize': dataSize, 'user' : url, 'img' : twitterIMGURL, 'TypeCount' : typeCount, 'hateScore' : hateScore, 'fakeScore': fakeScore}
+
+    transfer = {'dataframe': data.to_json() ,'relationship_access':relationship_list,'dataSize':int(dataSize), 'user' : url, 'img' : twitterIMGURL, 'TypeCount' : typeCount, 'hateScore' : hateScore, 'fakeScore': fakeScore}
 
     request.session['current-search'] = transfer
 
