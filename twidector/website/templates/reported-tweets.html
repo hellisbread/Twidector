@@ -145,14 +145,14 @@
           <div class="card-body container">
 
             {% for i in tweet_t %}
-            <div class="row">
-
+            <div class="row" style="margin-top: 20px;">
               <div class="col-md-2">
                 <img src="{% static 'img/emptyprofile.png' %}" alt="" width="100" height="100"
                   class="mr-3 rounded-circle img-thumbnail shadow-sm">
               </div>
+            </br>
               <div class="col-md-8">
-                <h6>{{i.screen_name}} <small> {{i.tweet_date}} </small></h6>
+                <h6><strong>{{i.screen_name}}</strong> <small> {{i.tweet_date}} </small></h6>
                 <!-- <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
                   et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
                   aliquip ex ea commodo consequat.</p> -->
