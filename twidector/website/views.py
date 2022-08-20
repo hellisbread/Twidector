@@ -594,7 +594,12 @@ def reportedTweets(request):
     #returning the reported tweets
     tweet_t = Tweet.objects.filter(flagged = 1).values()
  
-    return render(request, 'reported-tweets.html', {'tweet_t': tweet_t})
+    context={
+       
+      'tweet_t':tweet_t,
+    
+    } 
+    return render(request, 'reported-tweets.html', context)
 
 def accessing_score(request):
     tweet_t = Tweet.objects.filter(flagged = 1).values()

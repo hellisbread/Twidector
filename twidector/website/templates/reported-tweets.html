@@ -158,6 +158,31 @@
                   aliquip ex ea commodo consequat.</p> -->
                 <!-- <p> {{i.tweet_text}}</p> -->
                 <p>{{i.tweet_text}}</p>
+                <hr>
+                <table style=" background-repeat:no-repeat; width:450px;margin:0;" cellpadding="0" cellspacing="0" border="0">
+                  <tr>
+                    <th>Predicted hate score</th>
+                    <th>Predicted fake score</th>
+
+                  </tr>
+                  <tr>
+                    <td>{{i.predicted_hate_score}}</td>
+                    <td>{{i.predicted_fake_score}}</td>
+                  </tr>
+                </table>
+
+                <table style=" background-repeat:no-repeat; width:450px;margin:0;" cellpadding="0" cellspacing="0" border="0">
+                  <tr>
+                    <th>Offensive count</th>
+                    <th>Hateful count</th>
+                    <th>Neutral count</th>
+                  </tr>
+                  <tr>
+                    <td>{{i.offensive_count}}</td>
+                    <td>{{i.hateful_count}}</td>
+                    <td>{{i.neutral_count}}</td>
+                  </tr>
+                </table>
               </div>
               <!-- {{i.tweet_id|json_script:'json_tweet_id'}} -->
               <!-- //button -->
