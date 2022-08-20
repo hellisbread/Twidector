@@ -27,7 +27,7 @@ TEMPLATE_DIR = os.path.join(BASE_DIR, "templates")
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['twidector.pythonanywhere.com','localhost','127.0.0.1']
 
@@ -94,20 +94,13 @@ ssh_tunnel = SSHTunnelForwarder(
 ssh_tunnel.start()
 
 DATABASES = {
-    #development settings
+    #production settings
     'default': {
-        'ENGINE': os.getenv('DEV_SQL_ENGINE'),
-        'NAME': os.getenv('DEV_SQL_NAME'),
-        'USER': os.getenv('DEV_SQL_USER'),
-        'PASSWORD': os.getenv('DEV_SQL_PASSWORD'),
-        'HOST': os.getenv('DEV_SQL_HOST'),
-        'PORT': ssh_tunnel.local_bind_port,
-        'TEST': {
-          'NAME': "twidector$default",
-        },
-        'OPTIONS': {
-            'sql_mode': 'traditional',
-        }
+        'ENGINE': os.getenv('PROD_SQL_ENGINE'),
+        'NAME': os.getenv('PROD_SQL_NAME'),
+        'USER': os.getenv('PROD_SQL_USER'),
+        'PASSWORD': os.getenv('PROD_SQL_PASSWORD'),
+        'HOST': os.getenv('PROD_SQL_HOST'),
     }
 }
 
