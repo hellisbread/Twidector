@@ -637,14 +637,14 @@ def dashboard(request):
 
     context = {'twitter_id_exist':True , 'relationship_access':relationship_list, 'dataframe': tweet_list}
 
-    request.session['report-origin'] = "dashboard.html"
+    request.session['report-origin'] = "dashboard"
 
     return render(request, 'dashboard.html', context)
 
 @login_required
 def analyse(request):
 
-    request.session['report-origin'] = "analyse.html"
+    request.session['report-origin'] = "analyse"
 
     if 'search-url' in request.POST:
 
@@ -730,7 +730,7 @@ def analyse(request):
 
             data = {'dataframe': pd.read_json(context.get('dataframe'))}
 
-            transfer = {'dataframe': context.get('dataframe'), 'dataSize': context.get('dataSize'), 'user' : context.get('user'), 'img' : context.get('img'), 'TypeCount' : context.get('TypeCount')}
+            transfer = {'dataframe': context.get('dataframe'), 'relationship_access':context.get('relationship_access'), 'dataSize': context.get('dataSize'), 'user' : context.get('user'), 'img' : context.get('img'), 'TypeCount' : context.get('TypeCount'),'hateScore' : context.get('hateScore'), 'fakeScore': context.get('fakeScore')}
 
             context.update(data)
 
@@ -758,7 +758,20 @@ def analyse(request):
 
     else:
         if 'current-search' in request.session:
-            del request.session['current-search']
+            context = request.session['current-search']
+
+            data = {'dataframe': pd.read_json(context.get('dataframe'))}
+
+            transfer = {'dataframe': context.get('dataframe'), 'relationship_access':context.get('relationship_access'), 'dataSize': context.get('dataSize'), 'user' : context.get('user'), 'img' : context.get('img'), 'TypeCount' : context.get('TypeCount'),'hateScore' : context.get('hateScore'), 'fakeScore': context.get('fakeScore')}
+
+            context.update(data)
+
+            if 'current-search' in request.session:
+                del request.session['current-search']
+
+                request.session['current-search'] = transfer
+
+            return render(request, 'analyse.html', context)
 
         return render(request, 'analyse.html', {})
 
@@ -833,7 +846,7 @@ def reportTweets(request):
 
     report_origin = request.session.get('report-origin')
 
-    if(report_origin == "dashboard.html"):
+    if(report_origin == "dashboard"):
         if 'req_id' in request.POST:
         #getting the id of the tweet
             twitter_id = request.POST.get('req_id')
@@ -890,7 +903,7 @@ def reportTweets(request):
 
         messages.success(request, "Successfully Reported Tweet.")
         return redirect(dashboard)
-    elif(report_origin == "analyse.html"):
+    elif(report_origin == "analyse"):
 
         context = request.session.get('current-search')
 
@@ -973,6 +986,11 @@ def blocklist(request):
             messages.error(request, 'Invalid Twitter User')
             return redirect('block-list')
 
+        if(Blocked.objects.filter(blocked_twitter_id = twitter_id).filter(soft_delete = 0).exists()):
+
+            messages.error(request, "This user is already blocked!")
+            return redirect('block-list')
+
         new_block_user = Blocked(
                             blocked_twitter_id = twitter_id,
                             blocked_username = twitter_handle,
@@ -994,6 +1012,9 @@ def blocklist(request):
 
 @login_required
 def add_blocklist(request, user_id):
+
+    report_origin = request.session.get('report-origin')
+
     twitter_handle = user_id
 
     try:
@@ -1001,6 +1022,11 @@ def add_blocklist(request, user_id):
     except:
         messages.error(request, 'Invalid Twitter User')
         return redirect('block-list')
+
+    if(Blocked.objects.filter(blocked_twitter_id = twitter_id).filter(soft_delete = 0).exists()):
+
+        messages.error(request, "This user is already blocked!")
+        return redirect(report_origin)
 
     new_block_user = Blocked(
                         blocked_twitter_id = twitter_id,
@@ -1013,7 +1039,7 @@ def add_blocklist(request, user_id):
 
     messages.success(request, "Successfully added " + twitter_handle + " to block list.")
 
-    return redirect('dashboard')
+    return redirect(report_origin)
 
 @login_required
 def delete_blocklist(request, user_id):
@@ -1051,6 +1077,11 @@ def favouritelist(request):
             messages.error(request, 'Invalid Twitter User')
             return redirect('favourites')
 
+        if(Favourited.objects.filter(favourited_twitter_id = twitter_id).filter(soft_delete = 0).exists()):
+
+            messages.error(request, 'This user is already favourited!')
+            return redirect('favourites')
+
         new_favourite_user = Favourited(
                             favourited_twitter_id = twitter_id,
                             favourited_username = twitter_handle,
@@ -1073,6 +1104,8 @@ def favouritelist(request):
 @login_required
 def add_favouritelist(request, user_id):
 
+    report_origin = request.session.get('report-origin')
+
     twitter_handle = user_id
 
     try:
@@ -1080,6 +1113,11 @@ def add_favouritelist(request, user_id):
     except:
         messages.error(request, 'Invalid Twitter User')
         return redirect('favourites')
+
+    if(Favourited.objects.filter(favourited_twitter_id = twitter_id).filter(soft_delete = 0).exists()):
+
+        messages.error(request, 'This user is already favourited!')
+        return redirect(report_origin)
 
     new_favourite_user = Favourited(
                         favourited_twitter_id = twitter_id,
@@ -1092,7 +1130,7 @@ def add_favouritelist(request, user_id):
 
     messages.success(request, "Successfully added " + twitter_handle + " to favourites.")
 
-    return redirect('dashboard')
+    return redirect(report_origin)
 
 @login_required
 def delete_favouritelist(request, user_id):
