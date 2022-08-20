@@ -122,12 +122,12 @@
             <div class="input-group-prepend">
               <div class="input-group-text">@</div>
             </div>
-            <input type="text" class="form-control" id="Analyse-User" placeholder="Twitter Username">
+            <input type="text" name="analyse-user" class="form-control" id="Analyse-User" placeholder="Twitter Username">
           </div>
+          <!--===================================remove when done=========================================================================================-->
 
-          <a type="button" href="{% url 'analyse'%}" class="btn btn-block btn-black-outline-secondary text-center">
-            <i class="fa fa-search"></i> Start Analysis Now!
-          </a>
+          <input type="submit" value="Start Analysis Now!" name="analyse-now" class="btn btn-block btn-black-outline-secondary text-center">
+
 
           
           {% if twitter_id_exist%}

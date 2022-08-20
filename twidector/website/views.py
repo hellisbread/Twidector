@@ -679,6 +679,9 @@ def dashboard(request):
 
     request.session['report-origin'] = "dashboard"
 
+    #if 'analyze-now' in request.POST:
+    #    analyse
+
     return render(request, 'dashboard.html', context)
 
 @login_required
