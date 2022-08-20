@@ -23,7 +23,7 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('about-us/',views.aboutUs, name='about-us'),
     path('about-team/', views.aboutTeam, name='about-team'),
-    path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
+    path('login/', views.login_view, name='login'),
     path('login_twitter/', views.login_twitter, name='login_twitter'),
     path('login_twitter_callback/', views.login_twitter_callback, name='login_twitter_callback'),
     path('sync_twitter/', views.sync_twitter, name='sync_twitter'),

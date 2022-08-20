@@ -111,38 +111,38 @@
                     {% endfor %}
                   {% endif %}
 
-                    {% csrf_token %}
-                    <div class="form-outline mb-4">
+                  {% csrf_token %}
+                  {% for field in form %}  
+                  <div class="form-outline mb-4">
+                      {{ field.label_tag }}<br>  
+                      {{ field }}  
+                      {% if field.help_text %}  
+                      <small style="display: none ">{{ field.help_text }}</small>  
+                      {% endif %}  
+                      {% for error in field.errors %}  
+                      <p style="color: red">{{ error }}</p>  
+                      {% endfor %}  
+                  </div>
+                  {% endfor %} 
 
-                      <label class="form-label">Username:</label>
-                      <input type="text" id="username" name="username" class="form-control" placeholder="Username" />
-                    </div>
+                  <div class="text-center pt-1 mb-5 pb-1">
+                    <input class="btn btn-info btn-block fa-lg btn-outline-secondary login-button" type="submit"
+                      value="Login" />
+                    <a class="text-muted forgot-password" href="{% url 'password_reset_form' %}">Forgot password?</a>
+                  </div>
 
-                    <div class="form-outline mb-4">
+                  <div class="d-flex align-items-center justify-content-center mb-4 pb-4 pt-2">
+                    <h4 class="mb-0 me-2">Sign in via Twitter: </h4>
+                    <a type="button" class="btn btn-outline-secondary mx-1" href="{% url 'login_twitter' %}">
+                      <i class="fab fa-twitter twitter-icon"></i>
+                    </a>
+                  </div>
 
-                      <label class="form-label">Password:</label>
-                      <input type="password" id="password" name="password" class="form-control"
-                        placeholder="Password" />
-                    </div>
-
-                    <div class="text-center pt-1 mb-5 pb-1">
-                      <input class="btn btn-info btn-block fa-lg btn-outline-secondary login-button" type="submit"
-                        value="Login" />
-                      <a class="text-muted forgot-password" href="{% url 'password_reset_form' %}">Forgot password?</a>
-                    </div>
-
-                    <div class="d-flex align-items-center justify-content-center mb-4 pb-4 pt-2">
-                      <h4 class="mb-0 me-2">Sign in via Twitter: </h4>
-                      <a type="button" class="btn btn-outline-secondary mx-1" href="{% url 'login_twitter' %}">
-                        <i class="fab fa-twitter twitter-icon"></i>
-                      </a>
-                    </div>
-
-                    <div class="d-flex align-items-center justify-content-center pb-2">
-                      <p class="mb-0 me-2">Don't have an account?</p>
-                      <a type="button" class="btn btn-block btn-outline-secondary"
-                        href="{% url 'register' %}">Register</a>
-                    </div>
+                  <div class="d-flex align-items-center justify-content-center pb-2">
+                    <p class="mb-0 me-2">Don't have an account?</p>
+                    <a type="button" class="btn btn-block btn-outline-secondary"
+                      href="{% url 'register' %}">Register</a>
+                  </div>
 
                 </form>
               </div>

@@ -22,7 +22,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from .forms import user_info
 
-from .forms import UserRegistrationForm
+from .forms import UserRegistrationForm, UserLoginForm
 from django.contrib.auth import views as auth_views
 from django.contrib.admin.views.decorators import staff_member_required
 
@@ -123,6 +123,35 @@ def freeTrial(request):
         return render(request, 'free-trial.html', context)
 
 #Login/Register Views
+def login_view(request):
+    if 'loggedin' not in request.session:
+        form = UserLoginForm(request.POST or None)
+        if request.POST:
+            if form.is_valid():
+                user = form.login(request)
+
+                if user:
+                    auth_login(request, user)
+                    request.session['loggedin'] = 'logged-in'
+                    return redirect('dashboard')
+                    
+                else:
+                    messages.error(request, 'Invalid Username or Password')
+                    print('Invalid Username or Password')
+                    return redirect('login')
+            else:
+                messages.error(request, 'Invalid details')
+                print('Invalid deets')
+                return redirect('login')
+        else:
+            form = UserLoginForm()
+        return render(request, 'login.html', {'form':form})
+    else:
+        return redirect('index')
+    
+
+
+#Login/Register Views
 def login(request):
     if 'loggedin' not in request.session:
         username = request.POST['username']
@@ -136,7 +165,10 @@ def login(request):
             
         else:
             messages.error(request, 'Invalid Username or Password')
+            print('Invalid Username or Password')
             return redirect('login')
+    
+
     else:
         return redirect('index')
 
@@ -185,12 +217,12 @@ def register(request):
                 except:
                     return HttpResponse('Invalid header found.')
 
-            else:
+            #else:
                 for msg in form.error_messages:
                     messages.error(request, f"{msg}: {form.error_messages[msg]}")
                     print(msg)  
-
-        form = UserRegistrationForm()
+        else:
+            form = UserRegistrationForm()
 
         return render(request, 'register.html', {'form':form})
             
