@@ -107,7 +107,7 @@
     <div class="container mt-2">
 
       <div class="row">
-        <h3 class="mt-4 mb-3">Welcome to Twidector!</h3>
+        <h3 class="mt-4 mb-3">Welcome to Twidector, {{request.user.username}}!</h3>
         <hr>
 
         {% if not twitter_id_exist%}

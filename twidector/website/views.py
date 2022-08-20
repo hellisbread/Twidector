@@ -130,8 +130,8 @@ def login(request):
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
-            request.session['loggedin'] = username
             auth_login(request, user)
+            request.session['loggedin'] = 'logged-in'
             return redirect('dashboard')
             
         else:
@@ -327,6 +327,9 @@ def login_twitter(request):
         else:
             twitter_auth_token.oauth_token_secret = oauth_token_secret
             twitter_auth_token.save()
+
+        request.session['loggedin'] = 'logged-in'
+
         return redirect(url)
 
 
@@ -616,7 +619,7 @@ def dashboard(request):
 
     relationship_list = retrieve_top_users(relationship, 6, request.user)
 
-    favourited_objectlist = Favourited.objects.filter(user = request.user).filter(soft_delete=0).values('favourited_twitter_id', 'favourited_username')
+    favourited_objectlist = Favourited.objects.filter(user = request.user).filter(soft_delete=0).order_by('-id').values('favourited_twitter_id', 'favourited_username')
 
     tweet_list = []
 
