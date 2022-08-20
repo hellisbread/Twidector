@@ -146,19 +146,18 @@
 
             {% for i in tweet_t %}
             <div class="row" style="margin-top: 20px;">
-              <div class="col-md-2">
+              <!--<div class="col-md-2">
                 <img src="{% static 'img/emptyprofile.png' %}" alt="" width="100" height="100"
                   class="mr-3 rounded-circle img-thumbnail shadow-sm">
-              </div>
+              </div>-->
             </br>
-              <div class="col-md-8">
+              <div class="col-md-10">
                 <h6><strong>{{i.screen_name}}</strong> <small> {{i.tweet_date}} </small></h6>
                 <!-- <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
                   et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
                   aliquip ex ea commodo consequat.</p> -->
                 <!-- <p> {{i.tweet_text}}</p> -->
                 <p>{{i.tweet_text}}</p>
-                <hr>
                 <table style=" background-repeat:no-repeat; width:450px;margin:0;" cellpadding="0" cellspacing="0" border="0">
                   <tr>
                     <th>Predicted hate score</th>
@@ -183,9 +182,11 @@
                     <td>{{i.neutral_count}}</td>
                   </tr>
                 </table>
+                
               </div>
               <!-- {{i.tweet_id|json_script:'json_tweet_id'}} -->
               <!-- //button -->
+              
               <div class="col-md-1 mt-4">
                 <button type="button" . class="btn btn-primary hidden" data-bs-toggle="modal" data-bs-target="#myModal"
                   onclick="setId(id = '{{i.tweet_id}}')" name="adinda">
@@ -195,6 +196,7 @@
               </div>
               <!-- //end of button -->
             </div>
+            <hr>
             {% endfor %}
           </div>
         </div>
